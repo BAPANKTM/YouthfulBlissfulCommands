@@ -1,72 +1,107 @@
 
-.uploadSection {
-  background: linear-gradient(145deg, #1A1A1A 0%, #0F0F0F 100%);
-  border: 2px dashed rgba(157, 92, 255, 0.4);
-  border-radius: var(--radius-lg);
-  padding: 22px 18px;
-  text-align: center;
-  margin-bottom: 22px;
-  cursor: pointer;
-  box-shadow: var(--shadow-sm);
-  min-height: 100px;
-  transition: all 0.3s ease;
+.upload {
+  background: linear-gradient(120deg, rgba(157, 92, 255, 0.06) 0%, rgba(157, 92, 255, 0.01) 100%);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  margin-bottom: 24px;
+  border: 1px solid rgba(157, 92, 255, 0.1);
+  display: flex;
+  flex-direction: column;
   position: relative;
   overflow: hidden;
-}
-
-.uploadSection::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(145deg, rgba(157, 92, 255, 0.05) 0%, transparent 100%);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.uploadSection:active {
-  transform: scale(0.98);
-  border: 2px dashed rgba(157, 92, 255, 0.6);
-  box-shadow: 0 0 20px rgba(157, 92, 255, 0.1);
-}
-
-.uploadSection:active::before {
-  opacity: 1;
-}
-
-.uploadIcon {
-  height: 40px;
-  color: var(--primary);
-  margin-bottom: 12px;
-  filter: drop-shadow(0 2px 5px rgba(157, 92, 255, 0.3));
-  animation: pulse 2s infinite ease-in-out, float 3s infinite ease-in-out;
-  transform-origin: center center;
+  animation: var(--animation-slide-up);
+  animation-delay: 0.3s;
 }
 
 .uploadTitle {
   font-size: 18px;
   font-weight: 700;
-  letter-spacing: 0.3px;
-  margin-bottom: 8px;
-  background: linear-gradient(90deg, #FFFFFF 0%, #d0d0d0 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.uploadSubtitle {
-  font-size: 13px;
+.uploadIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.uploadDrop {
+  border: 1px dashed rgba(157, 92, 255, 0.3);
+  border-radius: var(--radius-sm);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: rgba(157, 92, 255, 0.03);
+  transition: background 0.2s ease, border-color 0.2s ease;
+  cursor: pointer;
+}
+
+.uploadDrop:active {
+  background: rgba(157, 92, 255, 0.06);
+  border-color: rgba(157, 92, 255, 0.4);
+}
+
+.uploadDropIcon {
+  margin-bottom: 10px;
+  padding: 10px;
+  background: rgba(157, 92, 255, 0.08);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.uploadText {
+  font-size: 15px;
   color: var(--text-secondary);
-  line-height: 1.4;
 }
 
-@media (max-width: 320px) {
-  .uploadTitle {
-    font-size: 16px;
+.uploadText strong {
+  color: var(--primary-light);
+}
+
+@media (min-width: 500px) {
+  .upload {
+    padding: 24px;
   }
   
-  .uploadSubtitle {
-    font-size: 12px;
+  .uploadTitle {
+    font-size: 20px;
+  }
+  
+  .uploadDrop {
+    padding: 24px;
+  }
+  
+  .uploadText {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 380px) {
+  .upload {
+    padding: 18px;
+  }
+  
+  .uploadTitle {
+    font-size: 17px;
+    margin-bottom: 14px;
+  }
+  
+  .uploadDrop {
+    padding: 16px;
+  }
+  
+  .uploadText {
+    font-size: 14px;
   }
 }

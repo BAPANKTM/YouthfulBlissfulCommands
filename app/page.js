@@ -1,6 +1,6 @@
 
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Container from './components/Container/Container';
 import Header from './components/Header/Header';
 import Greeting from './components/Greeting/Greeting';
@@ -10,55 +10,59 @@ import Upload from './components/Upload/Upload';
 import Stats from './components/Stats/Stats';
 import Navigation from './components/Navigation/Navigation';
 import Floater from './components/Floater/Floater';
-import './globals.css';
 
 export default function Home() {
-  const [floaterState, setFloaterState] = useState({
-    isActive: false,
-    type: null
+  const [activeTab, setActiveTab] = useState('home');
+  const [showFloater, setShowFloater] = useState(false);
+  const [floaterContent, setFloaterContent] = useState({
+    title: '',
+    content: '',
+    primaryText: '',
+    secondaryText: '',
+    onPrimary: () => {},
+    onSecondary: () => {}
   });
 
-  const openFloater = (type) => {
-    setFloaterState({
-      isActive: true,
-      type
+  const handleUpload = () => {
+    console.log("Upload clicked");
+    setFloaterContent({
+      title: 'Upload File',
+      content: 'Select a file to upload or drag and drop it here.',
+      primaryText: 'Upload',
+      secondaryText: 'Cancel',
+      onPrimary: () => console.log('Upload pressed'),
+      onSecondary: () => console.log('Cancel pressed')
     });
-    document.body.style.overflow = 'hidden'; // Prevent scrolling
+    setShowFloater(true);
   };
 
-  const closeFloater = () => {
-    setFloaterState({
-      ...floaterState,
-      isActive: false
-    });
-    document.body.style.overflow = ''; // Restore scrolling
-  };
-
-  const handleFloaterAction = (action) => {
-    console.log(`Action: ${action} for floater: ${floaterState.type}`);
-    // Here you can add specific actions for different buttons
-    closeFloater();
+  const handleAction = (action) => {
+    console.log(`Action clicked: ${action}`);
+    // Handle different actions here
   };
 
   return (
-    <main>
+    <>
       <Container>
-        <Header />
+        <Header username="Alex Smith" />
         <Greeting />
-        <Balance />
-        <ActionButtons openFloater={openFloater} />
-        <Upload />
+        <Balance value="4,285.50" />
+        <ActionButtons onAction={handleAction} />
+        <Upload onUpload={handleUpload} />
         <Stats />
       </Container>
-      
-      <Navigation />
-      
-      <Floater 
-        isActive={floaterState.isActive}
-        type={floaterState.type}
-        onClose={closeFloater}
-        onAction={handleFloaterAction}
-      />
-    </main>
+      <Navigation activeTab={activeTab} onTabChange={setActiveTab} />
+      <Floater
+        isOpen={showFloater}
+        onClose={() => setShowFloater(false)}
+        title={floaterContent.title}
+        primaryText={floaterContent.primaryText}
+        secondaryText={floaterContent.secondaryText}
+        onPrimary={floaterContent.onPrimary}
+        onSecondary={floaterContent.onSecondary}
+      >
+        <div>{floaterContent.content}</div>
+      </Floater>
+    </>
   );
 }

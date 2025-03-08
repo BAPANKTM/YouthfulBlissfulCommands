@@ -27,8 +27,8 @@
 :root {
   /* Animation definitions as CSS variables for component access */
   --animation-pulse: pulse 2s infinite ease-in-out;
-  --animation-slide-up: slide-up 0.8s ease-out;
-  --animation-slide-in-left: slide-in-left 0.5s ease-out;
+  --animation-slide-up: slide-up 0.8s ease-out forwards;
+  --animation-slide-in-left: slide-in-left 0.5s ease-out forwards;
   --animation-float: float 3s infinite ease-in-out;
   --animation-rotate-subtle: rotate-subtle 6s infinite ease-in-out;
   --animation-glow: glow 3s infinite alternate;

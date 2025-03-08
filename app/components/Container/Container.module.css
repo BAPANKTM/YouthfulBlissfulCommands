@@ -2,7 +2,7 @@
 .container {
   max-width: 540px;
   margin: 0 auto;
-  animation: slide-up 0.6s ease-out;
+  animation: var(--animation-slide-up);
 }
 
 @media (min-width: 500px) {
