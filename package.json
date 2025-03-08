@@ -4,9 +4,9 @@
   "version": "1.0.0",
   "description": "TeleShare app built with Next.js",
   "scripts": {
-    "dev": "next dev -p 3001 -H 0.0.0.0",
+    "dev": "next dev",
     "build": "next build",
-    "start": "next start -p 3001 -H 0.0.0.0"
+    "start": "next start"
   },
   "dependencies": {
     "next": "^13.4.19",

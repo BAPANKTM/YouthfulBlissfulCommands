@@ -1,3 +1,4 @@
+
 export const floaterConfigs = {
   withdrawal: {
     title: 'Withdrawal',
@@ -54,36 +55,45 @@ export const floaterConfigs = {
       {text: 'Got it', class: 'primary', action: 'close'}
     ]
   },
-  upload: {
-    title: 'Upload Files',
-    content: 'Choose files to upload and share with your audience.',
-    buttons: [
-      {
-        text: 'Select Files',
-        action: () => console.log('Upload files action'),
-        primary: true
-      },
-      {
-        text: 'Cancel',
-        action: () => console.log('Cancel upload'),
-        primary: false
-      }
-    ]
-  },
   settings: {
     title: 'Settings',
-    content: 'Adjust your account settings and preferences.',
+    icon: `<path d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`,
+    content: `<div style="line-height: 1.6;">
+                <div style="margin-bottom: 20px;">
+                  <label for="username" style="display: block; margin-bottom: 8px; font-size: 14px; color: #ADADAD;">
+                    Your Name
+                  </label>
+                  <input type="text" id="username" placeholder="Enter your name" value="User" style="width: 100%; padding: 12px; 
+                    background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(157, 92, 255, 0.3); 
+                    border-radius: 10px; color: white; font-size: 16px;">
+                </div>
+                
+                <div style="margin-bottom: 20px;">
+                  <label for="theme" style="display: block; margin-bottom: 8px; font-size: 14px; color: #ADADAD;">
+                    Theme
+                  </label>
+                  <select id="theme" style="width: 100%; padding: 12px; 
+                    background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(157, 92, 255, 0.3);
+                    border-radius: 10px; color: white; font-size: 16px;">
+                    <option value="dark">Dark (Default)</option>
+                    <option value="light">Light</option>
+                    <option value="system">System Preference</option>
+                  </select>
+                </div>
+                
+                <div style="margin-bottom: 20px;">
+                  <label for="notifications" style="margin-bottom: 8px; font-size: 14px; color: #ADADAD;">
+                    Notifications
+                  </label>
+                  <div style="display: flex; align-items: center; gap: 10px; margin-top: 8px;">
+                    <input type="checkbox" id="notifications" checked style="width: 18px; height: 18px; accent-color: #9D5CFF;">
+                    <label for="notifications" style="color: white;">Enable notifications</label>
+                  </div>
+                </div>
+              </div>`,
     buttons: [
-      {
-        text: 'Save Changes',
-        action: () => console.log('Save settings'),
-        primary: true
-      },
-      {
-        text: 'Cancel',
-        action: () => console.log('Cancel settings'),
-        primary: false
-      }
+      {text: 'Cancel', class: 'secondary', action: 'close'},
+      {text: 'Save', class: 'primary', action: 'save-settings'}
     ]
   }
 };
