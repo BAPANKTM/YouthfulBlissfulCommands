@@ -74,7 +74,7 @@
     padding: 20px 24px;
     margin-bottom: 24px;
   }
-  
+
   .greetingText {
     font-size: 22px;
   }
@@ -84,7 +84,7 @@
   .greetingBanner {
     padding: 16px 18px;
   }
-  
+
   .greetingText {
     font-size: 18px;
   }
@@ -94,13 +94,17 @@
   .greetingBanner {
     padding: 14px 16px;
   }
-  
+
   .greetingText {
     font-size: 16px;
   }
 }
 
 @media (max-width: 320px) {
+  .greetingBanner {
+    padding: 14px 16px;
+  }
+
   .greetingText {
     font-size: 15px;
   }

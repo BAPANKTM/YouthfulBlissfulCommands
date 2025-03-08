@@ -16,7 +16,7 @@
   backdrop-filter: blur(8px);
 }
 
-.floaterOverlayActive {
+.floaterOverlay.active {
   opacity: 1;
   visibility: visible;
 }
@@ -39,7 +39,7 @@
   border: 1px solid rgba(157, 92, 255, 0.15);
 }
 
-.floaterOverlayActive .floater {
+.floaterOverlay.active .floater {
   transform: translateY(0) scale(1);
   opacity: 1;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 40px rgba(157, 92, 255, 0.4);
@@ -127,12 +127,12 @@
   box-shadow: 0 2px 5px rgba(157, 92, 255, 0.2);
 }
 
-.floaterButton.secondary {
+.secondary {
   background: transparent;
   border: 1px solid rgba(157, 92, 255, 0.5);
   box-shadow: none;
 }
 
-.floaterButton.secondary:active {
+.secondary:active {
   background: rgba(157, 92, 255, 0.1);
 }
