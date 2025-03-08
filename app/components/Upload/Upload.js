@@ -1,4 +1,3 @@
-
 'use client';
 import React from 'react';
 import styles from './Upload.module.css';
@@ -23,8 +22,10 @@ const Upload = ({ onUpload }) => {
           </svg>
         </div>
         <div className={styles.uploadText}>
-          <strong>Click to upload</strong> or drag and drop<br />
-          PDF, JPG, PNG or TXT (max 50MB)
+          <span className={styles.uploadHighlight}>Click to upload</span> or drag files here
+          <div className={styles.uploadFormats}>
+            Support for all file types up to 1GB
+          </div>
         </div>
       </div>
     </div>

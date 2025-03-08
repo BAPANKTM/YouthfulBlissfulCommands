@@ -1,4 +1,3 @@
-
 'use client';
 import { useState, useEffect } from 'react';
 import Container from './components/Container/Container';
@@ -39,6 +38,15 @@ export default function Home() {
   const handleAction = (action) => {
     console.log(`Action clicked: ${action}`);
     // Handle different actions here
+    setFloaterContent({
+      title: action.charAt(0).toUpperCase() + action.slice(1),
+      content: `This is the ${action} content.`,
+      primaryText: 'Confirm',
+      secondaryText: 'Cancel',
+      onPrimary: () => console.log(`${action} confirmed`),
+      onSecondary: () => console.log(`${action} cancelled`)
+    });
+    setShowFloater(true);
   };
 
   return (
@@ -47,7 +55,7 @@ export default function Home() {
         <Header username="Alex Smith" />
         <Greeting />
         <Balance value="4,285.50" />
-        <ActionButtons onAction={handleAction} />
+        <ActionButtons openFloater={handleAction} />
         <Upload onUpload={handleUpload} />
         <Stats />
       </Container>

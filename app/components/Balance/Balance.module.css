@@ -32,6 +32,10 @@
   letter-spacing: -1px;
   line-height: 1;
   text-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+  position: relative;
+  z-index: 2;
+  animation: var(--animation-float);
+  animation-duration: 4s;
 }
 
 .moneyIcon {
@@ -78,6 +82,19 @@
   );
   animation: var(--animation-shine);
   z-index: 2;
+}
+
+.currencySymbol {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 4px;
+  color: inherit;
+}
+
+.currencySymbol svg {
+  width: 20px;
+  height: 28px;
+  vertical-align: middle;
 }
 
 @media (min-width: 500px) {
@@ -130,4 +147,67 @@
   .moneyTitle {
     font-size: 15px;
   }
+}
+
+@keyframes float-particle {
+  0% { transform: translateY(0) rotate(0); opacity: 0.7; }
+  50% { transform: translateY(-15px) rotate(10deg); opacity: 1; }
+  100% { transform: translateY(-30px) rotate(0); opacity: 0; }
+}
+
+@keyframes pulse-glow {
+  0% { opacity: 0.3; transform: scale(0.95); }
+  50% { opacity: 0.7; transform: scale(1.05); }
+  100% { opacity: 0.3; transform: scale(0.95); }
+}
+
+.glowEffect {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  height: 80%;
+  background: radial-gradient(circle, rgba(157, 92, 255, 0.3) 0%, rgba(157, 92, 255, 0) 70%);
+  border-radius: 50%;
+  z-index: 0;
+  animation: pulse-glow 4s infinite ease-in-out;
+}
+
+.particleContainer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.particle {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: rgba(157, 92, 255, 0.6);
+  border-radius: 50%;
+  animation: float-particle 3s infinite ease-out;
+}
+
+.particle1 {
+  bottom: 20px;
+  left: 20%;
+  animation-delay: 0s;
+}
+
+.particle2 {
+  bottom: 30px;
+  left: 50%;
+  animation-delay: 1s;
+}
+
+.particle3 {
+  bottom: 10px;
+  left: 80%;
+  animation-delay: 2s;
 }
