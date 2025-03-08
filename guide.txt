@@ -1,0 +1,103 @@
+
+# TeleShare NextJS App Guide
+
+## Project Structure Overview
+
+The project follows Next.js 14 App Router architecture with a well-organized component structure:
+
+/app - Main page routes
+  /components - Reusable UI components organized by functionality
+    /ActionButtons - Clickable action buttons
+    /Balance - Balance display component
+    /Container - Layout wrapper component
+    /Floater - Modal/popup system
+    /Greeting - Time-based greeting banner
+    /Header - App header with profile
+    /Navigation - Bottom navigation bar
+    /Stats - Statistics grid and placeholder
+    /Upload - Upload section component
+  /hooks - Custom React hooks
+    /useGreeting.js - Hook for time-based greeting logic
+  /globals.css - Global CSS variables and animations
+  /layout.js - Root layout component
+  /page.js - Main page component
+
+/public - Static assets, images, and icons
+
+## Component Breakdown
+
+1. Header - App header with profile icon and settings button
+2. Greeting - Dynamic greeting banner that changes based on time of day
+3. Balance - Shows user's total balance with animated elements
+4. ActionButtons - Row of action buttons that trigger different Floaters
+5. Upload - Upload content section for file sharing
+6. Stats - Statistics display with grid of cards and placeholder
+7. Navigation - Bottom navigation with active state tracking
+8. Floater - Modal system for various actions (withdrawal, help, settings)
+9. Container - Wrapper component for consistent layout
+
+## State Management Approach
+
+- React hooks (useState, useEffect) are used for local component state
+- Custom hooks like useGreeting handle specific functionality
+- The page component manages the Floater/modal state
+- Navigation component manages active tab state
+
+Key state objects:
+- Floater state: { isActive: boolean, type: string }
+- Active navigation tab: string
+- Greeting state: { text: string, icon: string }
+
+## How to Extend/Customize Components
+
+### Adding New Floater Types
+To add a new floater/modal type:
+1. Add a new configuration to the floaterConfigs object in Floater.js
+2. Include title, icon, content, and buttons configuration
+
+### Changing UI Colors
+Update the CSS variables in globals.css to customize the color scheme:
+- --primary: Main accent color
+- --primary-dark: Darker variant
+- --primary-light: Lighter variant
+- --bg-dark: Background color
+- --bg-card: Card background color
+
+### Adding Navigation Items
+To add new navigation items:
+1. Add a new div with class 'navItem' in Navigation.js
+2. Include the proper SVG icon and label
+3. Add the corresponding active state handling
+
+## Styling Methodology
+
+The project uses CSS Modules for component-scoped styling. Each component has its own .module.css file to avoid style conflicts.
+
+Key styling features:
+- CSS variables for consistent theming
+- Responsive design with media queries
+- Animations and transitions for interactive elements
+- Gradients and subtle effects for visual appeal
+- Mobile-first approach with breakpoints for larger screens
+
+## Animation System
+
+The app includes several animations defined in globals.css:
+- pulse: Opacity pulsing effect
+- slide-up: Entry animation for cards and sections
+- slide-in-left: Horizontal entry animation
+- float: Subtle floating movement
+- rotate-subtle: Gentle rotation animation
+- glow: Highlight effect for focused elements
+- shimmer: Gradient movement effect
+- shine: Shine overlay effect
+
+## Responsive Design
+
+The app is designed to be responsive across multiple screen sizes with breakpoints at:
+- 500px for tablets and larger phones
+- 380px for medium phones
+- 360px for smaller phones
+- 320px for very small devices
+
+Responsive adjustments include font size changes, padding adjustments, and layout modifications.

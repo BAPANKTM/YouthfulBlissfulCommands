@@ -1,0 +1,154 @@
+
+.balance {
+  text-align: center;
+  margin-bottom: 26px;
+  background: linear-gradient(145deg, #1A1A1A 0%, #0F0F0F 100%);
+  padding: 24px;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3), 0 0 20px rgba(157, 92, 255, 0.15);
+  border: 1px solid rgba(157, 92, 255, 0.15);
+  position: relative;
+  overflow: hidden;
+  transform: translateZ(0);
+  -webkit-font-smoothing: subpixel-antialiased;
+  backface-visibility: hidden;
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  animation: slide-up 0.8s ease-out;
+}
+
+.balance:active {
+  transform: scale(0.98) translateZ(0);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2), 0 0 15px rgba(157, 92, 255, 0.1);
+}
+
+.balance::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(157, 92, 255, 0.7), transparent);
+}
+
+.balance::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at center, rgba(157, 92, 255, 0.15) 0%, transparent 70%);
+  opacity: 0.4;
+  z-index: -1;
+}
+
+.moneyTitle {
+  font-size: 16px;
+  color: var(--text-secondary);
+  margin-bottom: 10px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+.moneyValue {
+  font-size: 52px;
+  font-weight: 800;
+  margin: 8px 0 12px;
+  background: linear-gradient(90deg, var(--primary) 0%, var(--primary-light) 50%, var(--primary-dark) 100%);
+  background-size: 200% auto;
+  animation: shimmer 3s infinite linear;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  text-shadow: 0 2px 10px rgba(157, 92, 255, 0.2);
+  letter-spacing: -0.5px;
+}
+
+.moneyIcon {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 15px rgba(157, 92, 255, 0.4);
+  position: relative;
+  animation: float 3s infinite ease-in-out;
+}
+
+.moneyIcon::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary-light), transparent 80%);
+  opacity: 0.4;
+  z-index: -1;
+  filter: blur(3px);
+}
+
+.balanceInfo {
+  margin-top: 18px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: rgba(157, 92, 255, 0.1);
+  padding: 10px 16px;
+  border-radius: 30px;
+  display: inline-block;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(157, 92, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.balanceInfo:active {
+  transform: scale(0.95);
+  background: rgba(157, 92, 255, 0.15);
+}
+
+@media (min-width: 500px) {
+  .balance {
+    padding: 28px;
+  }
+  
+  .moneyValue {
+    font-size: 56px;
+  }
+  
+  .moneyTitle {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 380px) {
+  .moneyValue {
+    font-size: 42px;
+  }
+  
+  .moneyIcon {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+@media (max-width: 360px) {
+  .moneyValue {
+    font-size: 38px;
+  }
+}
+
+@media (max-width: 320px) {
+  .moneyValue {
+    font-size: 32px;
+  }
+  
+  .moneyIcon {
+    width: 36px;
+    height: 36px;
+  }
+}

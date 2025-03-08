@@ -1,0 +1,138 @@
+
+.floaterOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+  backdrop-filter: blur(8px);
+}
+
+.floaterOverlayActive {
+  opacity: 1;
+  visibility: visible;
+}
+
+.floater {
+  background: linear-gradient(145deg, #1a1a1a 0%, #0D0D0D 100%);
+  border-radius: var(--radius-lg);
+  padding: 25px;
+  width: 90%;
+  max-width: 360px;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-lg);
+  transform: translateY(50px) scale(0.95);
+  opacity: 0;
+  transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+    opacity 0.5s ease,
+    box-shadow 0.5s ease;
+  position: relative;
+  border: 1px solid rgba(157, 92, 255, 0.15);
+}
+
+.floaterOverlayActive .floater {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 40px rgba(157, 92, 255, 0.4);
+  animation: glow 3s infinite alternate;
+}
+
+.floaterHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid rgba(157, 92, 255, 0.2);
+}
+
+.floaterTitle {
+  font-size: 22px;
+  font-weight: 700;
+  background: linear-gradient(90deg, #fff 0%, #d9d9d9 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.floaterTitleIcon {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(157, 92, 255, 0.3);
+}
+
+.floaterClose {
+  width: 40px;
+  height: 40px;
+  background-color: rgba(157, 92, 255, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.floaterClose:active {
+  background-color: rgba(157, 92, 255, 0.2);
+  transform: rotate(90deg);
+}
+
+.floaterContent {
+  margin-bottom: 25px;
+  min-height: 100px;
+  color: #d9d9d9;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.floaterFooter {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.floaterButton {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 14px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 10px rgba(157, 92, 255, 0.3);
+}
+
+.floaterButton:active {
+  transform: scale(0.96);
+  box-shadow: 0 2px 5px rgba(157, 92, 255, 0.2);
+}
+
+.floaterButton.secondary {
+  background: transparent;
+  border: 1px solid rgba(157, 92, 255, 0.5);
+  box-shadow: none;
+}
+
+.floaterButton.secondary:active {
+  background: rgba(157, 92, 255, 0.1);
+}

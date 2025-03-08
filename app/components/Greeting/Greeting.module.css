@@ -1,0 +1,107 @@
+
+.greetingBanner {
+  background: linear-gradient(135deg, rgba(157, 92, 255, 0.35) 0%, rgba(86, 48, 141, 0.25) 100%);
+  border-radius: var(--radius-lg);
+  padding: 18px 22px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid rgba(157, 92, 255, 0.3);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2), 0 0 15px rgba(157, 92, 255, 0.2);
+  animation: slide-up 0.7s ease-out;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  overflow: hidden;
+  position: relative;
+  transition: all 0.3s ease;
+  transform: translateZ(0);
+}
+
+.greetingBanner:active {
+  transform: scale(0.98) translateZ(0);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15), 0 0 10px rgba(157, 92, 255, 0.15);
+}
+
+.greetingBanner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 3s infinite linear;
+  pointer-events: none;
+}
+
+.greetingBanner::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+  opacity: 0.7;
+}
+
+.greetingText {
+  font-size: 20px;
+  font-weight: 700;
+  color: white;
+  letter-spacing: 0.4px;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+  background: linear-gradient(90deg, #FFFFFF 30%, #e0e0e0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.greetingIcon {
+  animation: float 3s infinite ease-in-out, rotate-subtle 6s infinite ease-in-out;
+  transform-origin: center center;
+}
+
+.greetingIcon svg {
+  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.3));
+  width: 28px;
+  height: 28px;
+}
+
+@media (min-width: 500px) {
+  .greetingBanner {
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  
+  .greetingText {
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 380px) {
+  .greetingBanner {
+    padding: 16px 18px;
+  }
+  
+  .greetingText {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 360px) {
+  .greetingBanner {
+    padding: 14px 16px;
+  }
+  
+  .greetingText {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 320px) {
+  .greetingText {
+    font-size: 15px;
+  }
+}
