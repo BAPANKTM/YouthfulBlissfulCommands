@@ -3,15 +3,11 @@
   "name": "teleshare-nextjs",
   "version": "1.0.0",
   "description": "TeleShare app built with Next.js",
-  "main": "index.js",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "next": "^13.4.19",
     "react": "^18.2.0",

@@ -1,0 +1,38 @@
+
+# TeleShare Project Guide
+
+## Project Structure
+
+- `/pages` - Next.js pages
+  - `_app.js` - Main application wrapper
+  - `index.js` - Home page
+  
+- `/components` - Reusable React components
+  - `/layout` - Layout components
+    - `Header.js` - Header component with profile and settings
+    - `BottomNav.js` - Bottom navigation bar
+  - `/ui` - UI components
+    - `Floater.js` - Reusable modal/floater component
+    - `ActionButton.js` - Reusable action button
+    - `BalanceCard.js` - Balance display card
+    - `UploadSection.js` - File upload section
+    - `StatsGrid.js` - Statistics grid component
+    - `GreetingBanner.js` - Time-based greeting banner
+
+- `/utils` - Utility functions
+  - `timeUtils.js` - Time-related functions for greeting
+  - `svgIcons.js` - SVG icon components
+
+- `/styles` - CSS styles
+  - `globals.css` - Global styles
+  - `Home.module.css` - Home page specific styles
+  - Components use their own module CSS files
+
+## Development Notes
+
+- The app uses Next.js for better performance and SEO
+- CSS Modules are used for component-specific styling
+- Each component is designed to be reusable
+- Time-based greeting changes based on time of day
+- Floater system supports multiple modal types
+- Local storage is used to save user preferences
