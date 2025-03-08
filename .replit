@@ -1,5 +1,5 @@
 
-run = "npm run dev"
+run = "node server.js"
 entrypoint = "pages/index.js"
 hidden = [".config", "package-lock.json"]
 modules = ["nodejs-20:v8-20230920-bd784b9"]
