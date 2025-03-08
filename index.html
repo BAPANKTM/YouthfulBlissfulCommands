@@ -42,6 +42,23 @@
       100% { transform: translateY(0); opacity: 1; }
     }
 
+    @keyframes slide-in-left {
+      0% { transform: translateX(-15px); opacity: 0; }
+      100% { transform: translateX(0); opacity: 1; }
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-5px); }
+      100% { transform: translateY(0px); }
+    }
+
+    @keyframes rotate-subtle {
+      0% { transform: rotate(-2deg); }
+      50% { transform: rotate(2deg); }
+      100% { transform: rotate(-2deg); }
+    }
+
     @keyframes glow {
       0% {
         box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5), 0 0 30px rgba(157, 92, 255, 0.3);
@@ -51,6 +68,11 @@
         box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 50px rgba(157, 92, 255, 0.5);
         border-color: rgba(157, 92, 255, 0.3);
       }
+    }
+    
+    @keyframes shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
     }
 
     body {
@@ -176,6 +198,15 @@
       border: 1px solid rgba(255, 255, 255, 0.05);
       position: relative;
       overflow: hidden;
+      transform: translateZ(0);
+      -webkit-font-smoothing: subpixel-antialiased;
+      backface-visibility: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .balance:active {
+      transform: scale(0.98) translateZ(0);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
     }
 
     .balance::before {
@@ -337,7 +368,8 @@
       color: var(--primary);
       margin-bottom: 12px;
       filter: drop-shadow(0 2px 5px rgba(157, 92, 255, 0.3));
-      animation: pulse 2s infinite ease-in-out;
+      animation: pulse 2s infinite ease-in-out, float 3s infinite ease-in-out;
+      transform-origin: center center;
     }
 
     .upload-title {
@@ -694,6 +726,53 @@
       background: rgba(157, 92, 255, 0.1);
     }
 
+    /* Greeting banner */
+    .greeting-banner {
+      background: linear-gradient(135deg, rgba(157, 92, 255, 0.25) 0%, rgba(86, 48, 141, 0.15) 100%);
+      border-radius: var(--radius-lg);
+      padding: 16px 18px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px solid rgba(157, 92, 255, 0.2);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      animation: slide-in-left 0.6s ease-out;
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .greeting-banner::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      background-size: 200% 100%;
+      animation: shimmer 4s infinite linear;
+      pointer-events: none;
+    }
+    
+    .greeting-text {
+      font-size: 18px;
+      font-weight: 600;
+      color: white;
+      letter-spacing: 0.3px;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+    
+    .greeting-icon {
+      animation: float 3s infinite ease-in-out;
+    }
+    
+    .greeting-icon svg {
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+    }
+
     /* Responsive adjustments */
     @media (min-width: 500px) {
       body {
@@ -704,15 +783,23 @@
       .container {
         padding: 0 15px;
       }
+      
+      .greeting-banner {
+        padding: 18px 22px;
+      }
+      
+      .greeting-text {
+        font-size: 20px;
+      }
     }
 
     @media (max-width: 360px) {
       .money-value {
-        font-size: 40px;
+        font-size: 38px;
       }
 
       .action-button {
-        min-height: 70px;
+        min-height: 68px;
       }
 
       .stats-grid {
@@ -723,12 +810,55 @@
         padding: 12px;
         height: 84px;
       }
+      
+      .greeting-banner {
+        padding: 14px 16px;
+      }
+      
+      .greeting-text {
+        font-size: 16px;
+      }
+    }
+    
+    /* Better Small Screen Support */
+    @media (max-width: 320px) {
+      .money-value {
+        font-size: 32px;
+      }
+      
+      .money-icon {
+        width: 36px;
+        height: 36px;
+      }
+      
+      .stat-number-large {
+        font-size: 18px;
+      }
+      
+      .greeting-text {
+        font-size: 15px;
+      }
+      
+      .profile-name {
+        font-size: 20px;
+      }
     }
   </style>
 </head>
 
 <body>
   <div class="container">
+    <div class="greeting-banner" id="greeting-banner">
+      <div class="greeting-text" id="greeting-text">Good day, User</div>
+      <div class="greeting-icon">
+        <svg id="greeting-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" 
+            stroke="rgba(255,255,255,0.8)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="12" cy="12" r="5" stroke="rgba(255,255,255,0.8)" stroke-width="2"/>
+        </svg>
+      </div>
+    </div>
+    
     <div class="header">
       <div class="profile">
         <div class="profile-icon">T</div>
@@ -952,8 +1082,68 @@
   </div>
 
   <script>
+    // Time-based greeting system
+    function updateGreeting() {
+      const greetingText = document.getElementById('greeting-text');
+      const greetingIcon = document.getElementById('greeting-icon');
+      const now = new Date();
+      const hour = now.getHours();
+      
+      let greeting;
+      let icon;
+      
+      if (hour >= 5 && hour < 12) {
+        greeting = "Good morning, User";
+        // Morning sun icon
+        icon = `<path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" 
+                stroke="rgba(255,255,255,0.8)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="12" cy="12" r="5" stroke="rgba(255,255,255,0.8)" stroke-width="2" fill="rgba(255,220,50,0.2)"/>`;
+      } else if (hour >= 12 && hour < 18) {
+        greeting = "Good afternoon, User";
+        // Afternoon sun icon
+        icon = `<path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" 
+                stroke="rgba(255,255,255,0.8)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="12" cy="12" r="5" stroke="rgba(255,255,255,0.8)" stroke-width="2" fill="rgba(255,180,50,0.2)"/>`;
+      } else if (hour >= 18 && hour < 22) {
+        greeting = "Good evening, User";
+        // Evening moon icon
+        icon = `<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" 
+                stroke="rgba(255,255,255,0.8)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="rgba(157,92,255,0.2)"/>`;
+      } else {
+        greeting = "Good night, User";
+        // Night moon and stars icon
+        icon = `<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" 
+                stroke="rgba(255,255,255,0.8)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="rgba(100,100,200,0.2)"/>
+              <path d="M5 5 L6 6 M17 3 L18 4 M8 2 L7 3" stroke="rgba(255,255,255,0.6)" stroke-width="2" stroke-linecap="round"/>`;
+      }
+      
+      if (greetingText) greetingText.innerText = greeting;
+      if (greetingIcon) greetingIcon.innerHTML = icon;
+    }
+    
+    // Fix SVG rendering issues by ensuring all SVGs have proper viewBox attributes
+    function ensureSvgViewBox() {
+      const svgs = document.querySelectorAll('svg');
+      svgs.forEach(svg => {
+        if (!svg.getAttribute('viewBox') && svg.getAttribute('width') && svg.getAttribute('height')) {
+          const width = svg.getAttribute('width');
+          const height = svg.getAttribute('height');
+          svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+          svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+        }
+      });
+    }
+    
     // Generic Floater System
     document.addEventListener('DOMContentLoaded', function () {
+      // Update greeting based on time of day
+      updateGreeting();
+      
+      // Fix any SVG rendering issues
+      ensureSvgViewBox();
+      
+      // Update greeting every minute (in case user keeps app open during time changes)
+      setInterval(updateGreeting, 60000);
       const floaterContainer = document.getElementById('floater-container');
       const floaterTitle = document.getElementById('floater-title');
       const floaterContent = document.getElementById('floater-content');
