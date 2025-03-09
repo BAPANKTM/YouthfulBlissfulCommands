@@ -26,19 +26,25 @@ let isUploading = false;
 
 // Initialize the application
 async function initApp() {
-    // Connect to Telegram MTProto
+    // Set up event listeners and drag-drop behavior
     setupEventListeners();
     setupDragAndDrop();
     setupMTProto();
     
-    // Connect to Telegram servers
-    try {
-        await mtprotoClient.connect();
-        console.log("Connected to Telegram");
-    } catch (error) {
-        console.error("Failed to connect to Telegram:", error);
-        showNotification('error', 'Failed to connect to Telegram: ' + error.message);
-    }
+    // Add connect button event listener
+    const connectionStatus = document.getElementById('connectionStatus');
+    connectionStatus.innerHTML += ' <button id="connectButton" class="connect-button">Connect to Telegram</button>';
+    
+    document.getElementById('connectButton').addEventListener('click', async () => {
+        try {
+            // Connect to Telegram servers
+            await mtprotoClient.connect();
+            console.log("Connected to Telegram");
+        } catch (error) {
+            console.error("Failed to connect to Telegram:", error);
+            showNotification('error', 'Failed to connect to Telegram: ' + error.message);
+        }
+    });
 }
 
 // Setup MTProto client event listeners
