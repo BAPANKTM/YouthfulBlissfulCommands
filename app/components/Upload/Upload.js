@@ -80,6 +80,8 @@ const Upload = ({ onUpload }) => {
     }
   };
   
+  const [forceDocument, setForceDocument] = useState(false);
+  
   const handleMediaUpload = async () => {
     if (!file) return;
     
@@ -93,11 +95,14 @@ const Upload = ({ onUpload }) => {
       const formData = new FormData();
       formData.append('chat_id', config.channel_id);
       
-      // Determine the correct API endpoint based on file type
+      // Determine the correct API endpoint based on file type and forceDocument option
       let endpoint;
       const fileType = file.type.split('/')[0];
       
-      if (fileType === 'image') {
+      if (forceDocument) {
+        endpoint = 'sendDocument';
+        formData.append('document', file);
+      } else if (fileType === 'image') {
         endpoint = 'sendPhoto';
         formData.append('photo', file);
       } else if (fileType === 'video') {
@@ -122,7 +127,10 @@ const Upload = ({ onUpload }) => {
       xhr.upload.onprogress = (event) => {
         if (event.lengthComputable) {
           const percent = Math.round((event.loaded / event.total) * 100);
-          setProgress(percent);
+          // Use requestAnimationFrame to prevent UI flickering
+          requestAnimationFrame(() => {
+            setProgress(percent);
+          });
         }
       };
       
@@ -146,6 +154,8 @@ const Upload = ({ onUpload }) => {
           } catch (error) {
             setUploadStatus({ type: 'error', message: 'Error parsing response' });
           }
+        } else if (xhr.status === 413) {
+          setUploadStatus({ type: 'error', message: 'File too large. Telegram has a 50MB file size limit.' });
         } else {
           setUploadStatus({ type: 'error', message: `HTTP error ${xhr.status}` });
         }
@@ -296,7 +306,7 @@ const Upload = ({ onUpload }) => {
               ref={fileInputRef} 
               onChange={handleFileSelect} 
               style={{ display: 'none' }} 
-              accept=".jpg,.jpeg,.png,.gif,.mp4,.mp3,.wav,.ogg,.pdf,.zip,.rar,.doc,.docx,.xls,.xlsx,.csv,.txt,.webp,.tgs,.webm,.mov"
+              accept=".jpg,.jpeg,.png,.gif,.mp4,.mp3,.wav,.ogg,.pdf,.zip,.rar,.doc,.docx,.xls,.xlsx,.csv,.txt,.webp,.tgs,.webm,.mov,.avi,.flv,.midi,.svg,.psd,.ai,.eps,.exe,.dll,.apk,.3gp,.m4a,.ts,.mkv"
               disabled={loading}
             />
             
@@ -346,6 +356,21 @@ const Upload = ({ onUpload }) => {
             </div>
             
             <ProgressIndicator />
+            
+            <div className={styles.uploadOptions}>
+              <label className={styles.checkboxContainer}>
+                <input
+                  type="checkbox"
+                  checked={forceDocument}
+                  onChange={(e) => setForceDocument(e.target.checked)}
+                  disabled={loading}
+                />
+                <span>Upload as Document</span>
+                <div className={styles.tooltip}>
+                  Sends file as a document regardless of type (preserves original file)
+                </div>
+              </label>
+            </div>
             
             <textarea 
               className={styles.captionInput} 
