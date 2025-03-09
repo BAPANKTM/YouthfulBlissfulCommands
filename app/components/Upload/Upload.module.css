@@ -95,6 +95,37 @@
   margin-right: 10px;
   display: flex;
   align-items: center;
+
+.mediaContainer {
+  min-height: 160px;
+  position: relative;
+  margin-bottom: 16px;
+}
+
+.removeButton {
+  background: rgba(255, 85, 85, 0.1);
+  color: #FF5555;
+  border: 1px solid rgba(255, 85, 85, 0.2);
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  display: block;
+  width: fit-content;
+  margin: 12px auto;
+  transition: background 0.2s;
+}
+
+.removeButton:hover:not(:disabled) {
+  background: rgba(255, 85, 85, 0.2);
+}
+
+.removeButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
   justify-content: center;
 }
 
@@ -219,6 +250,56 @@
   flex-direction: column;
   align-items: center;
   gap: 8px;
+}
+
+.progressContainer {
+  width: 100%;
+  margin: 16px 0;
+}
+
+.progressBar {
+  width: 100%;
+  height: 8px;
+  background: rgba(157, 92, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, #9D5CFF 0%, #7B2FE5 100%);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.progressText {
+  text-align: center;
+  font-size: 14px;
+  color: #9D5CFF;
+  margin-top: 4px;
+}
+
+.captionInput {
+  width: 100%;
+  min-height: 80px;
+  padding: 12px;
+  border: 1px solid rgba(157, 92, 255, 0.1);
+  border-radius: var(--radius-sm);
+  background: rgba(157, 92, 255, 0.02);
+  font-size: 14px;
+  resize: vertical;
+  margin-bottom: 16px;
+  transition: border-color 0.2s;
+}
+
+.captionInput:focus {
+  outline: none;
+  border-color: rgba(157, 92, 255, 0.3);
+}
+
+.captionInput:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .fileInfo p {
