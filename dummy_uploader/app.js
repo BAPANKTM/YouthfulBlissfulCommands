@@ -32,7 +32,13 @@ async function initApp() {
     setupMTProto();
     
     // Connect to Telegram servers
-    await mtprotoClient.connect();
+    try {
+        await mtprotoClient.connect();
+        console.log("Connected to Telegram");
+    } catch (error) {
+        console.error("Failed to connect to Telegram:", error);
+        showNotification('error', 'Failed to connect to Telegram: ' + error.message);
+    }
 }
 
 // Setup MTProto client event listeners
