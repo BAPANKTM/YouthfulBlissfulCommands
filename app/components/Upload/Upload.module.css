@@ -71,26 +71,21 @@
   color: var(--text-secondary);
 }
 
+.uploadHighlight {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
 .uploadFormats {
-  font-size: 12px;
+  font-size: 13px;
   margin-top: 6px;
   opacity: 0.6;
 }
 
-.uploadHighlight {
-  color: var(--primary-light);
-  font-weight: 600;
-}
-
-.hiddenFileInput {
-  display: none;
-}
-
-/* Media Type Selection */
-.mediaTypeSelection {
+.optionButtonsContainer {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
 .optionButton {
@@ -98,10 +93,10 @@
   align-items: center;
   gap: 10px;
   padding: 16px;
-  background: rgba(157, 92, 255, 0.08);
-  border: 1px solid rgba(157, 92, 255, 0.15);
   border-radius: var(--radius-sm);
-  color: white;
+  background: rgba(157, 92, 255, 0.05);
+  border: 1px solid rgba(157, 92, 255, 0.1);
+  color: var(--text-primary);
   font-weight: 600;
   font-size: 16px;
   cursor: pointer;
@@ -109,51 +104,56 @@
 }
 
 .optionButton:hover {
-  background: rgba(157, 92, 255, 0.12);
-  border-color: rgba(157, 92, 255, 0.25);
+  background: rgba(157, 92, 255, 0.1);
+  border-color: rgba(157, 92, 255, 0.3);
 }
 
 .optionButton:active {
-  background: rgba(157, 92, 255, 0.16);
   transform: scale(0.98);
 }
 
 .cancelButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 16px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: var(--radius-sm);
-  color: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-secondary);
   font-weight: 600;
+  font-size: 16px;
   cursor: pointer;
   transition: all 0.2s ease;
-  margin-top: 4px;
 }
 
 .cancelButton:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
 .cancelButton:active {
-  background: rgba(255, 255, 255, 0.1);
   transform: scale(0.98);
 }
 
-/* Text Entry */
-.textEntry {
+.hiddenFileInput {
+  display: none;
+}
+
+.textInputContainer {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
 }
 
 .textInput {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(157, 92, 255, 0.15);
+  padding: 16px;
   border-radius: var(--radius-sm);
-  padding: 14px;
-  color: white;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
   font-size: 16px;
+  font-family: inherit;
   resize: none;
   transition: border-color 0.2s ease;
 }
@@ -164,48 +164,47 @@
 }
 
 .textCounter {
-  font-size: 12px;
   text-align: right;
+  font-size: 13px;
   color: var(--text-secondary);
+  opacity: 0.7;
 }
 
 .buttonContainer {
   display: flex;
-  justify-content: space-between;
-  gap: 10px;
+  gap: 16px;
   margin-top: 8px;
 }
 
 .uploadButton {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 16px;
-  background: linear-gradient(135deg, rgba(157, 92, 255, 0.7) 0%, rgba(157, 92, 255, 0.9) 100%);
-  border: none;
   border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, #9D5CFF 0%, #6E00FF 100%);
+  border: none;
   color: white;
   font-weight: 600;
+  font-size: 16px;
   cursor: pointer;
   transition: all 0.2s ease;
-  flex: 1;
 }
 
 .uploadButton:hover {
-  background: linear-gradient(135deg, rgba(157, 92, 255, 0.8) 0%, rgba(157, 92, 255, 1) 100%);
+  filter: brightness(1.1);
 }
 
 .uploadButton:active {
   transform: scale(0.98);
 }
 
-.disabledButton {
+.uploadButtonDisabled {
   opacity: 0.5;
-  cursor: not-allowed;
+  pointer-events: none;
 }
 
-.disabledButton:hover {
-  background: linear-gradient(135deg, rgba(157, 92, 255, 0.7) 0%, rgba(157, 92, 255, 0.9) 100%);
-}
-
-/* Media Preview Section */
 .mediaPreview {
   display: flex;
   flex-direction: column;
@@ -213,62 +212,59 @@
 }
 
 .previewContainer {
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: var(--radius-sm);
-  overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
   max-height: 250px;
-  width: 100%;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+  background: rgba(0, 0, 0, 0.2);
 }
 
-.mediaPreviewImage {
+.mediaPreviewImage, 
+.mediaPreviewVideo {
   max-width: 100%;
   max-height: 250px;
   object-fit: contain;
 }
 
-.mediaPreviewVideo {
-  max-width: 100%;
-  max-height: 250px;
-}
-
 .fileInfoBox {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
   padding: 16px;
-  background: rgba(255, 255, 255, 0.05);
   border-radius: var(--radius-sm);
-  border: 1px solid rgba(157, 92, 255, 0.15);
+  background: rgba(157, 92, 255, 0.05);
+  border: 1px solid rgba(157, 92, 255, 0.1);
 }
 
 .fileInfoIcon {
-  padding: 10px;
-  background: rgba(157, 92, 255, 0.1);
-  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 12px;
+  border-radius: var(--radius-sm);
+  background: rgba(157, 92, 255, 0.1);
 }
 
 .fileInfoDetails {
-  overflow: hidden;
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .fileName {
   font-weight: 600;
-  margin-bottom: 4px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .fileSize {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--text-secondary);
+  margin-top: 4px;
 }
 
 .captionContainer {
@@ -278,12 +274,13 @@
 }
 
 .captionInput {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(157, 92, 255, 0.15);
+  padding: 16px;
   border-radius: var(--radius-sm);
-  padding: 14px;
-  color: white;
-  font-size: 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+  font-size: 15px;
+  font-family: inherit;
   resize: none;
   transition: border-color 0.2s ease;
 }
@@ -294,9 +291,10 @@
 }
 
 .captionCounter {
-  font-size: 12px;
   text-align: right;
+  font-size: 13px;
   color: var(--text-secondary);
+  opacity: 0.7;
 }
 
 @media (min-width: 500px) {

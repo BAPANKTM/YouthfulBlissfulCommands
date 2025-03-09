@@ -61,27 +61,27 @@ const Upload = ({ onUpload }) => {
       console.log('Media upload selected', selectedFile);
       console.log('Caption:', caption);
       // Implement actual file upload functionality here
-      
       resetUploadState();
     }
   };
   
   const resetUploadState = () => {
+    // First revoke object URL to avoid memory leaks
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl);
+    }
+    
+    // Then reset all state variables
     setStep(0);
     setSelectedFile(null);
     setSelectedFileName('');
+    setPreviewUrl('');
     setCaption('');
     setTextContent('');
     
-    // Clear file input
+    // Clear file input if it exists
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
-    }
-    
-    // Revoke object URL to avoid memory leaks
-    if (previewUrl) {
-      URL.revokeObjectURL(previewUrl);
-      setPreviewUrl('');
     }
   };
   
@@ -90,7 +90,17 @@ const Upload = ({ onUpload }) => {
   };
   
   const getFileIcon = () => {
-    if (!selectedFile) return null;
+    if (!selectedFile) {
+      return (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          <path d="M14 2V8H20" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          <path d="M16 13H8" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          <path d="M16 17H8" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          <path d="M10 9H9H8" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      );
+    }
     
     const type = selectedFile.type;
     
@@ -117,7 +127,7 @@ const Upload = ({ onUpload }) => {
           <path d="M18 19C19.6569 19 21 17.6569 21 16C21 14.3431 19.6569 13 18 13C16.3431 13 15 14.3431 15 16C15 17.6569 16.3431 19 18 19Z" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
       );
-    } else if (type === 'application/pdf') {
+    } else {
       return (
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -125,13 +135,6 @@ const Upload = ({ onUpload }) => {
           <path d="M16 13H8" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
           <path d="M16 17H8" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
           <path d="M10 9H9H8" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
-      );
-    } else {
-      return (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M13 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V9L13 2Z" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M13 2V9H20" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
       );
     }
@@ -177,15 +180,6 @@ const Upload = ({ onUpload }) => {
             </div>
           </div>
         </div>
-        
-        {/* Hidden file input element */}
-        <input
-          type="file"
-          ref={fileInputRef}
-          onChange={handleFileChange}
-          className={styles.hiddenFileInput}
-          accept="*/*"
-        />
       </div>
     );
   } else if (step === 1) {
@@ -200,10 +194,9 @@ const Upload = ({ onUpload }) => {
               <path d="M12 3V15" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </div>
-          Choose Upload Type
+          Select Upload Type
         </div>
-        
-        <div className={styles.mediaTypeSelection}>
+        <div className={styles.optionButtonsContainer}>
           <button 
             className={styles.optionButton}
             onClick={() => handleMediaTypeSelect('media')}
@@ -234,6 +227,15 @@ const Upload = ({ onUpload }) => {
             Cancel
           </button>
         </div>
+        
+        {/* Hidden file input element */}
+        <input
+          type="file"
+          ref={fileInputRef}
+          onChange={handleFileChange}
+          className={styles.hiddenFileInput}
+          accept="*/*"
+        />
       </div>
     );
   } else if (step === 2) {
@@ -244,6 +246,7 @@ const Upload = ({ onUpload }) => {
           <div className={styles.uploadIcon}>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M14 2V8H20" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               <path d="M16 13H8" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               <path d="M16 17H8" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               <path d="M10 9H9H8" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -252,26 +255,28 @@ const Upload = ({ onUpload }) => {
           Share Text
         </div>
         
-        <div className={styles.textEntry}>
+        <div className={styles.textInputContainer}>
           <textarea
             className={styles.textInput}
-            placeholder="Enter your message here..."
+            placeholder="Enter your text here..."
             value={textContent}
             onChange={(e) => setTextContent(e.target.value)}
-            rows={5}
+            rows={6}
           />
+          
           <div className={styles.textCounter}>
-            {textContent.length} characters
+            {textContent.length}/4000
           </div>
+          
           <div className={styles.buttonContainer}>
             <button 
               className={styles.cancelButton}
               onClick={handleCancel}
             >
-              Cancel
+              Back
             </button>
             <button 
-              className={`${styles.uploadButton} ${!textContent.trim() ? styles.disabledButton : ''}`}
+              className={`${styles.uploadButton} ${!textContent.trim() ? styles.uploadButtonDisabled : ''}`}
               onClick={handleTextUpload}
               disabled={!textContent.trim()}
             >
@@ -293,7 +298,7 @@ const Upload = ({ onUpload }) => {
         </div>
         
         <div className={styles.mediaPreview}>
-          {previewUrl && (selectedFile.type.startsWith('image/') || selectedFile.type.startsWith('video/')) ? (
+          {previewUrl && selectedFile && (selectedFile.type.startsWith('image/') || selectedFile.type.startsWith('video/')) ? (
             <div className={styles.previewContainer}>
               {selectedFile.type.startsWith('image/') ? (
                 <img 
@@ -324,7 +329,7 @@ const Upload = ({ onUpload }) => {
               </div>
             </div>
           )}
-
+          
           <div className={styles.captionContainer}>
             <textarea
               className={styles.captionInput}
