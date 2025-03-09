@@ -1,0 +1,12 @@
+
+.container {
+  max-width: 540px;
+  margin: 0 auto;
+  animation: var(--animation-slide-up);
+}
+
+@media (min-width: 500px) {
+  .container {
+    padding: 0 20px;
+  }
+}

@@ -1,0 +1,128 @@
+
+.statsSection {
+  margin-bottom: 22px;
+  animation: slide-up 0.8s ease-out;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.sectionTitle {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sectionTitle::before {
+  content: '';
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  border-radius: 50%;
+}
+
+.viewAll {
+  font-size: 14px;
+  color: var(--primary);
+  font-weight: 600;
+  position: relative;
+  padding-right: 15px;
+  cursor: pointer;
+}
+
+.viewAll::after {
+  content: '›';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 18px;
+  transition: transform 0.2s ease;
+}
+
+.viewAll:active::after {
+  transform: translateY(-50%) translateX(3px);
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.statCardCompact {
+  background: linear-gradient(145deg, #1A1A1A 0%, #131313 100%);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  height: 90px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.statCardCompact:active {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+}
+
+.statIconSmall {
+  width: 24px;
+  height: 24px;
+  margin-bottom: 6px;
+  color: var(--primary);
+  filter: drop-shadow(0 2px 3px rgba(157, 92, 255, 0.2));
+}
+
+.statNameSmall {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.statNumberLarge {
+  font-size: 20px;
+  font-weight: 700;
+  background: linear-gradient(90deg, #FFFFFF 0%, #d0d0d0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@media (max-width: 380px) {
+  .statsGrid {
+    gap: 10px;
+  }
+
+  .statCardCompact {
+    padding: 14px;
+    height: 86px;
+  }
+}
+
+@media (max-width: 360px) {
+  .statsGrid {
+    gap: 8px;
+  }
+
+  .statCardCompact {
+    padding: 12px;
+    height: 84px;
+  }
+}
+
+@media (max-width: 320px) {
+  .statNumberLarge {
+    font-size: 18px;
+  }
+}

@@ -1,0 +1,92 @@
+
+.actionButtons {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 22px;
+  gap: 10px;
+}
+
+.actionButton {
+  flex: 1;
+  min-height: 76px;
+  background: linear-gradient(145deg, #1E1E1E 0%, #151515 100%);
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-decoration: none;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+}
+
+.actionButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(145deg, rgba(157, 92, 255, 0.1) 0%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.actionButton:active {
+  transform: scale(0.96);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.actionButton:active::before {
+  opacity: 1;
+}
+
+.actionIcon {
+  height: 24px;
+  color: var(--primary);
+  margin-bottom: 2px;
+  filter: drop-shadow(0 2px 3px rgba(157, 92, 255, 0.3));
+}
+
+.actionLabel {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+@media (min-width: 500px) {
+  .actionButtons {
+    gap: 15px;
+  }
+  
+  .actionButton {
+    min-height: 86px;
+  }
+  
+  .actionLabel {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 380px) {
+  .actionButton {
+    min-height: 72px;
+  }
+  
+  .actionLabel {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 360px) {
+  .actionButton {
+    min-height: 68px;
+  }
+}

@@ -1,0 +1,76 @@
+.greetingBanner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(120deg, rgba(157, 92, 255, 0.08) 0%, rgba(157, 92, 255, 0.01) 100%);
+  border-radius: var(--radius-md);
+  padding: 18px 20px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(157, 92, 255, 0.12);
+  animation: var(--animation-slide-up);
+  animation-delay: 0.1s;
+  backdrop-filter: blur(10px);
+}
+
+.greetingText {
+  font-size: 20px;
+  font-weight: 700;
+  color: white;
+  letter-spacing: 0.4px;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+  background: linear-gradient(90deg, #FFFFFF 30%, #e0e0e0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.greetingIcon {
+  animation: var(--animation-float), var(--animation-rotate-subtle);
+  transform-origin: center center;
+}
+
+.greetingIcon svg {
+  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.3));
+  width: 28px;
+  height: 28px;
+}
+
+@media (min-width: 500px) {
+  .greetingBanner {
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+
+  .greetingText {
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 380px) {
+  .greetingBanner {
+    padding: 16px 18px;
+  }
+
+  .greetingText {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 360px) {
+  .greetingBanner {
+    padding: 14px 16px;
+  }
+
+  .greetingText {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 320px) {
+  .greetingBanner {
+    padding: 14px 16px;
+  }
+
+  .greetingText {
+    font-size: 15px;
+  }
+}
