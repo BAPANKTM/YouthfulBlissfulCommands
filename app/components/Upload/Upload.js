@@ -28,6 +28,15 @@ const Upload = ({ onUpload }) => {
     }
   };
   
+  const handleBack = () => {
+    setStep(0);
+    setUploadType(null);
+    setFile(null);
+    setText('');
+    setProgress(0);
+    setUploadStatus({ type: null, message: null });
+  };
+  
   const handleTextUpload = async () => {
     if (!text.trim()) return;
     
@@ -106,108 +115,59 @@ const Upload = ({ onUpload }) => {
       
       // Use XMLHttpRequest to track upload progress
       const xhr = new XMLHttpRequest();
-      xhr.open('POST', `https://api.telegram.org/bot${config.bot_token}/${endpoint}`);
       
       xhr.upload.onprogress = (event) => {
         if (event.lengthComputable) {
-          const percentComplete = Math.round((event.loaded / event.total) * 100);
-          setProgress(percentComplete);
+          const percent = Math.round((event.loaded / event.total) * 100);
+          setProgress(percent);
         }
       };
       
       xhr.onload = function() {
-        if (xhr.status === 200) {
-          const response = JSON.parse(xhr.responseText);
-          if (response.ok) {
-            setUploadStatus({ type: 'success', message: 'File uploaded successfully!' });
-            setText('');
-            setFile(null);
-            // Reset to initial state after 2 seconds
-            setTimeout(() => {
-              setStep(0);
-              setUploadType(null);
-              setUploadStatus({ type: null, message: null });
-            }, 2000);
-          } else {
-            throw new Error(response.description || 'Failed to upload file');
+        if (xhr.status >= 200 && xhr.status < 300) {
+          try {
+            const response = JSON.parse(xhr.responseText);
+            if (response.ok) {
+              setUploadStatus({ type: 'success', message: 'Media uploaded successfully!' });
+              setFile(null);
+              setText('');
+              // Reset to initial state after 2 seconds
+              setTimeout(() => {
+                setStep(0);
+                setUploadType(null);
+                setUploadStatus({ type: null, message: null });
+              }, 2000);
+            } else {
+              throw new Error(response.description || 'Failed to upload media');
+            }
+          } catch (error) {
+            setUploadStatus({ type: 'error', message: 'Error parsing response' });
           }
         } else {
-          throw new Error('Network error');
+          setUploadStatus({ type: 'error', message: `HTTP error ${xhr.status}` });
         }
+        setLoading(false);
       };
       
       xhr.onerror = function() {
-        throw new Error('Network error');
+        setUploadStatus({ type: 'error', message: 'Network error occurred' });
+        setLoading(false);
       };
       
+      xhr.open('POST', `https://api.telegram.org/bot${config.bot_token}/${endpoint}`);
       xhr.send(formData);
     } catch (error) {
       console.error('Error uploading media:', error);
-      setUploadStatus({ type: 'error', message: error.message || 'Failed to upload file' });
+      setUploadStatus({ type: 'error', message: error.message || 'Failed to upload media' });
       setLoading(false);
     }
   };
   
-  const handleBack = () => {
-    if (step === 1) {
-      setStep(0);
-      setUploadType(null);
-      setText('');
-      setFile(null);
-      setUploadStatus({ type: null, message: null });
-    }
+  const triggerFileInput = () => {
+    fileInputRef.current.click();
   };
   
-  const getFileIcon = (fileType) => {
-    if (fileType.startsWith('image/')) {
-      return (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect x="3" y="3" width="18" height="18" rx="2" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          <circle cx="8.5" cy="8.5" r="1.5" fill="#9D5CFF"/>
-          <path d="M21 15L16 10L5 21" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
-      );
-    } else if (fileType.startsWith('video/')) {
-      return (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M23 7L16 12L23 17V7Z" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          <rect x="1" y="5" width="15" height="14" rx="2" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
-      );
-    } else if (fileType.startsWith('audio/')) {
-      return (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M9 18V5L21 3V16" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          <circle cx="6" cy="18" r="3" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          <circle cx="18" cy="16" r="3" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
-      );
-    } else {
-      return (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M14 2V8H20" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M16 13H8" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M16 17H8" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M10 9H9H8" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
-      );
-    }
-  };
-  
-  const getFileSize = (size) => {
-    if (size < 1024) {
-      return size + ' B';
-    } else if (size < 1024 * 1024) {
-      return (size / 1024).toFixed(1) + ' KB';
-    } else if (size < 1024 * 1024 * 1024) {
-      return (size / (1024 * 1024)).toFixed(1) + ' MB';
-    } else {
-      return (size / (1024 * 1024 * 1024)).toFixed(1) + ' GB';
-    }
-  };
-  
-  // Upload Status Notification Component
+  // Component for status notification
   const StatusNotification = () => {
     if (!uploadStatus.type) return null;
     
@@ -230,7 +190,7 @@ const Upload = ({ onUpload }) => {
     );
   };
   
-  // Progress Indicator Component
+  // Component for progress indicator
   const ProgressIndicator = () => {
     if (!loading || progress === 0) return null;
     
@@ -247,20 +207,21 @@ const Upload = ({ onUpload }) => {
     );
   };
   
-  // Render the component based on current step
+  // Render the appropriate step
   if (step === 0) {
-    // Initial upload button
+    // Type selection
     return (
       <div className={styles.upload}>
         <div className={styles.uploadTitle}>
           <div className={styles.uploadIcon}>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M17 8L12 3L7 8" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M12 3V15" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M21 14H14V21H21V14Z" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M10 14H3V21H10V14Z" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M21 3H14V10H21V3Z" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M10 3H3V10H10V3Z" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </div>
-          <h2>Upload & Share</h2>
+          <span>Upload content</span>
         </div>
         <div className={styles.uploadOptions}>
           <div className={styles.uploadOption} onClick={() => handleTypeSelect('text')}>
@@ -319,38 +280,17 @@ const Upload = ({ onUpload }) => {
           </div>
         ) : (
           <div className={styles.mediaUploadForm}>
-            <input
-              type="file"
-              ref={fileInputRef}
-              onChange={handleFileSelect}
-              className={styles.hiddenFileInput}
-              accept="image/*,video/*,audio/*,.pdf,.doc,.docx,.xls,.xlsx,.txt"
+            <input 
+              type="file" 
+              ref={fileInputRef} 
+              onChange={handleFileSelect} 
+              style={{ display: 'none' }} 
+              accept="image/*,video/*,audio/*,application/*"
               disabled={loading}
             />
             
-            {file ? (
-              <div className={styles.filePreview}>
-                <div className={styles.fileInfo}>
-                  {getFileIcon(file.type)}
-                  <div className={styles.fileDetails}>
-                    <div className={styles.fileName}>{file.name}</div>
-                    <div className={styles.fileSize}>{getFileSize(file.size)}</div>
-                  </div>
-                </div>
-                
-                <button 
-                  className={styles.changeFileButton}
-                  onClick={() => fileInputRef.current?.click()}
-                  disabled={loading}
-                >
-                  Change
-                </button>
-              </div>
-            ) : (
-              <div 
-                className={styles.dropZone}
-                onClick={() => fileInputRef.current?.click()}
-              >
+            {!file ? (
+              <div className={styles.mediaDropArea} onClick={triggerFileInput}>
                 <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                   <path d="M17 8L12 3L7 8" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -358,16 +298,48 @@ const Upload = ({ onUpload }) => {
                 </svg>
                 <p>Click to select a file or drag and drop</p>
               </div>
+            ) : (
+              <div className={styles.mediaPreview}>
+                {file.type.startsWith('image/') ? (
+                  <img 
+                    src={URL.createObjectURL(file)} 
+                    alt="Preview" 
+                    className={styles.mediaPreviewImage}
+                  />
+                ) : file.type.startsWith('video/') ? (
+                  <video 
+                    src={URL.createObjectURL(file)} 
+                    controls 
+                    className={styles.mediaPreviewVideo}
+                  ></video>
+                ) : (
+                  <div className={styles.fileInfo}>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M14 2V8H20" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                    <p>{file.name}</p>
+                    <span>{(file.size / 1024 / 1024).toFixed(2)} MB</span>
+                  </div>
+                )}
+                <button 
+                  className={styles.removeButton} 
+                  onClick={() => setFile(null)}
+                  disabled={loading}
+                >
+                  Remove
+                </button>
+              </div>
             )}
             
             <ProgressIndicator />
             
             <textarea 
               className={styles.captionInput} 
-              placeholder="Add an optional caption..." 
+              placeholder="Add a caption (optional)..." 
               value={text}
               onChange={handleTextChange}
-              disabled={loading}
+              disabled={loading || !file}
             ></textarea>
             
             <button 
