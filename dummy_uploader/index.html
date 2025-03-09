@@ -1,0 +1,121 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram MTProto Uploader</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="uploader-card">
+            <div class="uploader-header">
+                <div class="uploader-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="#9D5CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M17 8L12 3L7 8" stroke="#9D5CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12 3V15" stroke="#9D5CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <h1>Telegram MTProto Uploader</h1>
+            </div>
+            
+            <div class="status-notification" id="statusNotification">
+                <div class="status-icon success-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M22 11.08V12C21.9988 14.1564 21.3005 16.2547 20.0093 17.9818C18.7182 19.709 16.9033 20.9725 14.8354 21.5839C12.7674 22.1953 10.5573 22.1219 8.53447 21.3746C6.51168 20.6273 4.78465 19.2461 3.61096 17.4371C2.43727 15.628 1.87979 13.4881 2.02168 11.3363C2.16356 9.18457 2.99721 7.13633 4.39828 5.49707C5.79935 3.85782 7.69279 2.71538 9.79619 2.24015C11.8996 1.76493 14.1003 1.98234 16.07 2.86" stroke="#00FF85" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M22 4L12 14.01L9 11.01" stroke="#00FF85" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div class="status-icon error-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#FF5555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M15 9L9 15" stroke="#FF5555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M9 9L15 15" stroke="#FF5555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <span id="statusMessage"></span>
+            </div>
+            
+            <div class="connection-status" id="connectionStatus">
+                <span class="status-dot" id="statusDot"></span>
+                <span id="connectionText">Initializing MTProto...</span>
+            </div>
+            
+            <div class="uploader-content">
+                <div class="media-drop-area" id="dropArea">
+                    <input type="file" id="fileInput" style="display: none">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="#9D5CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M17 8L12 3L7 8" stroke="#9D5CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12 3V15" stroke="#9D5CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <p>Click to select a file or drag and drop</p>
+                    <p class="max-size">Max file size: 2GB (4GB with Telegram Premium)</p>
+                </div>
+                
+                <div class="media-preview" id="mediaPreview" style="display: none;">
+                    <div class="preview-content" id="previewContent">
+                        <!-- Preview content will be inserted here -->
+                    </div>
+                    <button class="remove-button" id="removeButton">Remove</button>
+                </div>
+                
+                <div class="progress-container" id="progressContainer" style="display: none;">
+                    <div class="progress-info">
+                        <span id="uploadingFileName">Uploading...</span>
+                        <span id="progressPercent">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                    </div>
+                    <div class="upload-speed">
+                        <span id="uploadSpeed">0 KB/s</span>
+                        <span id="timeRemaining">Calculating...</span>
+                    </div>
+                </div>
+                
+                <div class="upload-options">
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="forceDocumentCheckbox">
+                        <span>Upload as Document</span>
+                        <div class="tooltip">
+                            Sends file as a document regardless of type (preserves original file without compression)
+                        </div>
+                    </label>
+                </div>
+                
+                <textarea class="caption-input" id="captionInput" placeholder="Add a caption (optional)..."></textarea>
+                
+                <div class="button-container">
+                    <button class="upload-button" id="uploadButton" disabled>Select a file to upload</button>
+                </div>
+            </div>
+            
+            <div class="uploader-footer">
+                <div class="targeting">
+                    <span>Uploading to: </span>
+                    <span id="channelId" class="channel-id">-1002459925876</span>
+                </div>
+                <div class="api-info">
+                    <span>Using Telegram MTProto API</span>
+                    <div class="tooltip">
+                        Direct connection to Telegram servers enables large file uploads (up to 2GB/4GB)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    
+    <!-- MTProto Connection Script -->
+    <script src="mtproto.js"></script>
+    
+    <!-- Main Application Logic -->
+    <script src="app.js"></script>
+</body>
+</html>
