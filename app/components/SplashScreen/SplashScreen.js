@@ -5,15 +5,26 @@ import styles from './SplashScreen.module.css';
 
 const SplashScreen = () => {
   const [visible, setVisible] = useState(true);
+  const [removed, setRemoved] = useState(false);
 
   useEffect(() => {
-    // Minimum display time of 2 seconds
-    const timer = setTimeout(() => {
+    // Show splash for 2.5 seconds
+    const fadeTimer = setTimeout(() => {
       setVisible(false);
-    }, 2300);
+      
+      // Completely remove from DOM after fade animation completes
+      const removeTimer = setTimeout(() => {
+        setRemoved(true);
+      }, 600); // slightly longer than CSS transition
+      
+      return () => clearTimeout(removeTimer);
+    }, 2500);
 
-    return () => clearTimeout(timer);
+    return () => clearTimeout(fadeTimer);
   }, []);
+
+  // Don't render at all if removed
+  if (removed) return null;
 
   return (
     <div className={`${styles.splashContainer} ${!visible ? styles.fadeOut : ''}`}>
@@ -26,14 +37,17 @@ const SplashScreen = () => {
           <div className={styles.loaderBar}></div>
         </div>
         <div className={styles.particles}>
-          {/* Generate 8 particle elements */}
-          {[...Array(8)].map((_, i) => (
+          {/* Generate 15 particles with varying positions */}
+          {[...Array(15)].map((_, i) => (
             <div 
               key={i} 
               className={styles.particle} 
               style={{
                 animationDelay: `${0.2 * i}s`,
-                left: `${10 + (i * 10)}%`
+                left: `${5 + (i * 6)}%`,
+                width: `${4 + Math.random() * 6}px`,
+                height: `${4 + Math.random() * 6}px`,
+                opacity: Math.random() * 0.7
               }}
             ></div>
           ))}
