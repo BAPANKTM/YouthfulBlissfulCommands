@@ -26,11 +26,11 @@ export default function Home() {
   const handleUpload = () => {
     console.log("Upload clicked");
     setFloaterContent({
-      title: "Upload File",
-      content: "Select a file to upload or drag and drop it here.",
-      primaryText: "Upload",
+      title: "Share Content",
+      content: <Upload onUpload={() => {}} />,
+      primaryText: "",
       secondaryText: "Cancel",
-      onPrimary: () => console.log("Upload pressed"),
+      onPrimary: () => {},
       onSecondary: () => console.log("Cancel pressed"),
     });
     setShowFloater(true);
