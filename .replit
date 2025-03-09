@@ -20,7 +20,7 @@ localPort = 8080
 externalPort = 8080
 
 [workflows]
-runButton = "Start Dummy Uploader"
+runButton = "Start Uploader"
 
 [[workflows.workflow]]
 name = "Start Dummy Uploader"
@@ -29,3 +29,11 @@ author = 40337134
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "cd dummy_uploader && npm start"
+
+[[workflows.workflow]]
+name = "Start Uploader"
+author = 40337134
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd dummy_uploader && node server.js"
