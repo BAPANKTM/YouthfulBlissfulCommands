@@ -42,35 +42,3 @@ const ActionButtons = ({ openFloater }) => {
 };
 
 export default ActionButtons;
-'use client';
-import React from 'react';
-import styles from './ActionButtons.module.css';
-
-const ActionButtons = ({ openFloater }) => {
-  return (
-    <div className={styles.actionButtons}>
-      <div className={styles.actionButton} onClick={() => openFloater('withdrawal')}>
-        <div className={styles.actionIcon}>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 17V3" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            <path d="M6 11L12 17L18 11" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            <path d="M19 21H5" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-        </div>
-        <span>Withdrawal</span>
-      </div>
-      <div className={styles.actionButton} onClick={() => openFloater('help')}>
-        <div className={styles.actionIcon}>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            <path d="M12 17V17.01" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            <path d="M12 13.5C11.9816 13.1754 12.0706 12.8536 12.2537 12.5791C12.4369 12.3045 12.7052 12.0929 13.02 11.975C13.9304 11.5894 14.6089 10.8032 14.8482 9.85946C15.0876 8.9157 14.8604 7.92076 14.2387 7.1507C13.6169 6.38063 12.6707 5.92639 11.6814 5.90625C10.692 5.8861 9.72936 6.30151 9.0765 7.04275" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-        </div>
-        <span>Help</span>
-      </div>
-    </div>
-  );
-};
-
-export default ActionButtons;
