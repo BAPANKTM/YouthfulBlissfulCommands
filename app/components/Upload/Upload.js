@@ -1,130 +1,185 @@
 
-'use client';
-import React, { useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import styles from './Upload.module.css';
+import fetchTelegramConfig from '../../utils/telegramConfig';
 
 const Upload = ({ onUpload }) => {
   const [step, setStep] = useState(0);
-  const [textContent, setTextContent] = useState('');
-  const [caption, setCaption] = useState('');
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [selectedFileName, setSelectedFileName] = useState('');
-  const [previewUrl, setPreviewUrl] = useState('');
+  const [uploadType, setUploadType] = useState(null);
+  const [text, setText] = useState('');
+  const [file, setFile] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [uploadStatus, setUploadStatus] = useState({ type: null, message: null });
   const fileInputRef = useRef(null);
   
-  const handleInitialClick = () => {
-    setStep(1); // Go to media type selection
+  const handleTypeSelect = (type) => {
+    setUploadType(type);
+    setStep(1);
   };
   
-  const handleMediaTypeSelect = (type) => {
-    if (type === 'media') {
-      // For media files - trigger file input
-      if (fileInputRef.current) {
-        fileInputRef.current.click();
-      }
-    } else if (type === 'text') {
-      setStep(2); // Go to text entry step
+  const handleTextChange = (e) => {
+    setText(e.target.value);
+  };
+  
+  const handleFileSelect = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      setFile(e.target.files[0]);
     }
   };
   
-  const handleTextUpload = () => {
-    if (textContent.trim()) {
-      console.log('Text content:', textContent);
-      // Implement actual upload functionality here
-      setTextContent('');
-      setStep(0); // Reset to initial state
-    }
-  };
-  
-  const handleFileChange = (e) => {
-    const files = e.target.files;
-    if (files && files.length > 0) {
-      const file = files[0];
-      setSelectedFile(file);
-      setSelectedFileName(file.name);
+  const handleTextUpload = async () => {
+    if (!text.trim()) return;
+    
+    setLoading(true);
+    setUploadStatus({ type: null, message: null });
+    
+    try {
+      const config = await fetchTelegramConfig();
       
-      // Create preview URL for images and videos
-      if (file.type.startsWith('image/') || file.type.startsWith('video/')) {
-        const url = URL.createObjectURL(file);
-        setPreviewUrl(url);
+      const formData = new FormData();
+      formData.append('chat_id', config.channel_id);
+      formData.append('text', text);
+      
+      const response = await fetch(`https://api.telegram.org/bot${config.bot_token}/sendMessage`, {
+        method: 'POST',
+        body: formData
+      });
+      
+      const data = await response.json();
+      
+      if (data.ok) {
+        setUploadStatus({ type: 'success', message: 'Message sent successfully!' });
+        setText('');
+        // Reset to initial state after 2 seconds
+        setTimeout(() => {
+          setStep(0);
+          setUploadType(null);
+          setUploadStatus({ type: null, message: null });
+        }, 2000);
       } else {
-        setPreviewUrl('');
+        throw new Error(data.description || 'Failed to send message');
+      }
+    } catch (error) {
+      console.error('Error uploading text:', error);
+      setUploadStatus({ type: 'error', message: error.message || 'Failed to send message' });
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  const handleMediaUpload = async () => {
+    if (!file) return;
+    
+    setLoading(true);
+    setProgress(0);
+    setUploadStatus({ type: null, message: null });
+    
+    try {
+      const config = await fetchTelegramConfig();
+      
+      const formData = new FormData();
+      formData.append('chat_id', config.channel_id);
+      
+      // Determine the correct API endpoint based on file type
+      let endpoint;
+      const fileType = file.type.split('/')[0];
+      
+      if (fileType === 'image') {
+        endpoint = 'sendPhoto';
+        formData.append('photo', file);
+      } else if (fileType === 'video') {
+        endpoint = 'sendVideo';
+        formData.append('video', file);
+      } else if (fileType === 'audio') {
+        endpoint = 'sendAudio';
+        formData.append('audio', file);
+      } else {
+        endpoint = 'sendDocument';
+        formData.append('document', file);
       }
       
-      // Go to media preview/caption step
-      setStep(3);
+      // Add caption if available
+      if (text.trim()) {
+        formData.append('caption', text);
+      }
+      
+      // Use XMLHttpRequest to track upload progress
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', `https://api.telegram.org/bot${config.bot_token}/${endpoint}`);
+      
+      xhr.upload.onprogress = (event) => {
+        if (event.lengthComputable) {
+          const percentComplete = Math.round((event.loaded / event.total) * 100);
+          setProgress(percentComplete);
+        }
+      };
+      
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          const response = JSON.parse(xhr.responseText);
+          if (response.ok) {
+            setUploadStatus({ type: 'success', message: 'File uploaded successfully!' });
+            setText('');
+            setFile(null);
+            // Reset to initial state after 2 seconds
+            setTimeout(() => {
+              setStep(0);
+              setUploadType(null);
+              setUploadStatus({ type: null, message: null });
+            }, 2000);
+          } else {
+            throw new Error(response.description || 'Failed to upload file');
+          }
+        } else {
+          throw new Error('Network error');
+        }
+      };
+      
+      xhr.onerror = function() {
+        throw new Error('Network error');
+      };
+      
+      xhr.send(formData);
+    } catch (error) {
+      console.error('Error uploading media:', error);
+      setUploadStatus({ type: 'error', message: error.message || 'Failed to upload file' });
+      setLoading(false);
     }
   };
   
-  const handleMediaUpload = () => {
-    if (selectedFile) {
-      console.log('Media upload selected', selectedFile);
-      console.log('Caption:', caption);
-      // Implement actual file upload functionality here
-      resetUploadState();
+  const handleBack = () => {
+    if (step === 1) {
+      setStep(0);
+      setUploadType(null);
+      setText('');
+      setFile(null);
+      setUploadStatus({ type: null, message: null });
     }
   };
   
-  const resetUploadState = () => {
-    // First revoke object URL to avoid memory leaks
-    if (previewUrl) {
-      URL.revokeObjectURL(previewUrl);
-    }
-    
-    // Then reset all state variables
-    setStep(0);
-    setSelectedFile(null);
-    setSelectedFileName('');
-    setPreviewUrl('');
-    setCaption('');
-    setTextContent('');
-    
-    // Clear file input if it exists
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
-    }
-  };
-  
-  const handleCancel = () => {
-    resetUploadState();
-  };
-  
-  const getFileIcon = () => {
-    if (!selectedFile) {
+  const getFileIcon = (fileType) => {
+    if (fileType.startsWith('image/')) {
       return (
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M14 2V8H20" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M16 13H8" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M16 17H8" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M10 9H9H8" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
-      );
-    }
-    
-    const type = selectedFile.type;
-    
-    if (type.startsWith('image/')) {
-      return (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M19 3H5C3.89543 3 3 3.89543 3 5V19C3 20.1046 3.89543 21 5 21H19C20.1046 21 21 20.1046 21 19V5C21 3.89543 20.1046 3 19 3Z" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M8.5 10C9.32843 10 10 9.32843 10 8.5C10 7.67157 9.32843 7 8.5 7C7.67157 7 7 7.67157 7 8.5C7 9.32843 7.67157 10 8.5 10Z" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          <rect x="3" y="3" width="18" height="18" rx="2" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          <circle cx="8.5" cy="8.5" r="1.5" fill="#9D5CFF"/>
           <path d="M21 15L16 10L5 21" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
       );
-    } else if (type.startsWith('video/')) {
+    } else if (fileType.startsWith('video/')) {
       return (
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M23 7L16 12L23 17V7Z" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M14 5H3C1.89543 5 1 5.89543 1 7V17C1 18.1046 1.89543 19 3 19H14C15.1046 19 16 18.1046 16 17V7C16 5.89543 15.1046 5 14 5Z" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          <rect x="1" y="5" width="15" height="14" rx="2" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
       );
-    } else if (type.startsWith('audio/')) {
+    } else if (fileType.startsWith('audio/')) {
       return (
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M9 18V5L21 3V16" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M6 21C7.65685 21 9 19.6569 9 18C9 16.3431 7.65685 15 6 15C4.34315 15 3 16.3431 3 18C3 19.6569 4.34315 21 6 21Z" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M18 19C19.6569 19 21 17.6569 21 16C21 14.3431 19.6569 13 18 13C16.3431 13 15 14.3431 15 16C15 17.6569 16.3431 19 18 19Z" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          <circle cx="6" cy="18" r="3" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          <circle cx="18" cy="16" r="3" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
       );
     } else {
@@ -152,6 +207,46 @@ const Upload = ({ onUpload }) => {
     }
   };
   
+  // Upload Status Notification Component
+  const StatusNotification = () => {
+    if (!uploadStatus.type) return null;
+    
+    return (
+      <div className={`${styles.statusNotification} ${styles[uploadStatus.type]}`}>
+        {uploadStatus.type === 'success' ? (
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M22 11.08V12C21.9988 14.1564 21.3005 16.2547 20.0093 17.9818C18.7182 19.709 16.9033 20.9725 14.8354 21.5839C12.7674 22.1953 10.5573 22.1219 8.53447 21.3746C6.51168 20.6273 4.78465 19.2461 3.61096 17.4371C2.43727 15.628 1.87979 13.4881 2.02168 11.3363C2.16356 9.18457 2.99721 7.13633 4.39828 5.49707C5.79935 3.85782 7.69279 2.71538 9.79619 2.24015C11.8996 1.76493 14.1003 1.98234 16.07 2.86" stroke="#00FF85" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M22 4L12 14.01L9 11.01" stroke="#00FF85" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        ) : (
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#FF5555" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M15 9L9 15" stroke="#FF5555" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M9 9L15 15" stroke="#FF5555" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        )}
+        <span>{uploadStatus.message}</span>
+      </div>
+    );
+  };
+  
+  // Progress Indicator Component
+  const ProgressIndicator = () => {
+    if (!loading || progress === 0) return null;
+    
+    return (
+      <div className={styles.progressContainer}>
+        <div className={styles.progressBar}>
+          <div 
+            className={styles.progressFill} 
+            style={{ width: `${progress}%` }}
+          ></div>
+        </div>
+        <div className={styles.progressText}>{progress}%</div>
+      </div>
+    );
+  };
+  
   // Render the component based on current step
   if (step === 0) {
     // Initial upload button
@@ -165,85 +260,10 @@ const Upload = ({ onUpload }) => {
               <path d="M12 3V15" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </div>
-          Upload Files
+          <h2>Upload & Share</h2>
         </div>
-        <div className={styles.uploadDrop} onClick={handleInitialClick}>
-          <div className={styles.uploadDropIcon}>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M7 16.5V17C7 18.1046 7.89543 19 9 19H15C16.1046 19 17 18.1046 17 17V16.5M12 14.5V6.5M12 6.5L9 9.5M12 6.5L15 9.5" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </div>
-          <div className={styles.uploadText}>
-            <span className={styles.uploadHighlight}>Click to upload</span> files or share text
-            <div className={styles.uploadFormats}>
-              Support for all file types up to 1GB
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  } else if (step === 1) {
-    // Media type selection with cancel button
-    return (
-      <div className={styles.upload}>
-        <div className={styles.uploadTitle}>
-          <div className={styles.uploadIcon}>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M17 8L12 3L7 8" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M12 3V15" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </div>
-          Select Upload Type
-        </div>
-        <div className={styles.optionButtonsContainer}>
-          <button 
-            className={styles.optionButton}
-            onClick={() => handleMediaTypeSelect('media')}
-          >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M19 3H5C3.89543 3 3 3.89543 3 5V19C3 20.1046 3.89543 21 5 21H19C20.1046 21 21 20.1046 21 19V5C21 3.89543 20.1046 3 19 3Z" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M8.5 10C9.32843 10 10 9.32843 10 8.5C10 7.67157 9.32843 7 8.5 7C7.67157 7 7 7.67157 7 8.5C7 9.32843 7.67157 10 8.5 10Z" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M21 15L16 10L5 21" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-            Upload Media
-          </button>
-          <button 
-            className={styles.optionButton}
-            onClick={() => handleMediaTypeSelect('text')}
-          >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M16 13H8" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M16 17H8" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M10 9H9H8" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-            Share Text
-          </button>
-          <button 
-            className={styles.cancelButton}
-            onClick={handleCancel}
-          >
-            Cancel
-          </button>
-        </div>
-        
-        {/* Hidden file input element */}
-        <input
-          type="file"
-          ref={fileInputRef}
-          onChange={handleFileChange}
-          className={styles.hiddenFileInput}
-          accept="*/*"
-        />
-      </div>
-    );
-  } else if (step === 2) {
-    // Text entry step
-    return (
-      <div className={styles.upload}>
-        <div className={styles.uploadTitle}>
-          <div className={styles.uploadIcon}>
+        <div className={styles.uploadOptions}>
+          <div className={styles.uploadOption} onClick={() => handleTypeSelect('text')}>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               <path d="M14 2V8H20" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -251,118 +271,117 @@ const Upload = ({ onUpload }) => {
               <path d="M16 17H8" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               <path d="M10 9H9H8" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
+            <span>Text</span>
           </div>
-          Share Text
-        </div>
-        
-        <div className={styles.textInputContainer}>
-          <textarea
-            className={styles.textInput}
-            placeholder="Enter your text here..."
-            value={textContent}
-            onChange={(e) => setTextContent(e.target.value)}
-            rows={6}
-          />
-          
-          <div className={styles.textCounter}>
-            {textContent.length}/4000
-          </div>
-          
-          <div className={styles.buttonContainer}>
-            <button 
-              className={styles.cancelButton}
-              onClick={handleCancel}
-            >
-              Back
-            </button>
-            <button 
-              className={`${styles.uploadButton} ${!textContent.trim() ? styles.uploadButtonDisabled : ''}`}
-              onClick={handleTextUpload}
-              disabled={!textContent.trim()}
-            >
-              Upload Text
-            </button>
+          <div className={styles.uploadOption} onClick={() => handleTypeSelect('media')}>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="3" y="3" width="18" height="18" rx="2" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <circle cx="8.5" cy="8.5" r="1.5" fill="#9D5CFF"/>
+              <path d="M21 15L16 10L5 21" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            <span>Media</span>
           </div>
         </div>
       </div>
     );
-  } else if (step === 3) {
-    // Media upload preview with caption
+  } else if (step === 1) {
+    // Upload form based on selected type
     return (
-      <div className={styles.upload}>
-        <div className={styles.uploadTitle}>
-          <div className={styles.uploadIcon}>
-            {getFileIcon()}
-          </div>
-          Media Upload
+      <div className={styles.uploadForm}>
+        <div className={styles.uploadHeader}>
+          <button className={styles.backButton} onClick={handleBack}>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M19 12H5" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M12 19L5 12L12 5" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
+          <h2>{uploadType === 'text' ? 'Share Text' : 'Share Media'}</h2>
         </div>
         
-        <div className={styles.mediaPreview}>
-          {previewUrl && selectedFile && (selectedFile.type.startsWith('image/') || selectedFile.type.startsWith('video/')) ? (
-            <div className={styles.previewContainer}>
-              {selectedFile.type.startsWith('image/') ? (
-                <img 
-                  src={previewUrl} 
-                  alt="Preview" 
-                  className={styles.mediaPreviewImage} 
-                />
-              ) : selectedFile.type.startsWith('video/') ? (
-                <video 
-                  src={previewUrl}
-                  controls
-                  className={styles.mediaPreviewVideo}
-                />
-              ) : null}
-            </div>
-          ) : (
-            <div className={styles.fileInfoBox}>
-              <div className={styles.fileInfoIcon}>
-                {getFileIcon()}
-              </div>
-              <div className={styles.fileInfoDetails}>
-                <div className={styles.fileName} title={selectedFileName}>
-                  {selectedFileName}
-                </div>
-                <div className={styles.fileSize}>
-                  {selectedFile ? getFileSize(selectedFile.size) : ''}
-                </div>
-              </div>
-            </div>
-          )}
-          
-          <div className={styles.captionContainer}>
-            <textarea
-              className={styles.captionInput}
-              placeholder="Add a caption (optional)..."
-              value={caption}
-              onChange={(e) => setCaption(e.target.value)}
-              rows={3}
+        <StatusNotification />
+        
+        {uploadType === 'text' ? (
+          <div className={styles.textUploadForm}>
+            <textarea 
+              className={styles.textInput} 
+              placeholder="Type your message here..." 
+              value={text}
+              onChange={handleTextChange}
+              disabled={loading}
+            ></textarea>
+            <button 
+              className={styles.uploadButton} 
+              onClick={handleTextUpload}
+              disabled={loading || !text.trim()}
+            >
+              {loading ? 'Sending...' : 'Send Message'}
+            </button>
+          </div>
+        ) : (
+          <div className={styles.mediaUploadForm}>
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleFileSelect}
+              className={styles.hiddenFileInput}
+              accept="image/*,video/*,audio/*,.pdf,.doc,.docx,.xls,.xlsx,.txt"
+              disabled={loading}
             />
-            <div className={styles.captionCounter}>
-              {caption.length}/1000
-            </div>
-          </div>
-          
-          <div className={styles.buttonContainer}>
+            
+            {file ? (
+              <div className={styles.filePreview}>
+                <div className={styles.fileInfo}>
+                  {getFileIcon(file.type)}
+                  <div className={styles.fileDetails}>
+                    <div className={styles.fileName}>{file.name}</div>
+                    <div className={styles.fileSize}>{getFileSize(file.size)}</div>
+                  </div>
+                </div>
+                
+                <button 
+                  className={styles.changeFileButton}
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={loading}
+                >
+                  Change
+                </button>
+              </div>
+            ) : (
+              <div 
+                className={styles.dropZone}
+                onClick={() => fileInputRef.current?.click()}
+              >
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M17 8L12 3L7 8" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M12 3V15" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                <p>Click to select a file or drag and drop</p>
+              </div>
+            )}
+            
+            <ProgressIndicator />
+            
+            <textarea 
+              className={styles.captionInput} 
+              placeholder="Add an optional caption..." 
+              value={text}
+              onChange={handleTextChange}
+              disabled={loading}
+            ></textarea>
+            
             <button 
-              className={styles.cancelButton}
-              onClick={handleCancel}
-            >
-              Cancel
-            </button>
-            <button 
-              className={styles.uploadButton}
+              className={styles.uploadButton} 
               onClick={handleMediaUpload}
+              disabled={loading || !file}
             >
-              Send Media
+              {loading ? 'Uploading...' : 'Upload File'}
             </button>
           </div>
-        </div>
+        )}
       </div>
     );
   }
-  
-  return null;
 };
 
 export default Upload;
