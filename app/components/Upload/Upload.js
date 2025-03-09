@@ -71,7 +71,10 @@ const Upload = ({ onUpload }) => {
       }
     } catch (error) {
       console.error('Error uploading text:', error);
-      setUploadStatus({ type: 'error', message: error.message || 'Failed to send message' });
+      setUploadStatus({ 
+        type: 'error', 
+        message: 'Failed to send message. Please try again.' 
+      });
     } finally {
       setLoading(false);
     }
@@ -150,7 +153,12 @@ const Upload = ({ onUpload }) => {
       };
       
       xhr.onerror = function() {
-        setUploadStatus({ type: 'error', message: 'Network error occurred' });
+        setUploadStatus({ type: 'error', message: 'Network error occurred. Please check your connection and try again.' });
+        setLoading(false);
+      };
+      
+      xhr.ontimeout = function() {
+        setUploadStatus({ type: 'error', message: 'Upload timed out. Please try again with a smaller file or check your connection.' });
         setLoading(false);
       };
       
@@ -158,7 +166,10 @@ const Upload = ({ onUpload }) => {
       xhr.send(formData);
     } catch (error) {
       console.error('Error uploading media:', error);
-      setUploadStatus({ type: 'error', message: error.message || 'Failed to upload media' });
+      setUploadStatus({ 
+        type: 'error', 
+        message: 'Failed to upload media. Please try again.'
+      });
       setLoading(false);
     }
   };
