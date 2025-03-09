@@ -95,6 +95,37 @@
   margin-right: 10px;
   display: flex;
   align-items: center;
+
+.mediaContainer {
+  min-height: 160px;
+  position: relative;
+  margin-bottom: 16px;
+}
+
+.removeButton {
+  background: rgba(255, 85, 85, 0.1);
+  color: #FF5555;
+  border: 1px solid rgba(255, 85, 85, 0.2);
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  display: block;
+  width: fit-content;
+  margin: 12px auto;
+  transition: background 0.2s;
+}
+
+.removeButton:hover:not(:disabled) {
+  background: rgba(255, 85, 85, 0.2);
+}
+
+.removeButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
   justify-content: center;
 }
 
@@ -196,16 +227,12 @@
 }
 
 .mediaPreview {
-  width: 100%;
   border-radius: var(--radius-sm);
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  background: rgba(157, 92, 255, 0.03);
+  background: rgba(0, 0, 0, 0.03);
   border: 1px solid rgba(157, 92, 255, 0.1);
-  transform: translateZ(0);
-  will-change: transform;
-  backface-visibility: hidden;
 }
 
 .mediaPreviewImage,
