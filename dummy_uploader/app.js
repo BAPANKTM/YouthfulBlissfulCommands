@@ -1,31 +1,10 @@
 
-// DOM Elements
-const fileInput = document.getElementById('fileInput');
-const dropArea = document.getElementById('dropArea');
-const mediaPreview = document.getElementById('mediaPreview');
-const previewContent = document.getElementById('previewContent');
-const removeButton = document.getElementById('removeButton');
-const uploadButton = document.getElementById('uploadButton');
-const captionInput = document.getElementById('captionInput');
-const forceDocumentCheckbox = document.getElementById('forceDocumentCheckbox');
-const progressContainer = document.getElementById('progressContainer');
-const progressFill = document.getElementById('progressFill');
-const progressPercent = document.getElementById('progressPercent');
-const uploadingFileName = document.getElementById('uploadingFileName');
-const uploadSpeed = document.getElementById('uploadSpeed');
-const timeRemaining = document.getElementById('timeRemaining');
-const statusNotification = document.getElementById('statusNotification');
-const statusMessage = document.getElementById('statusMessage');
-const connectionStatus = document.getElementById('connectionStatus');
-const statusDot = document.getElementById('statusDot');
-const connectionText = document.getElementById('connectionText');
-
 // App state
 let selectedFile = null;
 let isUploading = false;
 
 // Initialize the application
-async function initApp() {
+function initApp() {
     // Set up event listeners and drag-drop behavior
     setupEventListeners();
     setupDragAndDrop();
@@ -39,7 +18,6 @@ async function initApp() {
         try {
             // Connect to Telegram servers
             await mtprotoClient.connect();
-            console.log("Connected to Telegram");
         } catch (error) {
             console.error("Failed to connect to Telegram:", error);
             showNotification('error', 'Failed to connect to Telegram: ' + error.message);
@@ -49,62 +27,77 @@ async function initApp() {
 
 // Setup MTProto client event listeners
 function setupMTProto() {
+    const connectionText = document.getElementById('connectionText');
+    const statusDot = document.getElementById('statusDot');
+    
     mtprotoClient.onConnectionUpdate((status, message) => {
-        switch (status) {
+        switch(status) {
             case 'connecting':
-                statusDot.className = 'status-dot';
                 connectionText.textContent = 'Connecting to Telegram...';
+                statusDot.className = 'status-dot connecting';
                 break;
             case 'connected':
-                statusDot.className = 'status-dot connected';
                 connectionText.textContent = 'Connected to Telegram';
+                statusDot.className = 'status-dot connected';
+                document.getElementById('uploadButton').disabled = !selectedFile;
                 break;
             case 'error':
-                statusDot.className = 'status-dot disconnected';
                 connectionText.textContent = 'Connection error: ' + message;
-                break;
-            case 'disconnected':
-                statusDot.className = 'status-dot disconnected';
-                connectionText.textContent = 'Disconnected from Telegram';
+                statusDot.className = 'status-dot error';
                 break;
         }
     });
     
     mtprotoClient.onUploadProgress((progress) => {
-        updateUploadProgress(progress);
+        if (isUploading) {
+            updateProgress(progress);
+        }
     });
 }
 
-// Setup event listeners
+// Set up event listeners for buttons and inputs
 function setupEventListeners() {
-    // File selection
-    fileInput.addEventListener('change', handleFileSelect);
+    const fileInput = document.getElementById('fileInput');
+    const dropArea = document.getElementById('dropArea');
+    const uploadButton = document.getElementById('uploadButton');
+    const removeButton = document.getElementById('removeButton');
+    
+    // File input change event
+    fileInput.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) {
+            handleFileSelection(e.target.files[0]);
+        }
+    });
     
     // Click on drop area
     dropArea.addEventListener('click', () => {
         fileInput.click();
     });
     
-    // Remove button
-    removeButton.addEventListener('click', () => {
-        clearFileSelection();
+    // Upload button click
+    uploadButton.addEventListener('click', async () => {
+        if (selectedFile && !isUploading && mtprotoClient.connected) {
+            await uploadFile();
+        }
     });
     
-    // Upload button
-    uploadButton.addEventListener('click', uploadFile);
+    // Remove button click
+    removeButton.addEventListener('click', () => {
+        resetUploader();
+    });
 }
 
-// Setup drag and drop functionality
+// Set up drag and drop behavior
 function setupDragAndDrop() {
+    const dropArea = document.getElementById('dropArea');
+    
+    // Prevent default drag behaviors
     ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
         dropArea.addEventListener(eventName, preventDefaults, false);
+        document.body.addEventListener(eventName, preventDefaults, false);
     });
     
-    function preventDefaults(e) {
-        e.preventDefault();
-        e.stopPropagation();
-    }
-    
+    // Highlight drop area when item is dragged over it
     ['dragenter', 'dragover'].forEach(eventName => {
         dropArea.addEventListener(eventName, highlight, false);
     });
@@ -113,196 +106,227 @@ function setupDragAndDrop() {
         dropArea.addEventListener(eventName, unhighlight, false);
     });
     
+    // Handle dropped files
+    dropArea.addEventListener('drop', handleDrop, false);
+    
+    function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+    
     function highlight() {
-        dropArea.style.borderColor = 'var(--primary)';
-        dropArea.style.backgroundColor = 'var(--primary-alpha-05)';
+        dropArea.classList.add('highlight');
     }
     
     function unhighlight() {
-        dropArea.style.borderColor = 'var(--primary-alpha-20)';
-        dropArea.style.backgroundColor = '';
+        dropArea.classList.remove('highlight');
     }
     
-    dropArea.addEventListener('drop', handleDrop, false);
-}
-
-// Handle file drop
-function handleDrop(e) {
-    const dt = e.dataTransfer;
-    const file = dt.files[0];
-    handleFile(file);
-}
-
-// Handle file selection
-function handleFileSelect(e) {
-    if (e.target.files && e.target.files[0]) {
-        handleFile(e.target.files[0]);
+    function handleDrop(e) {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        
+        if (files.length > 0) {
+            handleFileSelection(files[0]);
+        }
     }
 }
 
-// Process the selected file
-function handleFile(file) {
+// Handle file selection from input or drop
+function handleFileSelection(file) {
+    // Check file size limit (2GB or 4GB for premium)
+    const maxSize = 2 * 1024 * 1024 * 1024; // 2GB
+    
+    if (file.size > maxSize) {
+        showNotification('error', 'File exceeds the 2GB size limit. Premium users can upload files up to 4GB.');
+        return;
+    }
+    
     selectedFile = file;
     
     // Show file preview
-    updateFilePreview();
+    const mediaPreview = document.getElementById('mediaPreview');
+    const previewContent = document.getElementById('previewContent');
+    const dropArea = document.getElementById('dropArea');
+    const uploadButton = document.getElementById('uploadButton');
     
-    // Update upload button
-    uploadButton.textContent = 'Upload File';
-    uploadButton.disabled = false;
-    
-    // Show the media preview
-    dropArea.style.display = 'none';
-    mediaPreview.style.display = 'flex';
-    
-    // Check file size and show warning if needed
-    if (file.size > 2 * 1024 * 1024 * 1024) { // 2GB
-        showNotification('error', 'File is larger than 2GB. To upload files up to 4GB, you need Telegram Premium.');
-    }
-}
-
-// Update the file preview
-function updateFilePreview() {
-    if (!selectedFile) return;
-    
+    // Clear previous preview
     previewContent.innerHTML = '';
     
-    if (selectedFile.type.startsWith('image/')) {
-        // Image preview
+    // Update button text
+    uploadButton.textContent = 'Upload File';
+    uploadButton.disabled = !mtprotoClient.connected;
+    
+    // Create preview based on file type
+    if (file.type.startsWith('image/')) {
         const img = document.createElement('img');
         img.className = 'preview-image';
-        img.src = URL.createObjectURL(selectedFile);
+        img.file = file;
+        
+        const reader = new FileReader();
+        reader.onload = (e) => { img.src = e.target.result; };
+        reader.readAsDataURL(file);
+        
         previewContent.appendChild(img);
-    } else if (selectedFile.type.startsWith('video/')) {
-        // Video preview
+    } else if (file.type.startsWith('video/')) {
         const video = document.createElement('video');
-        video.className = 'preview-video';
         video.controls = true;
-        video.src = URL.createObjectURL(selectedFile);
+        video.className = 'preview-video';
+        
+        const source = document.createElement('source');
+        source.src = URL.createObjectURL(file);
+        source.type = file.type;
+        
+        video.appendChild(source);
         previewContent.appendChild(video);
     } else {
         // Generic file preview
+        const filePreview = document.createElement('div');
+        filePreview.className = 'file-preview';
+        
+        const fileIcon = document.createElement('div');
+        fileIcon.className = 'file-icon';
+        fileIcon.innerHTML = `
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="#9D5CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M14 2V8H20" stroke="#9D5CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        `;
+        
         const fileInfo = document.createElement('div');
         fileInfo.className = 'file-info';
         
-        const fileIcon = document.createElement('svg');
-        fileIcon.setAttribute('width', '48');
-        fileIcon.setAttribute('height', '48');
-        fileIcon.setAttribute('viewBox', '0 0 24 24');
-        fileIcon.setAttribute('fill', 'none');
-        fileIcon.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
-        fileIcon.innerHTML = `
-            <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="#9D5CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M14 2V8H20" stroke="#9D5CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        `;
+        const fileName = document.createElement('div');
+        fileName.className = 'file-name';
+        fileName.textContent = file.name;
         
-        const fileName = document.createElement('p');
-        fileName.textContent = selectedFile.name;
+        const fileSize = document.createElement('div');
+        fileSize.className = 'file-size';
+        fileSize.textContent = MTProtoClient.formatFileSize(file.size);
         
-        const fileSize = document.createElement('span');
-        fileSize.textContent = MTProtoClient.formatFileSize(selectedFile.size);
+        const fileType = document.createElement('div');
+        fileType.className = 'file-type';
+        fileType.textContent = file.type || 'Unknown type';
         
-        fileInfo.appendChild(fileIcon);
         fileInfo.appendChild(fileName);
         fileInfo.appendChild(fileSize);
+        fileInfo.appendChild(fileType);
         
-        previewContent.appendChild(fileInfo);
+        filePreview.appendChild(fileIcon);
+        filePreview.appendChild(fileInfo);
+        
+        previewContent.appendChild(filePreview);
     }
-}
-
-// Clear the file selection
-function clearFileSelection() {
-    selectedFile = null;
-    fileInput.value = '';
-    captionInput.value = '';
     
-    // Hide media preview and show drop area
-    dropArea.style.display = 'flex';
-    mediaPreview.style.display = 'none';
-    
-    // Update upload button
-    uploadButton.textContent = 'Select a file to upload';
-    uploadButton.disabled = true;
-    
-    // Clear any notifications
-    hideNotification();
+    // Show preview, hide drop area
+    mediaPreview.style.display = 'block';
+    dropArea.style.display = 'none';
 }
 
 // Upload the selected file
 async function uploadFile() {
-    if (!selectedFile || isUploading) return;
+    if (!selectedFile || !mtprotoClient.connected) return;
     
+    const progressContainer = document.getElementById('progressContainer');
+    const uploadingFileName = document.getElementById('uploadingFileName');
+    const uploadButton = document.getElementById('uploadButton');
+    const captionInput = document.getElementById('captionInput');
+    const forceDocumentCheckbox = document.getElementById('forceDocumentCheckbox');
+    
+    // Set uploading state
     isUploading = true;
-    
-    // Update UI
-    uploadButton.textContent = 'Uploading...';
     uploadButton.disabled = true;
-    captionInput.disabled = true;
-    forceDocumentCheckbox.disabled = true;
-    removeButton.disabled = true;
+    uploadButton.textContent = 'Uploading...';
     
     // Show progress container
     progressContainer.style.display = 'block';
     uploadingFileName.textContent = selectedFile.name;
     
     try {
-        // Upload file using MTProto
+        // Start upload
         const result = await mtprotoClient.uploadFile(selectedFile, {
             caption: captionInput.value,
             asDocument: forceDocumentCheckbox.checked
         });
         
-        // Show success notification
+        // Upload successful
         showNotification('success', 'File uploaded successfully!');
         
-        // Reset form after a delay
+        // Reset uploader after a delay
         setTimeout(() => {
-            clearFileSelection();
-            progressContainer.style.display = 'none';
-            isUploading = false;
+            resetUploader();
         }, 2000);
-        
     } catch (error) {
         console.error('Upload error:', error);
+        showNotification('error', 'Upload failed: ' + (error.message || 'Unknown error'));
         
-        // Show error notification
-        showNotification('error', 'Upload failed: ' + error.message);
-        
-        // Reset upload state
-        uploadButton.textContent = 'Try Again';
-        uploadButton.disabled = false;
-        captionInput.disabled = false;
-        forceDocumentCheckbox.disabled = false;
-        removeButton.disabled = false;
+        // Reset uploading state
         isUploading = false;
+        uploadButton.disabled = false;
+        uploadButton.textContent = 'Retry Upload';
     }
 }
 
-// Update the upload progress
-function updateUploadProgress(progress) {
-    progressFill.style.width = progress.progress + '%';
-    progressPercent.textContent = Math.round(progress.progress) + '%';
+// Reset uploader state
+function resetUploader() {
+    selectedFile = null;
+    isUploading = false;
     
-    // Update speed and time remaining
+    const mediaPreview = document.getElementById('mediaPreview');
+    const dropArea = document.getElementById('dropArea');
+    const progressContainer = document.getElementById('progressContainer');
+    const uploadButton = document.getElementById('uploadButton');
+    const captionInput = document.getElementById('captionInput');
+    const fileInput = document.getElementById('fileInput');
+    
+    // Reset file input
+    fileInput.value = '';
+    
+    // Hide preview and progress, show drop area
+    mediaPreview.style.display = 'none';
+    progressContainer.style.display = 'none';
+    dropArea.style.display = 'flex';
+    
+    // Reset button
+    uploadButton.disabled = true;
+    uploadButton.textContent = 'Select a file to upload';
+    
+    // Clear caption
+    captionInput.value = '';
+}
+
+// Update progress display
+function updateProgress(progress) {
+    const progressFill = document.getElementById('progressFill');
+    const progressPercent = document.getElementById('progressPercent');
+    const uploadSpeed = document.getElementById('uploadSpeed');
+    const timeRemaining = document.getElementById('timeRemaining');
+    
+    // Update progress bar
+    const percent = Math.min(Math.round(progress.progress * 100) / 100, 100);
+    progressFill.style.width = percent + '%';
+    progressPercent.textContent = percent.toFixed(0) + '%';
+    
+    // Update speed and time
     uploadSpeed.textContent = MTProtoClient.formatSpeed(progress.speed);
-    
-    if (progress.timeRemaining && isFinite(progress.timeRemaining)) {
-        timeRemaining.textContent = MTProtoClient.formatTime(progress.timeRemaining);
-    } else {
-        timeRemaining.textContent = 'Calculating...';
-    }
+    timeRemaining.textContent = MTProtoClient.formatTime(progress.timeRemaining);
 }
 
-// Show a notification
+// Show notification
 function showNotification(type, message) {
+    const statusNotification = document.getElementById('statusNotification');
+    const statusMessage = document.getElementById('statusMessage');
+    
     statusNotification.className = 'status-notification ' + type;
     statusMessage.textContent = message;
+    
+    statusNotification.style.display = 'flex';
+    
+    // Hide notification after 5 seconds
+    setTimeout(() => {
+        statusNotification.style.display = 'none';
+    }, 5000);
 }
 
-// Hide notification
-function hideNotification() {
-    statusNotification.className = 'status-notification';
-}
-
-// Initialize the app when the document is loaded
+// Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', initApp);

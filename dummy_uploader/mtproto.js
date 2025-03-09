@@ -1,7 +1,7 @@
 
-/**
- * Telegram MTProto Client - Browser Implementation
- */
+// Real Telegram MTProto Client
+const MTProto = require('@mtproto/core');
+const { sleep } = require('@mtproto/core/src/utils/common');
 
 class MTProtoClient {
     constructor() {
@@ -12,7 +12,19 @@ class MTProtoClient {
         this.uploadListeners = [];
         this.phoneNumber = null;
         this.phoneCodeHash = null;
-        this.dc = 2; // Default DC
+        this.userId = null;
+        this.mtproto = null;
+        this.initializeMTProto();
+    }
+
+    initializeMTProto() {
+        this.mtproto = new MTProto({
+            api_id: this.apiId,
+            api_hash: this.apiHash,
+            storageOptions: {
+                path: './telegram-session.json',
+            },
+        });
     }
 
     // Initialize connection to Telegram servers
@@ -20,150 +32,125 @@ class MTProtoClient {
         try {
             this.updateConnectionStatus('connecting');
             
-            // In a real implementation, we would make an actual API call here
-            // For now, we'll just prompt for the phone number to start the auth flow
-            this.phoneNumber = prompt("Enter your phone number with country code (e.g., +12345678901):");
-            
-            if (!this.phoneNumber) {
+            const phoneNumber = prompt("Enter your phone number with country code (e.g., +12345678901):");
+            if (!phoneNumber) {
                 throw new Error("Phone number is required");
             }
-            
-            // Try to get phone code hash by sending auth.sendCode request
-            const phoneCodeHash = await this.callTelegramApi('auth.sendCode', {
+            this.phoneNumber = phoneNumber;
+
+            // Send the code
+            const { phone_code_hash } = await this.mtproto.call('auth.sendCode', {
                 phone_number: this.phoneNumber,
+                settings: {
+                    _: 'codeSettings',
+                },
                 api_id: this.apiId,
                 api_hash: this.apiHash,
-                settings: {
-                    _: 'codeSettings'
-                }
             });
             
-            if (!phoneCodeHash || !phoneCodeHash.phone_code_hash) {
-                throw new Error("Failed to send verification code");
-            }
+            this.phoneCodeHash = phone_code_hash;
             
-            this.phoneCodeHash = phoneCodeHash.phone_code_hash;
-            
-            // Now prompt for the code
+            // Get the code from user
             const code = prompt("Enter the verification code you received:");
-            
             if (!code) {
                 throw new Error("Verification code is required");
             }
-            
-            // Try to sign in with the code
-            const authResult = await this.callTelegramApi('auth.signIn', {
-                phone_number: this.phoneNumber,
-                phone_code_hash: this.phoneCodeHash,
-                phone_code: code
-            });
-            
-            if (!authResult || authResult._ === 'auth.authorizationSignUpRequired') {
-                // User needs to sign up
-                const firstName = prompt("You need to sign up. Enter your first name:");
-                const lastName = prompt("Enter your last name (optional):");
-                
-                const signUpResult = await this.callTelegramApi('auth.signUp', {
+
+            try {
+                // Try to sign in
+                const signInResult = await this.mtproto.call('auth.signIn', {
                     phone_number: this.phoneNumber,
                     phone_code_hash: this.phoneCodeHash,
-                    first_name: firstName,
-                    last_name: lastName || ''
+                    phone_code: code,
                 });
                 
-                if (!signUpResult) {
-                    throw new Error("Sign up failed");
+                this.userId = signInResult.user.id;
+                this.connected = true;
+                this.updateConnectionStatus('connected');
+                return true;
+            } catch (error) {
+                if (error.error_message === 'SESSION_PASSWORD_NEEDED') {
+                    return await this.handle2FA();
+                } else if (error.error_message === 'PHONE_NUMBER_UNOCCUPIED') {
+                    // User needs to sign up
+                    return await this.handleSignUp(code);
                 }
-            } else if (authResult._ === 'auth.authorization') {
-                console.log("Successfully authenticated");
+                throw error;
             }
-            
-            this.connected = true;
-            this.updateConnectionStatus('connected');
-            return true;
         } catch (error) {
             console.error('Connection error:', error);
-            this.updateConnectionStatus('error', error.message);
-            
-            // Check if we need to handle 2FA
-            if (error.message === 'SESSION_PASSWORD_NEEDED') {
-                try {
-                    await this.handle2FA();
-                    return true;
-                } catch (e) {
-                    console.error('2FA error:', e);
-                    this.updateConnectionStatus('error', e.message);
-                    return false;
-                }
-            }
-            
+            this.updateConnectionStatus('error', error.message || 'Connection failed');
             return false;
         }
     }
     
     // Handle 2FA authentication
     async handle2FA() {
-        const password = prompt("Enter your 2FA password:");
-        
-        if (!password) {
-            throw new Error("2FA password is required");
+        try {
+            // Get password hint
+            const { hint } = await this.mtproto.call('account.getPassword');
+            
+            const password = prompt(`Enter your 2FA password${hint ? ' (Hint: ' + hint + ')' : ''}:`);
+            if (!password) {
+                throw new Error("2FA password is required");
+            }
+            
+            // Get SRP parameters
+            const { current_algo, srp_id, srp_B } = await this.mtproto.call('account.getPassword');
+            
+            // Calculate SRP parameters
+            const { A, M1 } = await this.mtproto.crypto.getSRPParams({
+                g: current_algo.g,
+                p: current_algo.p,
+                salt1: current_algo.salt1,
+                salt2: current_algo.salt2,
+                gB: srp_B,
+                password,
+            });
+            
+            // Check password
+            const auth = await this.mtproto.call('auth.checkPassword', {
+                password: {
+                    _: 'inputCheckPasswordSRP',
+                    srp_id,
+                    A,
+                    M1,
+                },
+            });
+            
+            this.userId = auth.user.id;
+            this.connected = true;
+            this.updateConnectionStatus('connected');
+            return true;
+        } catch (error) {
+            console.error('2FA error:', error);
+            this.updateConnectionStatus('error', error.message || '2FA failed');
+            return false;
         }
-        
-        const checkPasswordResult = await this.callTelegramApi('auth.checkPassword', {
-            password: password
-        });
-        
-        if (!checkPasswordResult) {
-            throw new Error("2FA authentication failed");
-        }
-        
-        this.connected = true;
-        this.updateConnectionStatus('connected');
-        return true;
     }
     
-    // Simulate a Telegram API call
-    async callTelegramApi(method, params) {
-        console.log(`Calling ${method} with params:`, params);
-        
-        // In a real implementation, this would make an actual API call
-        // For demo purposes, we'll simulate responses
-        
-        if (method === 'auth.sendCode') {
-            // Simulate a successful sendCode response
-            return {
-                phone_code_hash: 'simulated_code_hash_' + Math.random().toString(36).substring(2, 15)
-            };
-        }
-        
-        if (method === 'auth.signIn' || method === 'auth.signUp') {
-            // Simulate a successful auth response
-            return {
-                _: 'auth.authorization',
-                user: {
-                    id: 123456789,
-                    first_name: 'Test',
-                    last_name: 'User',
-                    username: 'testuser'
-                }
-            };
-        }
-        
-        if (method === 'upload.saveFilePart') {
-            // Simulate a successful file part upload
+    // Handle sign up if the phone number is not registered
+    async handleSignUp(code) {
+        try {
+            const firstName = prompt("This number is not registered. Enter your first name:");
+            const lastName = prompt("Enter your last name (optional):");
+            
+            const signUpResult = await this.mtproto.call('auth.signUp', {
+                phone_number: this.phoneNumber,
+                phone_code_hash: this.phoneCodeHash,
+                first_name: firstName || 'User',
+                last_name: lastName || '',
+            });
+            
+            this.userId = signUpResult.user.id;
+            this.connected = true;
+            this.updateConnectionStatus('connected');
             return true;
+        } catch (error) {
+            console.error('Sign up error:', error);
+            this.updateConnectionStatus('error', error.message || 'Sign up failed');
+            return false;
         }
-        
-        if (method === 'messages.sendMedia') {
-            // Simulate a successful message send
-            return {
-                updates: [{
-                    id: Math.floor(Math.random() * 1000000),
-                    date: Math.floor(Date.now() / 1000)
-                }]
-            };
-        }
-        
-        return null;
     }
 
     // Update connection status and notify listeners
@@ -191,12 +178,17 @@ class MTProtoClient {
 
         const { caption = '', asDocument = false } = options;
         const channelId = '-1002459925876';
+        const channelIdNumber = Number(channelId.replace('-100', ''));
         
         try {
-            // Simulate reading file as array buffer
-            // In a real implementation, we would use the File API
+            const reader = new FileReader();
+            const fileBuffer = await new Promise((resolve, reject) => {
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = reject;
+                reader.readAsArrayBuffer(file);
+            });
             
-            // Simulate uploading file in chunks
+            // Upload file in chunks
             const totalSize = file.size;
             const chunkSize = 512 * 1024; // 512KB chunks
             const totalChunks = Math.ceil(totalSize / chunkSize);
@@ -206,11 +198,18 @@ class MTProtoClient {
             let uploadedBytes = 0;
             
             for (let i = 0; i < totalChunks; i++) {
-                // Simulate chunk upload
-                await new Promise(resolve => setTimeout(resolve, 300)); // Simulate network latency
+                const offset = i * chunkSize;
+                const limit = Math.min(chunkSize, totalSize - offset);
+                const chunk = fileBuffer.slice(offset, offset + limit);
+                
+                await this.mtproto.call('upload.saveFilePart', {
+                    file_id: fileId,
+                    file_part: i,
+                    bytes: chunk,
+                });
                 
                 // Update progress
-                uploadedBytes += Math.min(chunkSize, totalSize - i * chunkSize);
+                uploadedBytes += limit;
                 const progress = (uploadedBytes / totalSize) * 100;
                 const currentTime = Date.now();
                 const elapsed = (currentTime - startTime) / 1000;
@@ -229,33 +228,78 @@ class MTProtoClient {
                         timeRemaining: remaining
                     });
                 });
+                
+                // Small delay to prevent rate limiting
+                await sleep(50);
             }
             
-            // Simulate sending the file to the channel
-            let mediaType = 'inputMediaDocument';
-            if (file.type.startsWith('image/') && !asDocument) {
-                mediaType = 'inputMediaPhoto';
-            } else if (file.type.startsWith('video/') && !asDocument) {
-                mediaType = 'inputMediaVideo';
+            // Create input file
+            const inputFile = {
+                _: 'inputFile',
+                id: fileId,
+                parts: totalChunks,
+                name: file.name,
+                md5_checksum: '',
+            };
+            
+            // Determine media type based on file and options
+            let media;
+            if (asDocument || !(file.type.startsWith('image/') || file.type.startsWith('video/') || file.type.startsWith('audio/'))) {
+                // Send as document
+                media = {
+                    _: 'inputMediaDocument',
+                    file: inputFile,
+                    caption,
+                    ttl_seconds: 0,
+                };
+            } else if (file.type.startsWith('image/')) {
+                // Send as photo
+                media = {
+                    _: 'inputMediaPhoto',
+                    file: inputFile,
+                    caption,
+                    ttl_seconds: 0,
+                };
+            } else if (file.type.startsWith('video/')) {
+                // Send as video
+                media = {
+                    _: 'inputMediaVideo',
+                    file: inputFile,
+                    caption,
+                    ttl_seconds: 0,
+                };
+            } else if (file.type.startsWith('audio/')) {
+                // Send as audio
+                media = {
+                    _: 'inputMediaAudio',
+                    file: inputFile,
+                    caption,
+                };
             }
             
-            const result = await this.callTelegramApi('messages.sendMedia', {
+            // Get channel
+            const channelInfo = await this.mtproto.call('channels.getChannels', {
+                id: [
+                    {
+                        _: 'inputChannel',
+                        channel_id: channelIdNumber,
+                        access_hash: 0,
+                    },
+                ],
+            });
+            
+            const channel = channelInfo.chats[0];
+            
+            // Send media to channel
+            const result = await this.mtproto.call('messages.sendMedia', {
                 peer: {
                     _: 'inputPeerChannel',
-                    channel_id: channelId.replace('-100', ''),
-                    access_hash: 0
+                    channel_id: channelIdNumber,
+                    access_hash: channel.access_hash,
                 },
-                media: {
-                    _: mediaType,
-                    file: {
-                        _: 'inputFile',
-                        id: fileId,
-                        parts: totalChunks,
-                        name: file.name
-                    },
-                    caption
-                },
-                random_id: Math.floor(Math.random() * 1000000000)
+                media: media,
+                random_id: Math.floor(Math.random() * 1000000000),
+                message: caption,
             });
             
             return {
@@ -301,5 +345,7 @@ class MTProtoClient {
     }
 }
 
+// Export for browser environment
+window.MTProtoClient = MTProtoClient;
 // Create the MTProto client instance
 const mtprotoClient = new MTProtoClient();
