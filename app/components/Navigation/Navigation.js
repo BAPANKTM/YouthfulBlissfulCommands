@@ -1,5 +1,5 @@
+
 'use client';
-import React from 'react';
 import styles from './Navigation.module.css';
 
 const Navigation = ({ activeTab, onTabChange }) => {
@@ -16,9 +16,9 @@ const Navigation = ({ activeTab, onTabChange }) => {
       </div>
       <div className={`${styles.navItem} ${activeTab === 'links' ? styles.active : ''}`} onClick={() => onTabChange('links')}>
         <svg className={styles.navIcon} width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M10 13C10.8626 14.3291 12.3246 15.1615 13.92 15.16C14.9388 15.1642 15.921 14.7935 16.6748 14.1224C17.4285 13.4512 17.9034 12.5243 18 11.51C18 9.29 15.87 7.56 13.12 7C10.89 6.3 8.33 6.95 7.57 9.07C6.81 11.19 7.3 13.8 9.67 14.85L15.19 17.78C15.4615 17.9255 15.6816 18.1454 15.8274 18.4095C15.9732 18.6736 16.0392 18.9711 16.0174 19.2681C15.9957 19.565 15.887 19.8487 15.7033 20.0879C15.5195 20.3271 15.2679 20.5123 14.98 20.62L7.92 23.57" 
+          <path d="M10 13C10.4295 13.5741 10.9774 14.0461 11.6066 14.3929C12.2357 14.7397 12.9315 14.9547 13.6467 15.0217C14.3618 15.0886 15.0796 15.0063 15.7513 14.7797C16.4231 14.553 17.0331 14.1878 17.54 13.7L21.54 9.7C22.4557 8.74438 22.9488 7.4573 22.9274 6.12468C22.906 4.79206 22.3815 3.52052 21.4423 2.59982C20.5032 1.67912 19.2202 1.17272 17.8879 1.17079C16.5555 1.16886 15.2713 1.67154 14.33 2.59L12.33 4.59" 
             stroke={activeTab === 'links' ? "#9D5CFF" : "#9D9D9D"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M15 7V3C15 2.73478 14.8946 2.48043 14.7071 2.29289C14.5196 2.10536 14.2652 2 14 2H10C9.73478 2 9.48043 2.10536 9.29289 2.29289C9.10536 2.48043 9 2.73478 9 3V7" 
+          <path d="M14 11C13.5705 10.4259 13.0226 9.95391 12.3934 9.60711C11.7642 9.26031 11.0685 9.04531 10.3533 8.97833C9.63816 8.91135 8.92037 8.99374 8.24861 9.22033C7.57685 9.44692 6.96684 9.81215 6.45996 10.3L2.45996 14.3C1.54428 15.2556 1.05118 16.5427 1.07262 17.8753C1.09406 19.2079 1.61851 20.4795 2.55768 21.4002C3.49685 22.3209 4.77979 22.8273 6.11211 22.8292C7.44444 22.8311 8.7287 22.3285 9.66996 21.4L11.67 19.4" 
             stroke={activeTab === 'links' ? "#9D5CFF" : "#9D9D9D"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
         <div className={styles.navLabel}>Links</div>
@@ -26,9 +26,8 @@ const Navigation = ({ activeTab, onTabChange }) => {
       <div className={`${styles.navItem} ${activeTab === 'history' ? styles.active : ''}`} onClick={() => onTabChange('history')}>
         <svg className={styles.navIcon} width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M12 8V12L15 15" stroke={activeTab === 'history' ? "#9D5CFF" : "#9D9D9D"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M3.05 11C3.27151 9.38147 3.97341 7.86785 5.06413 6.6353C6.15486 5.40275 7.58456 4.50951 9.17268 4.06796C10.7608 3.6264 12.4389 3.65259 13.9999 4.14281C15.561 4.63303 16.9353 5.56807 17.9706 6.83862C19.0059 8.10917 19.6517 9.65843 19.8328 11.2908C20.0138 12.9232 19.7228 14.5716 18.9936 16.0549C18.2644 17.5382 17.1293 18.7898 15.7283 19.6553C14.3273 20.5209 12.7218 20.9617 11.08 20.93" 
+          <path d="M3.05078 11.0002C3.27246 8.18717 4.61914 5.54688 6.82471 3.78127C9.03027 2.01566 11.8857 1.26709 14.6952 1.744C17.5048 2.22092 20.0216 3.87287 21.5801 6.27142C23.1387 8.66996 23.5905 11.5998 22.8444 14.3144C22.0984 17.0291 20.2264 19.2949 17.6949 20.5885C15.1634 21.8822 12.1956 22.0869 9.51732 21.1498C6.83908 20.2127 4.66739 18.202 3.4917 15.6089C2.31601 13.0158 2.20846 10.0511 3.19102 7.38036" 
             stroke={activeTab === 'history' ? "#9D5CFF" : "#9D9D9D"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M3 11V5M3 11H9" stroke={activeTab === 'history' ? "#9D5CFF" : "#9D9D9D"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
         <div className={styles.navLabel}>History</div>
       </div>
