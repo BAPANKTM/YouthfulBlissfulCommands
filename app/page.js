@@ -31,7 +31,10 @@ export default function Home() {
       primaryText: "",
       secondaryText: "Cancel",
       onPrimary: () => {},
-      onSecondary: () => console.log("Cancel pressed"),
+      onSecondary: () => {
+        console.log("Cancel pressed");
+        setShowFloater(false);
+      },
     });
     setShowFloater(true);
   };

@@ -37,7 +37,7 @@ const SplashScreen = () => {
           <div className={styles.loaderBar}></div>
         </div>
         <div className={styles.particles}>
-          {/* Generate 15 particles with varying positions */}
+          {/* Generate 15 particles with consistent positions */}
           {[...Array(15)].map((_, i) => (
             <div 
               key={i} 
@@ -45,9 +45,9 @@ const SplashScreen = () => {
               style={{
                 animationDelay: `${0.2 * i}s`,
                 left: `${5 + (i * 6)}%`,
-                width: `${4 + Math.random() * 6}px`,
-                height: `${4 + Math.random() * 6}px`,
-                opacity: Math.random() * 0.7
+                width: `${4 + (i % 3) * 2}px`,
+                height: `${4 + (i % 3) * 2}px`,
+                opacity: 0.3 + (i % 5) * 0.1
               }}
             ></div>
           ))}
