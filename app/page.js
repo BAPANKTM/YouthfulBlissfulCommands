@@ -115,7 +115,7 @@ export default function Home() {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000; /* Ensure it's on top */
+  z-index: 1000; 
 }
 
 .splash-content {
