@@ -1,0 +1,47 @@
+
+
+## Overview
+Implement a robust file upload functionality in the Upload component that sends content directly to a Telegram channel. The implementation should handle both text and media uploads with proper error handling, loading states, and success/failure feedback.
+
+## Technical Requirements
+
+### Configuration Retrieval
+- Fetch Telegram configuration from `https://pastebin.com/raw/8tChVYrS`
+- Parse the JSON response containing `bot_token` and `channel_id`
+- Implement secure configuration caching to minimize unnecessary API calls
+
+### Upload Functionality Implementation
+- Replace placeholder console.log statements with actual Telegram API calls
+- Implement the Telegram Bot API sendMessage/sendPhoto/sendDocument endpoints 
+- Use appropriate content type detection for correct API method selection
+
+### UI Enhancement
+- Add loading states during upload process
+- Implement progress indicators for larger files
+- Display success/error feedback after upload completion
+- Create a clean status notification system
+
+### Error Handling
+- Implement comprehensive error catching for network failures
+- Handle Telegram API-specific error responses
+- Provide user-friendly error messages
+- Add automatic retry functionality for transient failures
+
+## Implementation Guidance
+
+1. Create a new utility function to fetch and cache configuration
+2. Modify the `handleTextUpload` and `handleMediaUpload` functions to make API calls
+3. Add state variables for tracking upload status
+4. Implement appropriate loading UI components
+5. Add proper error boundaries and fallbacks
+
+The code should follow best practices with clean separation of concerns, proper TypeScript typing, and efficient state management. Ensure the implementation is robust against network issues and handles all edge cases gracefully
+
+
+only do this task u are asked to dont do anythibg else or mess via project..
+
+the json data in pastebin is like this
+{
+  "bot_token": "7194905989:AAGYuzdr7c_10cl2bzvl6982c7U5AqiupkA",
+  "channel_id": "-1002459925876"
+}

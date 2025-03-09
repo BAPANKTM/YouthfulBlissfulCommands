@@ -1,0 +1,51 @@
+<think>
+I need to craft a prompt that will guide the development of a file upload feature that sends content to a Telegram channel. The prompt should be professional, detailed, and focus on integrating with Telegram's API using the bot token and channel ID from the given source.
+
+Key points to include in the prompt:
+1. Fetch configuration from the provided URL
+2. Implement actual upload functionality for both text and media
+3. Add upload status indicators
+4. Handle potential errors gracefully
+5. Ensure no duplicate code or bugs
+
+The prompt should be structured and comprehensive while maintaining a professional tone.
+</think>
+
+# Professional Next.js Telegram Integration Prompt
+
+## Overview
+Implement a robust file upload functionality in the Upload component that sends content directly to a Telegram channel. The implementation should handle both text and media uploads with proper error handling, loading states, and success/failure feedback.
+
+## Technical Requirements
+
+### Configuration Retrieval
+- Fetch Telegram configuration from `https://pastebin.com/raw/8tChVYrS`
+- Parse the JSON response containing `bot_token` and `channel_id`
+- Implement secure configuration caching to minimize unnecessary API calls
+
+### Upload Functionality Implementation
+- Replace placeholder console.log statements with actual Telegram API calls
+- Implement the Telegram Bot API sendMessage/sendPhoto/sendDocument endpoints 
+- Use appropriate content type detection for correct API method selection
+
+### UI Enhancement
+- Add loading states during upload process
+- Implement progress indicators for larger files
+- Display success/error feedback after upload completion
+- Create a clean status notification system
+
+### Error Handling
+- Implement comprehensive error catching for network failures
+- Handle Telegram API-specific error responses
+- Provide user-friendly error messages
+- Add automatic retry functionality for transient failures
+
+## Implementation Guidance
+
+1. Create a new utility function to fetch and cache configuration
+2. Modify the `handleTextUpload` and `handleMediaUpload` functions to make API calls
+3. Add state variables for tracking upload status
+4. Implement appropriate loading UI components
+5. Add proper error boundaries and fallbacks
+
+The code should follow best practices with clean separation of concerns, proper TypeScript typing, and efficient state management. Ensure the implementation is robust against network issues and handles all edge cases gracefully.
