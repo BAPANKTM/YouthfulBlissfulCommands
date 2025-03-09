@@ -1,9 +1,11 @@
-
 .actionButtons {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 22px;
-  gap: 10px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin-bottom: 20px;
+  animation: slide-up 0.5s ease-out forwards;
+  animation-delay: 0.4s;
+  opacity: 0;
 }
 
 .actionButton {
@@ -65,11 +67,11 @@
   .actionButtons {
     gap: 15px;
   }
-  
+
   .actionButton {
     min-height: 86px;
   }
-  
+
   .actionLabel {
     font-size: 15px;
   }
@@ -79,7 +81,7 @@
   .actionButton {
     min-height: 72px;
   }
-  
+
   .actionLabel {
     font-size: 13px;
   }
