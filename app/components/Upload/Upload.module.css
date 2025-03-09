@@ -45,9 +45,15 @@
   cursor: pointer;
 }
 
-.uploadDrop:active {
-  background: rgba(157, 92, 255, 0.06);
+.uploadDrop:hover {
+  background: rgba(157, 92, 255, 0.05);
   border-color: rgba(157, 92, 255, 0.4);
+}
+
+.uploadDrop:active {
+  background: rgba(157, 92, 255, 0.08);
+  border-color: rgba(157, 92, 255, 0.5);
+  transform: scale(0.99);
 }
 
 .uploadDropIcon {
@@ -76,31 +82,21 @@
   font-weight: 600;
 }
 
-/* Media Type Selection Styles */
+/* Media Type Selection */
 .mediaTypeSelection {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  width: 100%;
-  padding: 20px 0;
-}
-
-.selectionTitle {
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 8px;
-  text-align: center;
+  gap: 12px;
 }
 
 .optionButton {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 12px;
-  background: rgba(157, 92, 255, 0.08);
-  border: 1px solid rgba(157, 92, 255, 0.2);
-  border-radius: var(--radius-sm);
+  gap: 10px;
   padding: 16px;
+  background: rgba(157, 92, 255, 0.08);
+  border: 1px solid rgba(157, 92, 255, 0.15);
+  border-radius: var(--radius-sm);
   color: white;
   font-weight: 600;
   font-size: 16px;
@@ -110,31 +106,53 @@
 
 .optionButton:hover {
   background: rgba(157, 92, 255, 0.12);
+  border-color: rgba(157, 92, 255, 0.25);
 }
 
 .optionButton:active {
-  transform: scale(0.98);
   background: rgba(157, 92, 255, 0.16);
+  transform: scale(0.98);
 }
 
-/* Text Entry Styles */
+.cancelButton {
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-sm);
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 4px;
+}
+
+.cancelButton:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.cancelButton:active {
+  background: rgba(255, 255, 255, 0.1);
+  transform: scale(0.98);
+}
+
+/* Text Entry */
 .textEntry {
   display: flex;
   flex-direction: column;
-  width: 100%;
-  padding: 20px 0;
+  gap: 12px;
 }
 
 .textArea {
-  min-height: 150px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(157, 92, 255, 0.2);
+  min-height: 140px;
+  padding: 14px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: var(--radius-sm);
-  padding: 16px;
-  font-size: 15px;
   color: white;
-  margin-bottom: 8px;
+  font-size: 16px;
   resize: vertical;
+  transition: border-color 0.2s ease;
 }
 
 .textArea:focus {
@@ -143,15 +161,16 @@
 }
 
 .characterCount {
-  text-align: right;
   font-size: 12px;
   color: var(--text-secondary);
-  margin-bottom: 16px;
+  text-align: right;
+  margin-top: -8px;
 }
 
 .buttonContainer {
   display: flex;
-  gap: 16px;
+  gap: 10px;
+  margin-top: 8px;
 }
 
 .backButton {
@@ -166,8 +185,13 @@
   flex: 1;
 }
 
-.backButton:active {
+.backButton:hover {
   background: rgba(255, 255, 255, 0.12);
+}
+
+.backButton:active {
+  background: rgba(255, 255, 255, 0.16);
+  transform: scale(0.98);
 }
 
 .uploadButton {
@@ -182,9 +206,27 @@
   flex: 2;
 }
 
+.uploadButton:hover {
+  background: #a668ff;
+}
+
 .uploadButton:active {
   background: #8a4de3;
   transform: scale(0.98);
+}
+
+.disabledButton {
+  background: rgba(157, 92, 255, 0.4);
+  cursor: not-allowed;
+}
+
+.disabledButton:hover, .disabledButton:active {
+  background: rgba(157, 92, 255, 0.4);
+  transform: none;
+}
+
+.hiddenFileInput {
+  display: none;
 }
 
 @media (min-width: 500px) {
@@ -236,5 +278,10 @@
   .buttonContainer {
     flex-direction: column;
     gap: 12px;
+  }
+  
+  .cancelButton {
+    padding: 14px;
+    font-size: 15px;
   }
 }
