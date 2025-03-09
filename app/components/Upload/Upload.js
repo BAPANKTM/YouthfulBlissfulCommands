@@ -6,6 +6,10 @@ import styles from './Upload.module.css';
 const Upload = ({ onUpload }) => {
   const [step, setStep] = useState(0);
   const [textContent, setTextContent] = useState('');
+  const [caption, setCaption] = useState('');
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [selectedFileName, setSelectedFileName] = useState('');
+  const [previewUrl, setPreviewUrl] = useState('');
   const fileInputRef = useRef(null);
   
   const handleInitialClick = () => {
@@ -35,20 +39,114 @@ const Upload = ({ onUpload }) => {
   const handleFileChange = (e) => {
     const files = e.target.files;
     if (files && files.length > 0) {
-      console.log('Media upload selected', files);
+      const file = files[0];
+      setSelectedFile(file);
+      setSelectedFileName(file.name);
+      
+      // Create preview URL for images and videos
+      if (file.type.startsWith('image/') || file.type.startsWith('video/')) {
+        const url = URL.createObjectURL(file);
+        setPreviewUrl(url);
+      } else {
+        setPreviewUrl('');
+      }
+      
+      // Go to media preview/caption step
+      setStep(3);
+    }
+  };
+  
+  const handleMediaUpload = () => {
+    if (selectedFile) {
+      console.log('Media upload selected', selectedFile);
+      console.log('Caption:', caption);
       // Implement actual file upload functionality here
       
-      // Reset file input
-      if (fileInputRef.current) {
-        fileInputRef.current.value = '';
-      }
-      setStep(0); // Reset to initial state
+      resetUploadState();
+    }
+  };
+  
+  const resetUploadState = () => {
+    setStep(0);
+    setSelectedFile(null);
+    setSelectedFileName('');
+    setCaption('');
+    setTextContent('');
+    
+    // Clear file input
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+    
+    // Revoke object URL to avoid memory leaks
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl);
+      setPreviewUrl('');
     }
   };
   
   const handleCancel = () => {
-    setStep(0); // Reset to initial state
-    setTextContent('');
+    resetUploadState();
+  };
+  
+  const getFileIcon = () => {
+    if (!selectedFile) return null;
+    
+    const type = selectedFile.type;
+    
+    if (type.startsWith('image/')) {
+      return (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M19 3H5C3.89543 3 3 3.89543 3 5V19C3 20.1046 3.89543 21 5 21H19C20.1046 21 21 20.1046 21 19V5C21 3.89543 20.1046 3 19 3Z" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          <path d="M8.5 10C9.32843 10 10 9.32843 10 8.5C10 7.67157 9.32843 7 8.5 7C7.67157 7 7 7.67157 7 8.5C7 9.32843 7.67157 10 8.5 10Z" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          <path d="M21 15L16 10L5 21" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      );
+    } else if (type.startsWith('video/')) {
+      return (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M23 7L16 12L23 17V7Z" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          <path d="M14 5H3C1.89543 5 1 5.89543 1 7V17C1 18.1046 1.89543 19 3 19H14C15.1046 19 16 18.1046 16 17V7C16 5.89543 15.1046 5 14 5Z" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      );
+    } else if (type.startsWith('audio/')) {
+      return (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M9 18V5L21 3V16" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          <path d="M6 21C7.65685 21 9 19.6569 9 18C9 16.3431 7.65685 15 6 15C4.34315 15 3 16.3431 3 18C3 19.6569 4.34315 21 6 21Z" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          <path d="M18 19C19.6569 19 21 17.6569 21 16C21 14.3431 19.6569 13 18 13C16.3431 13 15 14.3431 15 16C15 17.6569 16.3431 19 18 19Z" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      );
+    } else if (type === 'application/pdf') {
+      return (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          <path d="M14 2V8H20" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          <path d="M16 13H8" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          <path d="M16 17H8" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          <path d="M10 9H9H8" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      );
+    } else {
+      return (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M13 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V9L13 2Z" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          <path d="M13 2V9H20" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      );
+    }
+  };
+  
+  const getFileSize = (size) => {
+    if (size < 1024) {
+      return size + ' B';
+    } else if (size < 1024 * 1024) {
+      return (size / 1024).toFixed(1) + ' KB';
+    } else if (size < 1024 * 1024 * 1024) {
+      return (size / (1024 * 1024)).toFixed(1) + ' MB';
+    } else {
+      return (size / (1024 * 1024 * 1024)).toFixed(1) + ' GB';
+    }
   };
   
   // Render the component based on current step
@@ -81,7 +179,7 @@ const Upload = ({ onUpload }) => {
         </div>
         
         {/* Hidden file input element */}
-        <input 
+        <input
           type="file"
           ref={fileInputRef}
           onChange={handleFileChange}
@@ -129,7 +227,6 @@ const Upload = ({ onUpload }) => {
             </svg>
             Share Text
           </button>
-          
           <button 
             className={styles.cancelButton}
             onClick={handleCancel}
@@ -147,20 +244,23 @@ const Upload = ({ onUpload }) => {
           <div className={styles.uploadIcon}>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M14 2V8H20" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M16 13H8" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M16 17H8" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M10 9H9H8" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </div>
           Share Text
         </div>
         
         <div className={styles.textEntry}>
-          <textarea 
-            className={styles.textArea}
-            placeholder="Enter your text here..."
+          <textarea
+            className={styles.textInput}
+            placeholder="Enter your message here..."
             value={textContent}
             onChange={(e) => setTextContent(e.target.value)}
+            rows={5}
           />
-          <div className={styles.characterCount}>
+          <div className={styles.textCounter}>
             {textContent.length} characters
           </div>
           <div className={styles.buttonContainer}>
@@ -176,6 +276,80 @@ const Upload = ({ onUpload }) => {
               disabled={!textContent.trim()}
             >
               Upload Text
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  } else if (step === 3) {
+    // Media upload preview with caption
+    return (
+      <div className={styles.upload}>
+        <div className={styles.uploadTitle}>
+          <div className={styles.uploadIcon}>
+            {getFileIcon()}
+          </div>
+          Media Upload
+        </div>
+        
+        <div className={styles.mediaPreview}>
+          {previewUrl && (selectedFile.type.startsWith('image/') || selectedFile.type.startsWith('video/')) ? (
+            <div className={styles.previewContainer}>
+              {selectedFile.type.startsWith('image/') ? (
+                <img 
+                  src={previewUrl} 
+                  alt="Preview" 
+                  className={styles.mediaPreviewImage} 
+                />
+              ) : selectedFile.type.startsWith('video/') ? (
+                <video 
+                  src={previewUrl}
+                  controls
+                  className={styles.mediaPreviewVideo}
+                />
+              ) : null}
+            </div>
+          ) : (
+            <div className={styles.fileInfoBox}>
+              <div className={styles.fileInfoIcon}>
+                {getFileIcon()}
+              </div>
+              <div className={styles.fileInfoDetails}>
+                <div className={styles.fileName} title={selectedFileName}>
+                  {selectedFileName}
+                </div>
+                <div className={styles.fileSize}>
+                  {selectedFile ? getFileSize(selectedFile.size) : ''}
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div className={styles.captionContainer}>
+            <textarea
+              className={styles.captionInput}
+              placeholder="Add a caption (optional)..."
+              value={caption}
+              onChange={(e) => setCaption(e.target.value)}
+              rows={3}
+            />
+            <div className={styles.captionCounter}>
+              {caption.length}/1000
+            </div>
+          </div>
+          
+          <div className={styles.buttonContainer}>
+            <button 
+              className={styles.cancelButton}
+              onClick={handleCancel}
+            >
+              Cancel
+            </button>
+            <button 
+              className={styles.uploadButton}
+              onClick={handleMediaUpload}
+            >
+              Send Media
             </button>
           </div>
         </div>
