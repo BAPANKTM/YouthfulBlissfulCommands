@@ -2,7 +2,7 @@
 import React from 'react';
 import styles from './Header.module.css';
 
-const Header = () => {
+const Header = ({ username }) => {
   return (
     <div className={styles.header}>
       <div className={styles.profile}>
