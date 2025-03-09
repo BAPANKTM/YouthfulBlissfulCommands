@@ -1,63 +1,55 @@
 
-// Utility to fetch and cache Telegram API configuration
-const fetchTelegramConfig = async () => {
-  // Check if we have cached config
-  const cachedConfig = sessionStorage.getItem('telegramConfig');
-  const cachedTimestamp = sessionStorage.getItem('telegramConfigTimestamp');
-  
-  // Use cache if available and less than 1 hour old
-  if (cachedConfig && cachedTimestamp) {
-    const now = new Date().getTime();
-    if (now - parseInt(cachedTimestamp) < 3600000) { // 1 hour in milliseconds
-      return JSON.parse(cachedConfig);
-    }
+/**
+ * Utility function to fetch and cache Telegram configuration
+ */
+
+let cachedConfig = null;
+let cacheTimestamp = null;
+const CACHE_DURATION = 1000 * 60 * 30; // 30 minutes
+
+async function fetchTelegramConfig() {
+  const currentTime = Date.now();
+
+  // Return cached config if valid
+  if (cachedConfig && cacheTimestamp && (currentTime - cacheTimestamp < CACHE_DURATION)) {
+    return cachedConfig;
   }
-  
+
   try {
-    // Fix the CORS issue by using a proxy or direct API call
-    const response = await fetch('https://pastebin.com/raw/8tChVYrS', {
-      method: 'GET',
+    const response = await fetch('https://pastebin.com/raw/8tChVYrS', { 
+      cache: 'no-store',
       headers: {
-        'Accept': 'application/json',
-      },
+        'Cache-Control': 'no-cache',
+        'Pragma': 'no-cache'
+      }
     });
     
     if (!response.ok) {
-      throw new Error(`Failed to fetch config: ${response.status}`);
+      throw new Error(`HTTP Error: ${response.status}`);
     }
     
-    const responseText = await response.text();
-    let config;
+    const data = await response.json();
     
-    try {
-      config = JSON.parse(responseText);
-    } catch (e) {
-      // If JSON parsing fails, use hardcoded values from the requirements
-      config = {
-        "bot_token": "7194905989:AAGYuzdr7c_10cl2bzvl6982c7U5AqiupkA",
-        "channel_id": "-1002459925876"
-      };
+    // Validate data structure
+    if (!data.bot_token || !data.channel_id) {
+      throw new Error('Invalid configuration data');
     }
     
-    // Cache the config
-    sessionStorage.setItem('telegramConfig', JSON.stringify(config));
-    sessionStorage.setItem('telegramConfigTimestamp', new Date().getTime().toString());
+    // Update cache
+    cachedConfig = data;
+    cacheTimestamp = currentTime;
     
-    return config;
+    return data;
   } catch (error) {
     console.error('Error fetching Telegram config:', error);
-    // Fallback to hardcoded values if fetch fails
-    const fallbackConfig = {
-      "bot_token": "7194905989:AAGYuzdr7c_10cl2bzvl6982c7U5AqiupkA",
-      "channel_id": "-1002459925876"
-    };
     
-    // Cache the fallback config
-    sessionStorage.setItem('telegramConfig', JSON.stringify(fallbackConfig));
-    sessionStorage.setItem('telegramConfigTimestamp', new Date().getTime().toString());
+    // If there's cached data, use it as fallback even if expired
+    if (cachedConfig) {
+      return cachedConfig;
+    }
     
-    return fallbackConfig;
+    throw error;
   }
-};
+}
 
 export default fetchTelegramConfig;
