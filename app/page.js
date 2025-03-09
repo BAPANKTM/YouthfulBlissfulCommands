@@ -1,38 +1,37 @@
-'use client';
-import { useState, useEffect } from 'react';
-import Container from './components/Container/Container';
-import Header from './components/Header/Header';
-import Greeting from './components/Greeting/Greeting';
-import Balance from './components/Balance/Balance';
-import ActionButtons from './components/ActionButtons/ActionButtons';
-import Upload from './components/Upload/Upload';
-import Stats from './components/Stats/Stats';
-import Navigation from './components/Navigation/Navigation';
-import Floater from './components/Floater/Floater';
-import SplashScreen from './components/SplashScreen/SplashScreen';
-
+"use client";
+import { useState, useEffect } from "react";
+import Container from "./components/Container/Container";
+import Header from "./components/Header/Header";
+import Greeting from "./components/Greeting/Greeting";
+import Balance from "./components/Balance/Balance";
+import ActionButtons from "./components/ActionButtons/ActionButtons";
+import Upload from "./components/Upload/Upload";
+import Stats from "./components/Stats/Stats";
+import Navigation from "./components/Navigation/Navigation";
+import Floater from "./components/Floater/Floater";
+import SplashScreen from "./components/SplashScreen/SplashScreen";
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState('home');
+  const [activeTab, setActiveTab] = useState("home");
   const [showFloater, setShowFloater] = useState(false);
   const [floaterContent, setFloaterContent] = useState({
-    title: '',
-    content: '',
-    primaryText: '',
-    secondaryText: '',
+    title: "",
+    content: "",
+    primaryText: "",
+    secondaryText: "",
     onPrimary: () => {},
-    onSecondary: () => {}
+    onSecondary: () => {},
   });
 
   const handleUpload = () => {
     console.log("Upload clicked");
     setFloaterContent({
-      title: 'Upload File',
-      content: 'Select a file to upload or drag and drop it here.',
-      primaryText: 'Upload',
-      secondaryText: 'Cancel',
-      onPrimary: () => console.log('Upload pressed'),
-      onSecondary: () => console.log('Cancel pressed')
+      title: "Upload File",
+      content: "Select a file to upload or drag and drop it here.",
+      primaryText: "Upload",
+      secondaryText: "Cancel",
+      onPrimary: () => console.log("Upload pressed"),
+      onSecondary: () => console.log("Cancel pressed"),
     });
     setShowFloater(true);
   };
@@ -43,10 +42,10 @@ export default function Home() {
     setFloaterContent({
       title: action.charAt(0).toUpperCase() + action.slice(1),
       content: `This is the ${action} content.`,
-      primaryText: 'Confirm',
-      secondaryText: 'Cancel',
+      primaryText: "Confirm",
+      secondaryText: "Cancel",
       onPrimary: () => console.log(`${action} confirmed`),
-      onSecondary: () => console.log(`${action} cancelled`)
+      onSecondary: () => console.log(`${action} cancelled`),
     });
     setShowFloater(true);
   };
@@ -55,9 +54,9 @@ export default function Home() {
     <>
       <SplashScreen /> {/*Added SplashScreen */}
       <Container>
-        <Header username="Alex Smith" />
+        <Header username="User" />
         <Greeting />
-        <Balance value="4,285.50" />
+        <Balance value="0" />
         <ActionButtons openFloater={handleAction} />
         <Upload onUpload={handleUpload} />
         <Stats />

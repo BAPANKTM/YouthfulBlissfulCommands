@@ -1,0 +1,49 @@
+
+
+# Upload Component Modification Prompt for TeleShare
+
+Create a streamlined, mobile-friendly media upload flow for our TeleShare Telegram web app by modifying the existing upload component:
+
+## Modification Requirements
+
+- Remove the current "drag and drop" functionality as it's not suitable for our Telegram web app context
+- Create a clean, intuitive upload flow with multiple steps
+
+## Upload Flow Sequence
+
+1. **Initial Upload Button**
+   - Maintain the existing upload button UI but modify the click behavior
+
+2. **Media Type Selection Screen**
+   - When user clicks "Upload", show a simple selection screen with two options:
+     - "Upload Media" (images, videos, files)
+     - "Share Text" 
+   - Design should use our existing button styles and color scheme
+   - Keep the UI minimal and focused
+
+3. **Text Entry Screen** (when "Share Text" is selected)
+   - Show a textarea with placeholder "Enter your text here..."
+   - Include an "Upload" button using our primary style
+   - Add a "Back" button to return to media type selection
+   - Optional character counter
+
+## UI Requirements
+
+- Maintain our existing compact, professional dark UI aesthetic
+- Use consistent animations with the rest of the app
+- Ensure all screens are fully responsive across device sizes
+- Keep text and buttons large enough for mobile touch targets
+- Use our purple accent color (#9D5CFF) for key actions
+
+## Technical Implementation
+
+- Modify the existing Upload component and Floater content
+- Use component state to manage the upload flow steps
+- Preserve the existing styling patterns and CSS modules
+- Ensure smooth transitions between different upload screens
+
+The implementation should be sleek and straightforward, focusing on usability for mobile users while maintaining our professional design language.
+
+special note - dont do anything else please, rather than what i asked for, i dont want any errors in code. 
+
+2) dont create duplicate css or duplicate code just modifying exicting ui should be attractive and compat.
