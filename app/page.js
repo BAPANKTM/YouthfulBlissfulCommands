@@ -40,6 +40,21 @@ export default function Home() {
         },
       });
       setShowFloater(true);
+    } else if (activeTab === 'links') {
+      const Links = require('./components/Links/Links').default;
+      setFloaterContent({
+        title: "Links History",
+        content: <Links />,
+        primaryText: "",
+        secondaryText: "Back",
+        onPrimary: null,
+        onSecondary: () => {
+          console.log('Links closed');
+          setShowFloater(false);
+          setActiveTab('home');
+        },
+      });
+      setShowFloater(true);
     } else {
       // Close floater when switching to other tabs
       setShowFloater(false);

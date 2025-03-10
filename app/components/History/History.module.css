@@ -118,6 +118,55 @@
   max-width: 65%;
 }
 
+.typeIcon {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+.url {
+  font-size: 12px;
+  color: var(--primary);
+  word-break: break-all;
+  margin-top: 2px;
+}
+
+.statsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(157, 92, 255, 0.1);
+}
+
+.statItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.statLabel {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.statValue {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.recentStat {
+  font-size: 11px;
+  color: var(--primary);
+  background: rgba(157, 92, 255, 0.08);
+  padding: 2px 5px;
+  border-radius: 10px;
+  white-space: nowrap;
+}
+
 .status {
   font-size: 12px;
   font-weight: 600;
