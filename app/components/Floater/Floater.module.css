@@ -23,9 +23,9 @@
 .floater {
   background: linear-gradient(135deg, rgba(26, 26, 26, 0.9) 0%, rgba(13, 13, 13, 0.95) 100%);
   width: 90%;
-  max-width: 460px;
+  max-width: 400px;
   border-radius: var(--radius-lg);
-  padding: 24px;
+  padding: 20px;
   transform: translateY(20px) scale(0.95);
   opacity: 0;
   transition: transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
@@ -42,15 +42,17 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 
 .floaterTitle {
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 700;
   background: linear-gradient(90deg, #FFFFFF 30%, #e0e0e0 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
 }
 
 .floaterClose {
@@ -70,7 +72,26 @@
 }
 
 .floaterContent {
-  margin-bottom: 24px;
+  margin-bottom: 20px;
+  max-height: 65vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary) rgba(26, 26, 26, 0.3);
+}
+
+.floaterContent::-webkit-scrollbar {
+  width: 4px;
+}
+
+.floaterContent::-webkit-scrollbar-track {
+  background: rgba(26, 26, 26, 0.3);
+  border-radius: 10px;
+}
+
+.floaterContent::-webkit-scrollbar-thumb {
+  background-color: var(--primary);
+  border-radius: 10px;
 }
 
 .floaterButtons {
@@ -83,9 +104,9 @@
   background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
   color: white;
   border: none;
-  padding: 12px;
+  padding: 10px;
   border-radius: var(--radius-md);
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
   cursor: pointer;
   transition: opacity 0.2s ease, transform 0.2s ease;
@@ -107,17 +128,54 @@
   transform: translateY(1px);
 }
 
-@media (min-width: 500px) {
+/* Responsive adjustments */
+@media (max-width: 380px) {
   .floater {
-    padding: 28px;
+    padding: 16px;
+    width: 95%;
+  }
+  
+  .floaterTitle {
+    font-size: 20px;
+  }
+  
+  .floaterButton {
+    padding: 8px;
+    font-size: 14px;
+  }
+  
+  .floaterContent {
+    margin-bottom: 16px;
+  }
+}
+
+@media (min-width: 381px) and (max-width: 500px) {
+  .floater {
+    padding: 18px;
+    width: 92%;
+  }
+  
+  .floaterContent {
+    margin-bottom: 18px;
+  }
+}
+
+@media (min-width: 501px) {
+  .floater {
+    padding: 24px;
+    max-width: 420px;
   }
 
   .floaterTitle {
-    font-size: 24px;
+    font-size: 22px;
   }
 
   .floaterButton {
-    padding: 14px;
+    padding: 12px;
     font-size: 16px;
+  }
+  
+  .floaterContent {
+    max-height: 70vh;
   }
 }
