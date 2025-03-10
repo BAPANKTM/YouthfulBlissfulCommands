@@ -46,7 +46,7 @@ export const formatDate = (dateString) => {
 };
 
 export const getContentTypeIcon = (type) => {
-  switch (type.toLowerCase()) {
+  switch (type?.toLowerCase()) {
     case 'text':
       return '📝';
     case 'image':
@@ -56,6 +56,6 @@ export const getContentTypeIcon = (type) => {
     case 'video':
       return '🎬';
     default:
-      return '📎';
+      return '🔗';
   }
 };

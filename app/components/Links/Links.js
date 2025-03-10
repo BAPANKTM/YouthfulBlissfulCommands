@@ -1,4 +1,3 @@
-
 'use client';
 import { useState, useEffect } from 'react';
 import styles from './Links.module.css';
@@ -54,57 +53,29 @@ export default function Links() {
   if (selectedLink) {
     return (
       <div className={styles.linkDetailContainer}>
-        <button className={styles.backButton} onClick={handleBackClick}>
+        <div className={styles.backButton} onClick={handleBackClick}>
           ← Back to Links
-        </button>
-        
-        <div className={styles.linkDetail}>
-          <div className={styles.linkDetailHeader}>
-            <span className={styles.linkTypeIcon}>{getContentTypeIcon(selectedLink.type)}</span>
-            <h3 className={styles.linkTitle}>{selectedLink.title}</h3>
-          </div>
-          
-          <div className={styles.linkInfo}>
-            <div className={styles.linkInfoItem}>
-              <span className={styles.linkInfoLabel}>Link ID:</span>
-              <span className={styles.linkInfoValue}>{selectedLink.id}</span>
+        </div>
+        <div className={styles.linkDetailHeader}>
+          <div className={styles.linkTypeIconLarge}>{getContentTypeIcon(selectedLink.type)}</div>
+          <h2 className={styles.linkDetailTitle}>{selectedLink.title}</h2>
+        </div>
+        <div className={styles.linkDetailInfo}>
+          <p className={styles.linkDetailDate}>Created on {formatDate(selectedLink.date)}</p>
+
+          <div className={styles.metricsGrid}>
+            <div className={styles.metricCard}>
+              <h4>Total Clicks</h4>
+              <div className={styles.metricValueLarge}>{selectedLink.metrics.clicks}</div>
             </div>
-            <div className={styles.linkInfoItem}>
-              <span className={styles.linkInfoLabel}>Created:</span>
-              <span className={styles.linkInfoValue}>{formatDate(selectedLink.date)}</span>
-            </div>
-            <div className={styles.linkInfoItem}>
-              <span className={styles.linkInfoLabel}>Type:</span>
-              <span className={styles.linkInfoValue}>{selectedLink.type}</span>
+            <div className={styles.metricCard}>
+              <h4>Total Downloads</h4>
+              <div className={styles.metricValueLarge}>{selectedLink.metrics.downloads}</div>
             </div>
           </div>
-          
-          <div className={styles.metricsContainer}>
-            <h4>Performance Metrics</h4>
-            <div className={styles.metricsGrid}>
-              <div className={styles.metricCard}>
-                <div className={styles.metricValue}>{selectedLink.metrics.clicks}</div>
-                <div className={styles.metricLabel}>Total Clicks</div>
-                <div className={styles.metricIcon}>👆</div>
-              </div>
-              <div className={styles.metricCard}>
-                <div className={styles.metricValue}>{selectedLink.metrics.downloads}</div>
-                <div className={styles.metricLabel}>Downloads</div>
-                <div className={styles.metricIcon}>⬇️</div>
-              </div>
-              <div className={styles.metricCard}>
-                <div className={styles.metricValue}>
-                  {((selectedLink.metrics.downloads / selectedLink.metrics.clicks) * 100 || 0).toFixed(1)}%
-                </div>
-                <div className={styles.metricLabel}>Conversion</div>
-                <div className={styles.metricIcon}>📊</div>
-              </div>
-            </div>
-          </div>
-          
+
           <div className={styles.linkActions}>
             <button className={styles.actionButton}>Copy Link</button>
-            <button className={styles.actionButton}>Share</button>
           </div>
         </div>
       </div>

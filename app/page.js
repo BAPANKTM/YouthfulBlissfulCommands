@@ -16,22 +16,6 @@ import Links from "./components/Links/Links";
 export default function Home() {
   const [activeTab, setActiveTab] = useState("home");
   const [showFloater, setShowFloater] = useState(false);
-  
-  useEffect(() => {
-    // Listen for custom navigation events
-    const handleActionEvent = (event) => {
-      if (event.detail && event.detail.type) {
-        handleAction(event.detail.type);
-      }
-    };
-    
-    window.addEventListener('action', handleActionEvent);
-    
-    return () => {
-      window.removeEventListener('action', handleActionEvent);
-    };
-  }, []);
-  
   const [floaterContent, setFloaterContent] = useState({
     title: "",
     content: "",
@@ -40,10 +24,62 @@ export default function Home() {
     onPrimary: () => {},
     onSecondary: () => {},
   });
-  
+
+  useEffect(() => {
+    // Listen for custom navigation events
+    const handleActionEvent = (event) => {
+      if (event.detail && event.detail.type) {
+        handleAction(event.detail.type);
+      }
+    };
+
+    window.addEventListener('action', handleActionEvent);
+
+    return () => {
+      window.removeEventListener('action', handleActionEvent);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (activeTab === 'history') {
+      setFloaterContent({
+        title: "Withdrawal History",
+        content: <History />,
+        primaryText: "",
+        secondaryText: "Back",
+        onPrimary: null,
+        onSecondary: () => {
+          console.log('History closed');
+          setShowFloater(false);
+          setActiveTab('home');
+        },
+      });
+      setShowFloater(true);
+    } else {
+      // Close floater when switching to other tabs
+      setShowFloater(false);
+    }
+  }, [activeTab]);
+
+  const handleUpload = (file) => {
+    console.log("Upload clicked", file);
+    setFloaterContent({
+      title: "Share Content",
+      content: <Upload onUpload={() => {}} />,
+      primaryText: "",
+      secondaryText: "Cancel",
+      onPrimary: () => {},
+      onSecondary: () => {
+        console.log("Cancel pressed");
+        setShowFloater(false);
+      },
+    });
+    setShowFloater(true);
+  };
+
   const handleAction = (action) => {
     console.log(`Action clicked: ${action}`);
-    
+
     if (action === 'withdrawal') {
       setFloaterContent({
         title: "Withdrawal",
@@ -105,96 +141,9 @@ export default function Home() {
     }
   };
 
-  const handleUpload = (file) => {
-    // Upload handling logic
-    console.log("File uploaded:", file);
-  };
-
-  useEffect(() => {
-    if (activeTab === 'history') {
-      setFloaterContent({
-        title: "Withdrawal History",
-        content: <History />,
-        primaryText: "",
-        secondaryText: "Back",
-        onPrimary: null,
-        onSecondary: () => {
-          console.log('History closed');
-          setShowFloater(false);
-          setActiveTab('home');
-        },
-      });
-      setShowFloater(true);
-    } else {
-      // Close floater when switching to other tabs
-      setShowFloater(false);
-    }
-  }, [activeTab]);
-
-  const handleUpload = () => {
-    console.log("Upload clicked");
-    setFloaterContent({
-      title: "Share Content",
-      content: <Upload onUpload={() => {}} />,
-      primaryText: "",
-      secondaryText: "Cancel",
-      onPrimary: () => {},
-      onSecondary: () => {
-        console.log("Cancel pressed");
-        setShowFloater(false);
-      },
-    });
-    setShowFloater(true);
-  };
-
-  const handleAction = (action) => {
-    console.log(`Action clicked: ${action}`);
-    // Handle different actions here
-    if (action === 'withdrawal') {
-      setFloaterContent({
-        title: 'Withdrawal History',
-        content: <History />,
-        primaryText: "",
-        secondaryText: "Back",
-        onPrimary: () => console.log(`${action} confirmed`),
-        onSecondary: () => {
-          console.log(`History closed`);
-          setShowFloater(false);
-        },
-      });
-      setShowFloater(true);
-    } else if (action === 'links') {
-      setFloaterContent({
-        title: 'Links History',
-        content: <Links />,
-        primaryText: "",
-        secondaryText: "Back",
-        onPrimary: () => {},
-        onSecondary: () => {
-          console.log(`Links closed`);
-          setShowFloater(false);
-        },
-      });
-      setShowFloater(true);
-    } else if (action === 'help') {
-      setFloaterContent({
-        title: action.charAt(0).toUpperCase() + action.slice(1),
-        content: `This is the ${action} content.`,
-        primaryText: "Confirm",
-        secondaryText: "Cancel",
-        onPrimary: () => console.log(`${action} confirmed`),
-        onSecondary: () => {
-          console.log(`${action} cancelled`);
-          setShowFloater(false);
-        },
-      });
-      setShowFloater(true);
-    }
-  };
-
   return (
     <>
-      <SplashScreen /> {/*Added SplashScreen */}
+      <SplashScreen />
       <Container>
         <Header username="User" />
         <Greeting />

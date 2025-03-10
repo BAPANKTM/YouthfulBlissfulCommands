@@ -1,4 +1,3 @@
-
 .linksContainer {
   width: 100%;
   max-height: 60vh;
@@ -96,59 +95,49 @@
   color: var(--text-secondary);
 }
 
-/* Empty State */
-.emptyState {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 40px 20px;
-  text-align: center;
-}
-
-.emptyIcon {
-  font-size: 48px;
-  margin-bottom: 16px;
-  animation: var(--animation-float);
-}
-
-.emptyState h3 {
-  margin: 0 0 8px;
-  font-size: 18px;
-}
-
-.emptyState p {
-  margin: 0;
-  color: var(--text-secondary);
-  font-size: 14px;
-}
-
 /* Loading State */
 .loadingContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 40px 20px;
+  padding: 40px 0;
+  gap: 15px;
+  color: var(--text-secondary);
 }
 
 .loadingSpinner {
-  width: 32px;
-  height: 32px;
-  border: 3px solid rgba(157, 92, 255, 0.1);
+  width: 30px;
+  height: 30px;
+  border: 3px solid rgba(157, 92, 255, 0.2);
+  border-top: 3px solid var(--primary);
   border-radius: 50%;
-  border-top-color: var(--primary);
   animation: spin 1s linear infinite;
-  margin-bottom: 16px;
 }
 
 @keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
-/* Link Detail View */
+/* Empty State */
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 0;
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.emptyIcon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  opacity: 0.7;
+}
+
+/* Detail View */
 .linkDetailContainer {
   width: 100%;
   display: flex;
@@ -157,126 +146,85 @@
 }
 
 .backButton {
-  background: none;
-  border: none;
-  color: var(--primary);
-  font-size: 14px;
+  padding: 8px 0;
   cursor: pointer;
-  padding: 4px 0;
-  text-align: left;
-  display: flex;
-  align-items: center;
-  width: fit-content;
+  color: var(--primary);
+  font-weight: 500;
+  transition: all 0.2s ease;
 }
 
 .backButton:hover {
-  text-decoration: underline;
-}
-
-.linkDetail {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  animation: var(--animation-slide-up);
-  animation-duration: 0.3s;
+  opacity: 0.8;
 }
 
 .linkDetailHeader {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
 }
 
-.linkDetailHeader .linkTypeIcon {
-  width: 48px;
-  height: 48px;
-  font-size: 28px;
+.linkTypeIconLarge {
+  font-size: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  background: rgba(157, 92, 255, 0.1);
+  border-radius: 12px;
 }
 
-.linkDetailHeader .linkTitle {
+.linkDetailTitle {
+  margin: 0;
   font-size: 20px;
-  margin: 0;
+  font-weight: 600;
 }
 
-.linkInfo {
+.linkDetailInfo {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 10px;
-  padding: 12px;
+  gap: 16px;
 }
 
-.linkInfoItem {
-  display: flex;
-  justify-content: space-between;
-}
-
-.linkInfoLabel {
+.linkDetailDate {
   color: var(--text-secondary);
-  font-size: 14px;
-}
-
-.linkInfoValue {
-  font-size: 14px;
-}
-
-.metricsContainer {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.metricsContainer h4 {
   margin: 0;
-  font-size: 16px;
-  font-weight: 500;
 }
 
 .metricsGrid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: 1fr 1fr;
   gap: 12px;
+  margin-top: 8px;
 }
 
 .metricCard {
   background: linear-gradient(145deg, #1A1A1A 0%, #131313 100%);
   border-radius: 10px;
-  padding: 12px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  min-height: 90px;
+  gap: 8px;
   border: 1px solid rgba(255, 255, 255, 0.03);
 }
 
-.metricCard .metricValue {
+.metricCard h4 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.metricValueLarge {
   font-size: 24px;
   font-weight: 600;
   color: var(--primary);
-  margin-bottom: 4px;
-}
-
-.metricCard .metricLabel {
-  font-size: 12px;
-  color: var(--text-secondary);
-  text-align: center;
-}
-
-.metricCard .metricIcon {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  font-size: 16px;
-  opacity: 0.5;
 }
 
 .linkActions {
   display: flex;
   gap: 12px;
-  margin-top: 12px;
+  margin-top: 16px;
 }
 
 .actionButton {
@@ -302,17 +250,17 @@
     flex-direction: column;
     align-items: flex-start;
   }
-  
+
   .linkMetrics {
     width: 100%;
     justify-content: space-between;
     margin-top: 8px;
   }
-  
+
   .metricsGrid {
     grid-template-columns: 1fr 1fr;
   }
-  
+
   .metricCard:last-child {
     grid-column: span 2;
   }
