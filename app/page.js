@@ -16,6 +16,22 @@ import Links from "./components/Links/Links";
 export default function Home() {
   const [activeTab, setActiveTab] = useState("home");
   const [showFloater, setShowFloater] = useState(false);
+  
+  useEffect(() => {
+    // Listen for custom navigation events
+    const handleActionEvent = (event) => {
+      if (event.detail && event.detail.type) {
+        handleAction(event.detail.type);
+      }
+    };
+    
+    window.addEventListener('action', handleActionEvent);
+    
+    return () => {
+      window.removeEventListener('action', handleActionEvent);
+    };
+  }, []);
+  
   const [floaterContent, setFloaterContent] = useState({
     title: "",
     content: "",
@@ -24,6 +40,75 @@ export default function Home() {
     onPrimary: () => {},
     onSecondary: () => {},
   });
+  
+  const handleAction = (action) => {
+    console.log(`Action clicked: ${action}`);
+    
+    if (action === 'withdrawal') {
+      setFloaterContent({
+        title: "Withdrawal",
+        content: "Withdrawal form here",
+        primaryText: "Withdraw",
+        secondaryText: "Cancel",
+        onPrimary: () => {
+          console.log("withdrawal submitted");
+          setShowFloater(false);
+        },
+        onSecondary: () => {
+          console.log("withdrawal cancelled");
+          setShowFloater(false);
+        },
+      });
+      setShowFloater(true);
+    } else if (action === 'help') {
+      setFloaterContent({
+        title: "Help & Support",
+        content: "Help content here",
+        primaryText: "Contact Support",
+        secondaryText: "Close",
+        onPrimary: () => {
+          console.log("contact support");
+          setShowFloater(false);
+        },
+        onSecondary: () => {
+          console.log("help cancelled");
+          setShowFloater(false);
+        },
+      });
+      setShowFloater(true);
+    } else if (action === 'history') {
+      setFloaterContent({
+        title: "Withdrawal History",
+        content: <History />,
+        primaryText: "",
+        secondaryText: "Close",
+        onPrimary: () => {},
+        onSecondary: () => {
+          console.log("History closed");
+          setShowFloater(false);
+        },
+      });
+      setShowFloater(true);
+    } else if (action === 'links') {
+      setFloaterContent({
+        title: "My Links",
+        content: <Links />,
+        primaryText: "",
+        secondaryText: "Close",
+        onPrimary: () => {},
+        onSecondary: () => {
+          console.log("Links closed");
+          setShowFloater(false);
+        },
+      });
+      setShowFloater(true);
+    }
+  };
+
+  const handleUpload = (file) => {
+    // Upload handling logic
+    console.log("File uploaded:", file);
+  };
 
   useEffect(() => {
     if (activeTab === 'history') {

@@ -1,0 +1,319 @@
+
+.linksContainer {
+  width: 100%;
+  max-height: 60vh;
+  overflow-y: auto;
+  padding: 8px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.linksList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.linkItem {
+  background: linear-gradient(145deg, #1A1A1A 0%, #131313 100%);
+  border-radius: 10px;
+  padding: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  animation: var(--animation-slide-up);
+  animation-duration: 0.3s;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.linkItem:hover {
+  border-color: rgba(157, 92, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.linkItemContent {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.linkTypeIcon {
+  font-size: 24px;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(157, 92, 255, 0.1);
+  border-radius: 8px;
+}
+
+.linkInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow: hidden;
+}
+
+.linkTitle {
+  font-size: 16px;
+  font-weight: 500;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.linkDate {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.linkMetrics {
+  display: flex;
+  gap: 12px;
+}
+
+.metricItem {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.metricValue {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--primary);
+}
+
+.metricLabel {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+/* Empty State */
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.emptyIcon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  animation: var(--animation-float);
+}
+
+.emptyState h3 {
+  margin: 0 0 8px;
+  font-size: 18px;
+}
+
+.emptyState p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+/* Loading State */
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.loadingSpinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba(157, 92, 255, 0.1);
+  border-radius: 50%;
+  border-top-color: var(--primary);
+  animation: spin 1s linear infinite;
+  margin-bottom: 16px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Link Detail View */
+.linkDetailContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.backButton {
+  background: none;
+  border: none;
+  color: var(--primary);
+  font-size: 14px;
+  cursor: pointer;
+  padding: 4px 0;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  width: fit-content;
+}
+
+.backButton:hover {
+  text-decoration: underline;
+}
+
+.linkDetail {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  animation: var(--animation-slide-up);
+  animation-duration: 0.3s;
+}
+
+.linkDetailHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.linkDetailHeader .linkTypeIcon {
+  width: 48px;
+  height: 48px;
+  font-size: 28px;
+}
+
+.linkDetailHeader .linkTitle {
+  font-size: 20px;
+  margin: 0;
+}
+
+.linkInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 10px;
+  padding: 12px;
+}
+
+.linkInfoItem {
+  display: flex;
+  justify-content: space-between;
+}
+
+.linkInfoLabel {
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.linkInfoValue {
+  font-size: 14px;
+}
+
+.metricsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.metricsContainer h4 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.metricCard {
+  background: linear-gradient(145deg, #1A1A1A 0%, #131313 100%);
+  border-radius: 10px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  min-height: 90px;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.metricCard .metricValue {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--primary);
+  margin-bottom: 4px;
+}
+
+.metricCard .metricLabel {
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+.metricCard .metricIcon {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-size: 16px;
+  opacity: 0.5;
+}
+
+.linkActions {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.actionButton {
+  flex: 1;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 0;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.actionButton:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 380px) {
+  .linkItemContent {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .linkMetrics {
+    width: 100%;
+    justify-content: space-between;
+    margin-top: 8px;
+  }
+  
+  .metricsGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  .metricCard:last-child {
+    grid-column: span 2;
+  }
+}
