@@ -41,7 +41,7 @@ export default function Home() {
 
   const handleAction = (action) => {
     console.log(`Action clicked: ${action}`);
-    // Handle different actions here (only withdrawal and help)
+    // Handle different actions here
     if (action === 'withdrawal' || action === 'help') {
       setFloaterContent({
         title: action.charAt(0).toUpperCase() + action.slice(1),
@@ -49,7 +49,24 @@ export default function Home() {
         primaryText: "Confirm",
         secondaryText: "Cancel",
         onPrimary: () => console.log(`${action} confirmed`),
-        onSecondary: () => console.log(`${action} cancelled`),
+        onSecondary: () => {
+          console.log(`${action} cancelled`);
+          setShowFloater(false);
+        },
+      });
+      setShowFloater(true);
+    } else if (action === 'history') {
+      const History = require('./components/History/History').default;
+      setFloaterContent({
+        title: "Withdrawal History",
+        content: <History />,
+        primaryText: "",
+        secondaryText: "Close",
+        onPrimary: () => {},
+        onSecondary: () => {
+          console.log('History closed');
+          setShowFloater(false);
+        },
       });
       setShowFloater(true);
     }

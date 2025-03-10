@@ -1,0 +1,45 @@
+
+[
+  {
+    "user_id": "101",
+    "withdrawal_id": "W12345",
+    "withdrawal_method": "UPI",
+    "withdrawal_time": "2025-03-10T14:30:00Z",
+    "amount": 1500,
+    "status": "complete"
+  },
+  {
+    "user_id": "102",
+    "withdrawal_id": "W12346",
+    "withdrawal_method": "Crypto",
+    "withdrawal_time": "2025-03-09T12:15:00Z",
+    "amount": 0.005,
+    "status": "failed",
+    "reason": "Insufficient balance"
+  },
+  {
+    "user_id": "103",
+    "withdrawal_id": "W12347",
+    "withdrawal_method": "UPI",
+    "withdrawal_time": "2025-03-08T16:45:00Z",
+    "amount": 2500,
+    "status": "processing"
+  },
+  {
+    "user_id": "104",
+    "withdrawal_id": "W12348",
+    "withdrawal_method": "Crypto",
+    "withdrawal_time": "2025-03-07T10:05:00Z",
+    "amount": 0.01,
+    "status": "complete"
+  },
+  {
+    "user_id": "105",
+    "withdrawal_id": "W12349",
+    "withdrawal_method": "UPI",
+    "withdrawal_time": "2025-03-06T09:30:00Z",
+    "amount": 1000,
+    "status": "failed",
+    "reason": "Incorrect UPI ID"
+  }
+]
