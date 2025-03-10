@@ -12,7 +12,7 @@
     "withdrawal_id": "W12346",
     "withdrawal_method": "Crypto",
     "withdrawal_time": "2025-03-09T12:15:00Z",
-    "amount": 5200,
+    "amount": 0.005,
     "status": "failed",
     "reason": "Insufficient balance"
   },
@@ -29,7 +29,7 @@
     "withdrawal_id": "W12348",
     "withdrawal_method": "Crypto",
     "withdrawal_time": "2025-03-07T10:05:00Z",
-    "amount": 4300,
+    "amount": 0.01,
     "status": "complete"
   },
   {
@@ -46,7 +46,7 @@
     "withdrawal_id": "W12350",
     "withdrawal_method": "Crypto",
     "withdrawal_time": "2025-03-05T11:10:00Z",
-    "amount": 6200,
+    "amount": 0.007,
     "status": "complete"
   },
   {
@@ -62,7 +62,7 @@
     "withdrawal_id": "W12352",
     "withdrawal_method": "Crypto",
     "withdrawal_time": "2025-03-03T08:45:00Z",
-    "amount": 8100,
+    "amount": 0.002,
     "status": "failed",
     "reason": "Network issue"
   },
@@ -79,7 +79,7 @@
     "withdrawal_id": "W12354",
     "withdrawal_method": "Crypto",
     "withdrawal_time": "2025-03-01T14:15:00Z",
-    "amount": 5000,
+    "amount": 0.009,
     "status": "processing"
   }
 ]

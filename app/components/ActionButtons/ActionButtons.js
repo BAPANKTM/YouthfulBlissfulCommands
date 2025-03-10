@@ -5,20 +5,27 @@ import styles from './ActionButtons.module.css';
 const ActionButtons = ({ openFloater }) => {
   return (
     <div className={styles.actionButtons}>
-      <button className={styles.actionButton} onClick={() => openFloater('withdrawal')}>
-        <svg className={styles.actionIcon} xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M3 15C3 17.8284 3 19.2426 3.87868 20.1213C4.75736 21 6.17157 21 9 21H15C17.8284 21 19.2426 21 20.1213 20.1213C21 19.2426 21 17.8284 21 15"></path>
-          <path d="M12 3L12 15M12 15L16 11M12 15L8 11"></path>
+      <div className={styles.actionButton} onClick={() => openFloater('withdrawal')}>
+        <svg className={styles.actionIcon} width="22" height="22" viewBox="0 0 24 24" fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 17V3M12 17L6 11M12 17L18 11" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round"
+            strokeLinejoin="round" />
+          <path d="M3 21H21" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
-        <span>Withdraw</span>
-      </button>
-      <button className={styles.actionButton} onClick={() => openFloater('links')}>
-        <svg className={styles.actionIcon} xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
-          <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+        <span className={styles.actionText}>Withdrawal</span>
+      </div>
+      <div className={styles.actionButton} onClick={() => openFloater('help')}>
+        <svg className={styles.actionIcon} width="22" height="22" viewBox="0 0 24 24" fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
+            stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M9.09 9.00001C9.3251 8.33167 9.78915 7.76811 10.4 7.40914C11.0108 7.05016 11.7289 6.91895 12.4272 7.03871C13.1255 7.15847 13.7588 7.52153 14.2151 8.06353C14.6713 8.60554 14.9211 9.29153 14.92 10C14.92 12 11.92 13 11.92 13"
+            stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M12 17H12.01" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
-        <span>Links</span>
-      </button>
+        <span className={styles.actionText}>Help</span>
+      </div>
     </div>
   );
 };
