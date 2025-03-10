@@ -31,8 +31,9 @@ const normalizeStatus = (status) => {
   
   const statusLower = status.toLowerCase();
   
-  if (statusLower === 'complete') return 'completed';
-  if (statusLower === 'fail') return 'failed';
+  if (statusLower === 'complete' || statusLower === 'completed') return 'completed';
+  if (statusLower === 'fail' || statusLower === 'failed') return 'failed';
+  if (statusLower === 'pending' || statusLower === 'processing') return 'processing';
   
   return statusLower;
 };

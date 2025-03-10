@@ -27,10 +27,16 @@ export default function History() {
   const formatDate = (dateString) => {
     try {
       const date = new Date(dateString);
+      if (isNaN(date.getTime())) {
+        throw new Error('Invalid date');
+      }
       return date.toLocaleDateString('en-US', { 
         month: 'short', 
         day: 'numeric', 
-        year: 'numeric' 
+        year: 'numeric',
+      }) + ' ' + date.toLocaleTimeString('en-US', {
+        hour: '2-digit',
+        minute: '2-digit'
       });
     } catch (e) {
       console.error('Date formatting error:', e);
@@ -110,8 +116,8 @@ export default function History() {
           {filteredWithdrawals.map((withdrawal, index) => (
             <div key={index} className={styles.historyItem}>
               <div className={styles.historyItemHeader}>
-                <div className={styles.method}>{withdrawal.withdrawal_method}</div>
-                <div className={styles.amount}>₹{withdrawal.amount}</div>
+                <div className={styles.method}>{withdrawal.withdrawal_method || withdrawal.method}</div>
+                <div className={styles.amount}>${withdrawal.amount}</div>
               </div>
               <div className={styles.historyItemDetails}>
                 <div className={styles.date}>{formatDate(withdrawal.withdrawal_time)}</div>
