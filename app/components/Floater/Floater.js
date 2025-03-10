@@ -50,9 +50,11 @@ const Floater = ({ title, children, primaryText, secondaryText, onPrimary, onSec
               {secondaryText}
             </button>
           )}
-          <button className={styles.floaterButton} onClick={handlePrimary}>
-            {primaryText}
-          </button>
+          {primaryText && (
+            <button className={styles.floaterButton} onClick={handlePrimary}>
+              {primaryText}
+            </button>
+          )}
         </div>
       </div>
     </div>
