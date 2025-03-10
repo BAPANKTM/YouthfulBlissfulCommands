@@ -1,3 +1,4 @@
+
 .linksContainer {
   width: 100%;
   max-height: 60vh;
@@ -5,7 +6,7 @@
   padding: 8px 0;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
 }
 
 .linksList {
@@ -17,7 +18,7 @@
 .linkItem {
   background: linear-gradient(145deg, #1A1A1A 0%, #131313 100%);
   border-radius: 10px;
-  padding: 14px;
+  padding: 12px;
   border: 1px solid rgba(255, 255, 255, 0.03);
   animation: var(--animation-slide-up);
   animation-duration: 0.3s;
@@ -31,209 +32,6 @@
   border-color: rgba(157, 92, 255, 0.2);
   transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-}
-
-.linkHeader {
-  display: flex;
-  align-items: center;
-  margin-bottom: 4px;
-}
-
-.typeIcon {
-  display: inline-flex;
-  margin-right: 8px;
-  font-size: 16px;
-}
-
-.linkTitle {
-  font-weight: 600;
-  font-size: 15px;
-  color: #fff;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.linkDate {
-  font-size: 12px;
-  color: var(--text-secondary);
-  margin-bottom: 8px;
-  padding-left: 26px;
-}
-
-.linkStats {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  padding-top: 5px;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
-  font-size: 12px;
-}
-
-.statItem {
-  background-color: rgba(157, 92, 255, 0.08);
-  border-radius: 4px;
-  padding: 2px 6px;
-  display: inline-flex;
-  align-items: center;
-}
-
-.statLabel {
-  color: var(--text-secondary);
-  margin-right: 4px;
-}
-
-.statValue {
-  font-weight: 600;
-  color: var(--primary-light);
-}
-
-/* Link Detail View */
-.linkDetailView {
-  padding: 4px;
-}
-
-.backButton {
-  display: inline-block;
-  margin-bottom: 16px;
-  padding: 8px 12px;
-  background: rgba(157, 92, 255, 0.08);
-  border-radius: 6px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.backButton:hover {
-  background: rgba(157, 92, 255, 0.15);
-}
-
-.detailHeader {
-  display: flex;
-  align-items: center;
-  margin-bottom: 16px;
-}
-
-.detailTitle {
-  font-size: 18px;
-  font-weight: 600;
-  margin: 0;
-}
-
-.detailInfo {
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 8px;
-  padding: 12px;
-  margin-bottom: 16px;
-}
-
-.detailRow {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 8px;
-  font-size: 14px;
-}
-
-.detailRow:last-child {
-  margin-bottom: 0;
-}
-
-.detailLabel {
-  color: var(--text-secondary);
-}
-
-.detailValue {
-  font-weight: 500;
-}
-
-.metricsSection {
-  margin-top: 20px;
-}
-
-.metricsSection h4 {
-  font-size: 16px;
-  margin-bottom: 12px;
-  color: var(--text-secondary);
-}
-
-.metricsGrid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-
-.metricCard {
-  background: linear-gradient(145deg, #1A1A1A 0%, #131313 100%);
-  border-radius: 10px;
-  padding: 16px;
-  text-align: center;
-  border: 1px solid rgba(255, 255, 255, 0.03);
-}
-
-.metricValue {
-  font-size: 24px;
-  font-weight: 700;
-  color: var(--primary);
-  margin-bottom: 4px;
-}
-
-.metricLabel {
-  font-size: 12px;
-  color: var(--text-secondary);
-}
-
-/* Loading and Empty States */
-.loadingContainer, .emptyState {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 40px 20px;
-  text-align: center;
-}
-
-.loadingSpinner {
-  width: 30px;
-  height: 30px;
-  border: 3px solid rgba(157, 92, 255, 0.2);
-  border-top: 3px solid var(--primary);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin-bottom: 16px;
-}
-
-.emptyIcon {
-  font-size: 36px;
-  margin-bottom: 16px;
-}
-
-.emptyState h3 {
-  margin: 0 0 8px;
-  font-size: 18px;
-}
-
-.emptyState p {
-  color: var(--text-secondary);
-  font-size: 14px;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-@media (max-width: 380px) {
-  .linkItem {
-    padding: 12px;
-  }
-
-  .metricValue {
-    font-size: 20px;
-  }
-
-  .linkTitle {
-    font-size: 14px;
-  }
 }
 
 .linkItemContent {
@@ -262,6 +60,19 @@
   overflow: hidden;
 }
 
+.linkTitle {
+  font-size: 16px;
+  font-weight: 500;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.linkDate {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
 
 .linkMetrics {
   display: flex;
@@ -285,49 +96,59 @@
   color: var(--text-secondary);
 }
 
-/* Loading State */
-.loadingContainer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 40px 0;
-  gap: 15px;
-  color: var(--text-secondary);
-}
-
-.loadingSpinner {
-  width: 30px;
-  height: 30px;
-  border: 3px solid rgba(157, 92, 255, 0.2);
-  border-top: 3px solid var(--primary);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
 /* Empty State */
 .emptyState {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 40px 0;
+  padding: 40px 20px;
   text-align: center;
-  color: var(--text-secondary);
 }
 
 .emptyIcon {
   font-size: 48px;
   margin-bottom: 16px;
-  opacity: 0.7;
+  animation: var(--animation-float);
 }
 
-/* Detail View */
+.emptyState h3 {
+  margin: 0 0 8px;
+  font-size: 18px;
+}
+
+.emptyState p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+/* Loading State */
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.loadingSpinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba(157, 92, 255, 0.1);
+  border-radius: 50%;
+  border-top-color: var(--primary);
+  animation: spin 1s linear infinite;
+  margin-bottom: 16px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Link Detail View */
 .linkDetailContainer {
   width: 100%;
   display: flex;
@@ -336,85 +157,126 @@
 }
 
 .backButton {
-  padding: 8px 0;
-  cursor: pointer;
+  background: none;
+  border: none;
   color: var(--primary);
-  font-weight: 500;
-  transition: all 0.2s ease;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 4px 0;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  width: fit-content;
 }
 
 .backButton:hover {
-  opacity: 0.8;
+  text-decoration: underline;
+}
+
+.linkDetail {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  animation: var(--animation-slide-up);
+  animation-duration: 0.3s;
 }
 
 .linkDetailHeader {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
 }
 
-.linkTypeIconLarge {
-  font-size: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 60px;
-  height: 60px;
-  background: rgba(157, 92, 255, 0.1);
-  border-radius: 12px;
+.linkDetailHeader .linkTypeIcon {
+  width: 48px;
+  height: 48px;
+  font-size: 28px;
 }
 
-.linkDetailTitle {
-  margin: 0;
+.linkDetailHeader .linkTitle {
   font-size: 20px;
-  font-weight: 600;
+  margin: 0;
 }
 
-.linkDetailInfo {
+.linkInfo {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 10px;
+  padding: 12px;
 }
 
-.linkDetailDate {
+.linkInfoItem {
+  display: flex;
+  justify-content: space-between;
+}
+
+.linkInfoLabel {
   color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.linkInfoValue {
+  font-size: 14px;
+}
+
+.metricsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.metricsContainer h4 {
   margin: 0;
+  font-size: 16px;
+  font-weight: 500;
 }
 
 .metricsGrid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(3, 1fr);
   gap: 12px;
-  margin-top: 8px;
 }
 
 .metricCard {
   background: linear-gradient(145deg, #1A1A1A 0%, #131313 100%);
   border-radius: 10px;
-  padding: 16px;
+  padding: 12px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  min-height: 90px;
   border: 1px solid rgba(255, 255, 255, 0.03);
 }
 
-.metricCard h4 {
-  margin: 0;
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--text-secondary);
-}
-
-.metricValueLarge {
+.metricCard .metricValue {
   font-size: 24px;
   font-weight: 600;
   color: var(--primary);
+  margin-bottom: 4px;
+}
+
+.metricCard .metricLabel {
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+.metricCard .metricIcon {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-size: 16px;
+  opacity: 0.5;
 }
 
 .linkActions {
   display: flex;
   gap: 12px;
-  margin-top: 16px;
+  margin-top: 12px;
 }
 
 .actionButton {
@@ -440,17 +302,17 @@
     flex-direction: column;
     align-items: flex-start;
   }
-
+  
   .linkMetrics {
     width: 100%;
     justify-content: space-between;
     margin-top: 8px;
   }
-
+  
   .metricsGrid {
     grid-template-columns: 1fr 1fr;
   }
-
+  
   .metricCard:last-child {
     grid-column: span 2;
   }
