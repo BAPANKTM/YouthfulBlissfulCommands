@@ -1,114 +1,99 @@
-
 'use client';
 import { useState, useEffect } from 'react';
-import { fetchWithdrawalHistory, formatDate, getStatusColor } from '../../utils/withdrawalUtils';
 import styles from './History.module.css';
+import { fetchWithdrawalHistory } from '../../utils/withdrawalUtils';
 
-const History = () => {
+export default function History() {
   const [withdrawals, setWithdrawals] = useState([]);
-  const [filteredWithdrawals, setFilteredWithdrawals] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [activeFilter, setActiveFilter] = useState('all');
 
   useEffect(() => {
-    const getWithdrawals = async () => {
+    async function loadHistory() {
       try {
-        setLoading(true);
         const data = await fetchWithdrawalHistory();
         setWithdrawals(data);
-        setFilteredWithdrawals(data);
-        setLoading(false);
-      } catch (err) {
-        setError('Failed to load withdrawal history');
+      } catch (error) {
+        console.error('Error loading withdrawal history:', error);
+      } finally {
         setLoading(false);
       }
-    };
+    }
 
-    getWithdrawals();
+    loadHistory();
   }, []);
 
-  useEffect(() => {
-    if (activeFilter === 'all') {
-      setFilteredWithdrawals(withdrawals);
-    } else {
-      setFilteredWithdrawals(
-        withdrawals.filter(item => item.status === activeFilter)
-      );
-    }
-  }, [activeFilter, withdrawals]);
-
-  const handleFilterChange = (filter) => {
-    setActiveFilter(filter);
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', { 
+      month: 'short', 
+      day: 'numeric', 
+      year: 'numeric' 
+    });
   };
 
-  if (loading) {
-    return <div className={styles.loading}>Loading withdrawal history...</div>;
-  }
+  const getFilteredWithdrawals = () => {
+    if (activeFilter === 'all') {
+      return withdrawals;
+    }
+    return withdrawals.filter(withdrawal => withdrawal.status.toLowerCase() === activeFilter);
+  };
 
-  if (error) {
-    return <div className={styles.error}>{error}</div>;
-  }
+  const getStatusClassName = (status) => {
+    return `${styles.status} ${styles[status.toLowerCase()]}`;
+  };
+
+  const filteredWithdrawals = getFilteredWithdrawals();
 
   return (
     <div className={styles.historyContainer}>
       <div className={styles.filterContainer}>
         <div 
           className={`${styles.filterOption} ${activeFilter === 'all' ? styles.active : ''}`}
-          onClick={() => handleFilterChange('all')}
+          onClick={() => setActiveFilter('all')}
         >
           All
         </div>
         <div 
-          className={`${styles.filterOption} ${activeFilter === 'complete' ? styles.active : ''}`}
-          onClick={() => handleFilterChange('complete')}
+          className={`${styles.filterOption} ${activeFilter === 'completed' ? styles.active : ''}`}
+          onClick={() => setActiveFilter('completed')}
         >
-          Complete
+          Completed
         </div>
         <div 
           className={`${styles.filterOption} ${activeFilter === 'processing' ? styles.active : ''}`}
-          onClick={() => handleFilterChange('processing')}
+          onClick={() => setActiveFilter('processing')}
         >
           Processing
         </div>
         <div 
           className={`${styles.filterOption} ${activeFilter === 'failed' ? styles.active : ''}`}
-          onClick={() => handleFilterChange('failed')}
+          onClick={() => setActiveFilter('failed')}
         >
           Failed
         </div>
       </div>
 
-      {filteredWithdrawals.length === 0 ? (
-        <div className={styles.emptyState}>
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-          <p>No withdrawals found for this filter</p>
-        </div>
+      {loading ? (
+        <div className={styles.emptyState}>Loading...</div>
+      ) : filteredWithdrawals.length === 0 ? (
+        <div className={styles.emptyState}>No withdrawal history found</div>
       ) : (
         <div className={styles.historyList}>
-          {filteredWithdrawals.map((withdrawal) => (
-            <div key={withdrawal.withdrawal_id} className={styles.historyItem}>
+          {filteredWithdrawals.map((withdrawal, index) => (
+            <div key={index} className={styles.historyItem}>
               <div className={styles.historyItemHeader}>
-                <div className={styles.method}>{withdrawal.withdrawal_method}</div>
-                <div className={styles.amount}>${typeof withdrawal.amount === 'number' && withdrawal.amount < 1 
-                  ? withdrawal.amount.toFixed(5) 
-                  : withdrawal.amount.toFixed(2)}</div>
+                <div className={styles.method}>{withdrawal.method}</div>
+                <div className={styles.amount}>₹{withdrawal.amount}</div>
               </div>
               <div className={styles.historyItemDetails}>
-                <div className={styles.date}>{formatDate(withdrawal.withdrawal_time)}</div>
-                <div 
-                  className={styles.status} 
-                  style={{ color: getStatusColor(withdrawal.status) }}
-                >
-                  {withdrawal.status.charAt(0).toUpperCase() + withdrawal.status.slice(1)}
+                <div className={styles.date}>{formatDate(withdrawal.date)}</div>
+                <div className={getStatusClassName(withdrawal.status)}>
+                  {withdrawal.status}
                 </div>
               </div>
               {withdrawal.reason && (
-                <div className={styles.reason}>
-                  Reason: {withdrawal.reason}
-                </div>
+                <div className={styles.reason}>{withdrawal.reason}</div>
               )}
             </div>
           ))}
@@ -116,6 +101,4 @@ const History = () => {
       )}
     </div>
   );
-};
-
-export default History;
+}

@@ -29,9 +29,9 @@ export default function Home() {
       setFloaterContent({
         title: "Withdrawal History",
         content: <History />,
-        primaryText: "",
+        primaryText: null,
         secondaryText: "Back",
-        onPrimary: () => {},
+        onPrimary: null,
         onSecondary: () => {
           console.log('History closed');
           setShowFloater(false);
