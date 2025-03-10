@@ -1,3 +1,4 @@
+
 'use client';
 import { useState, useEffect } from 'react';
 import styles from './History.module.css';
@@ -24,23 +25,39 @@ export default function History() {
   }, []);
 
   const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { 
-      month: 'short', 
-      day: 'numeric', 
-      year: 'numeric' 
-    });
+    try {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('en-US', { 
+        month: 'short', 
+        day: 'numeric', 
+        year: 'numeric' 
+      });
+    } catch (e) {
+      console.error('Date formatting error:', e);
+      return 'Invalid date';
+    }
   };
 
   const getFilteredWithdrawals = () => {
     if (activeFilter === 'all') {
       return withdrawals;
     }
-    return withdrawals.filter(withdrawal => withdrawal.status.toLowerCase() === activeFilter);
+    return withdrawals.filter(withdrawal => {
+      const status = withdrawal.status.toLowerCase();
+      return status === activeFilter;
+    });
   };
 
   const getStatusClassName = (status) => {
-    return `${styles.status} ${styles[status.toLowerCase()]}`;
+    const statusLower = status.toLowerCase();
+    // Map status to appropriate class names
+    const statusMap = {
+      'complete': 'completed',
+      'completed': 'completed',
+      'processing': 'processing',
+      'failed': 'failed'
+    };
+    return `${styles.status} ${styles[statusMap[statusLower] || 'default']}`;
   };
 
   const filteredWithdrawals = getFilteredWithdrawals();
@@ -75,21 +92,31 @@ export default function History() {
       </div>
 
       {loading ? (
-        <div className={styles.emptyState}>Loading...</div>
+        <div className={styles.loadingState}>
+          <div className={styles.loadingSpinner}></div>
+          <div>Loading history...</div>
+        </div>
       ) : filteredWithdrawals.length === 0 ? (
-        <div className={styles.emptyState}>No withdrawal history found</div>
+        <div className={styles.emptyState}>
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 8V12L15 15" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M3.05078 11.0002C3.27246 8.18717 4.61914 5.54688 6.82471 3.78127C9.03027 2.01566 11.8857 1.26709 14.6952 1.744C17.5048 2.22092 20.0216 3.87287 21.5801 6.27142C23.1387 8.66996 23.5905 11.5998 22.8444 14.3144C22.0984 17.0291 20.2264 19.2949 17.6949 20.5885C15.1634 21.8822 12.1956 22.0869 9.51732 21.1498C6.83908 20.2127 4.66739 18.202 3.4917 15.6089C2.31601 13.0158 2.20846 10.0511 3.19102 7.38036" 
+              stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+          <p>No {activeFilter !== 'all' ? activeFilter : ''} withdrawal history found</p>
+        </div>
       ) : (
         <div className={styles.historyList}>
           {filteredWithdrawals.map((withdrawal, index) => (
             <div key={index} className={styles.historyItem}>
               <div className={styles.historyItemHeader}>
-                <div className={styles.method}>{withdrawal.method}</div>
+                <div className={styles.method}>{withdrawal.withdrawal_method}</div>
                 <div className={styles.amount}>₹{withdrawal.amount}</div>
               </div>
               <div className={styles.historyItemDetails}>
-                <div className={styles.date}>{formatDate(withdrawal.date)}</div>
+                <div className={styles.date}>{formatDate(withdrawal.withdrawal_time)}</div>
                 <div className={getStatusClassName(withdrawal.status)}>
-                  {withdrawal.status}
+                  {withdrawal.status.charAt(0).toUpperCase() + withdrawal.status.slice(1)}
                 </div>
               </div>
               {withdrawal.reason && (

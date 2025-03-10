@@ -1,3 +1,4 @@
+
 "use client";
 import { useState, useEffect } from "react";
 import Container from "./components/Container/Container";
@@ -29,7 +30,7 @@ export default function Home() {
       setFloaterContent({
         title: "Withdrawal History",
         content: <History />,
-        primaryText: null,
+        primaryText: "",
         secondaryText: "Back",
         onPrimary: null,
         onSecondary: () => {
@@ -94,7 +95,12 @@ export default function Home() {
       <Navigation activeTab={activeTab} onTabChange={setActiveTab} />
       <Floater
         isOpen={showFloater}
-        onClose={() => setShowFloater(false)}
+        onClose={() => {
+          setShowFloater(false);
+          if (activeTab === 'history') {
+            setActiveTab('home');
+          }
+        }}
         title={floaterContent.title}
         primaryText={floaterContent.primaryText}
         secondaryText={floaterContent.secondaryText}
@@ -106,5 +112,3 @@ export default function Home() {
     </>
   );
 }
-
-// We're now using the SplashScreen component from components/SplashScreen
