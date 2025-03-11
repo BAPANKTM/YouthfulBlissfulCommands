@@ -300,6 +300,13 @@
   white-space: nowrap;
 }
 
+.actionButtonsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 25px;
+}
+
 .deleteButton {
   display: flex;
   align-items: center;
@@ -307,7 +314,6 @@
   gap: 8px;
   width: 100%;
   padding: 14px;
-  margin-top: 25px;
   border: none;
   background-color: rgba(255, 92, 92, 0.1);
   color: #FF5C5C;
@@ -320,6 +326,28 @@
 
 .deleteButton:active {
   background-color: rgba(255, 92, 92, 0.2);
+  transform: scale(0.98);
+}
+
+.backButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 14px;
+  border: none;
+  background-color: rgba(157, 92, 255, 0.1);
+  color: var(--primary);
+  border-radius: var(--radius-md);
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.backButton:active {
+  background-color: rgba(157, 92, 255, 0.2);
   transform: scale(0.98);
 }
 
@@ -390,6 +418,48 @@
   margin: 0 0 24px 0;
 }
 
+/* Success modal styles */
+.successModal {
+  background-color: var(--bg-card);
+  border-radius: var(--radius-lg, 16px);
+  width: 85%;
+  max-width: 360px;
+  padding: 24px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  animation: slideUp 0.3s ease-out;
+}
+
+.successModalIcon {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.successModalTitle {
+  color: #4BB543;
+  text-align: center;
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0 0 16px 0;
+}
+
+.successModalText {
+  color: var(--text-primary);
+  text-align: center;
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0 0 8px 0;
+}
+
+.successModalNote {
+  color: var(--text-secondary);
+  text-align: center;
+  font-size: 13px;
+  font-style: italic;
+  margin: 0;
+}
+
 .deleteModalActions {
   display: flex;
   justify-content: center;
@@ -440,6 +510,17 @@
     flex-direction: column;
     gap: 12px;
   }
+  
+  .actionButtonsContainer {
+    gap: 10px;
+  }
+  
+  .deleteButton,
+  .backButton {
+    padding: 12px;
+    font-size: 15px;
+  }
+}
 
   .statNumber {
     font-size: 24px;

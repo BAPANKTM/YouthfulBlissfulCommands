@@ -64,12 +64,18 @@ export default function Links() {
     setShowDeleteConfirm(true);
   };
   
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  
   const confirmDelete = () => {
     // Here you would implement the actual delete functionality
-    // For now, we'll just show a success message
     setShowDeleteConfirm(false);
-    alert('Link deleted successfully. It is no longer accessible to the public. (Your earnings are preserved)');
-    closeDetails();
+    setShowSuccessMessage(true);
+    
+    // Auto close the success message after 3 seconds
+    setTimeout(() => {
+      setShowSuccessMessage(false);
+      closeDetails();
+    }, 3000);
   };
   
   const cancelDelete = (e) => {
@@ -220,13 +226,22 @@ export default function Links() {
             </div>
           </div>
 
-          <button className={styles.deleteButton} onClick={handleDelete}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M3 6H5H21" stroke="#FF5C5C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z" stroke="#FF5C5C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-            Delete Link
-          </button>
+          <div className={styles.actionButtonsContainer}>
+            <button className={styles.deleteButton} onClick={handleDelete}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3 6H5H21" stroke="#FF5C5C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z" stroke="#FF5C5C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              Delete Link
+            </button>
+            <button className={styles.backButton} onClick={closeDetails}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M19 12H5" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M12 19L5 12L12 5" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              Back to Links
+            </button>
+          </div>
         </div>
 
         {showDeleteConfirm && (
@@ -263,6 +278,26 @@ export default function Links() {
                   Confirm
                 </button>
               </div>
+            </div>
+          </div>
+        )}
+        
+        {showSuccessMessage && (
+          <div className={styles.modalOverlay}>
+            <div className={styles.successModal}>
+              <div className={styles.successModalIcon}>
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M22 11.08V12C21.9988 14.1564 21.3005 16.2547 20.0093 17.9818C18.7182 19.709 16.9033 20.9725 14.8354 21.5839C12.7674 22.1953 10.5573 22.1219 8.53447 21.3746C6.51168 20.6273 4.78465 19.2461 3.61096 17.4371C2.43727 15.628 1.87979 13.4881 2.02168 11.3363C2.16356 9.18455 2.99721 7.13631 4.39828 5.49706C5.79935 3.85781 7.69279 2.71537 9.79619 2.24013C11.8996 1.7649 14.1003 1.98232 16.07 2.85999" stroke="#4BB543" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M22 4L12 14.01L9 11.01" stroke="#4BB543" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </div>
+              <h2 className={styles.successModalTitle}>Link Deleted</h2>
+              <p className={styles.successModalText}>
+                The link has been successfully deleted from the server and is no longer accessible to the public.
+              </p>
+              <p className={styles.successModalNote}>
+                Your earnings have been preserved.
+              </p>
             </div>
           </div>
         )}
