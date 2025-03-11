@@ -128,8 +128,20 @@ export default function Links() {
           <div className={styles.statsSection}>
             <div className={styles.statsHeader}>
               <h3 className={styles.statsSectionTitle}>View Statistics</h3>
-              <button className={styles.refreshButton} onClick={refreshStats}>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <button 
+                className={styles.refreshButton} 
+                onClick={() => {
+                  const iconElement = document.getElementById('refreshIcon');
+                  if (iconElement) {
+                    iconElement.classList.add(styles.spinning);
+                    setTimeout(() => {
+                      iconElement.classList.remove(styles.spinning);
+                    }, 1000);
+                  }
+                  refreshStats();
+                }}
+              >
+                <svg id="refreshIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M23 4V10H17" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                   <path d="M1 20V14H7" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                   <path d="M3.51 9.00001C4.01717 7.56682 4.87913 6.2789 6.01547 5.27549C7.1518 4.27208 8.52547 3.58339 10.0083 3.26956C11.4911 2.95572 13.0348 3.02714 14.4761 3.47691C15.9175 3.92668 17.2137 4.73815 18.24 5.82001L23 10M1 14L5.76 18.18C6.78626 19.2619 8.08247 20.0734 9.52384 20.5231C10.9652 20.9729 12.5089 21.0443 13.9917 20.7305C15.4745 20.4166 16.8482 19.728 17.9845 18.7245C19.1209 17.7211 19.9828 16.4332 20.49 15" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
