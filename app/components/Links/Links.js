@@ -239,7 +239,7 @@ export default function Links() {
                 <path d="M19 12H5" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                 <path d="M12 19L5 12L12 5" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
-              Back to Links
+              Return to Links List
             </button>
           </div>
         </div>
@@ -256,10 +256,10 @@ export default function Links() {
               </div>
               <h2 className={styles.deleteModalTitle}>Delete Link?</h2>
               <p className={styles.deleteModalText}>
-                Are you sure you want to delete this link? It will no longer be accessible to the public.
+                You are about to permanently remove this link from our servers. This action cannot be undone and the link will immediately become inaccessible.
               </p>
               <p className={styles.deleteModalNote}>
-                Your earnings will not be deleted.
+                All associated earnings have been securely stored and will remain in your account.
               </p>
               <div className={styles.deleteModalActions}>
                 <button 
@@ -291,11 +291,12 @@ export default function Links() {
                   <path d="M22 4L12 14.01L9 11.01" stroke="#4BB543" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
               </div>
-              <h2 className={styles.successModalTitle}>Link Deleted</h2>
+              <h2 className={styles.successModalTitle}>Link Successfully Removed</h2>
               <p className={styles.successModalText}>
-                The link has been successfully deleted from the server and is no longer accessible to the public.
+                Your link has been permanently deleted from our servers and is no longer accessible.
               </p>
               <p className={styles.successModalNote}>
+                All associated earnings have been preserved in your account.
                 Your earnings have been preserved.
               </p>
             </div>

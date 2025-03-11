@@ -336,19 +336,26 @@
   gap: 8px;
   width: 100%;
   padding: 14px;
-  border: none;
+  border: 1px solid rgba(157, 92, 255, 0.3);
   background-color: rgba(157, 92, 255, 0.1);
   color: var(--primary);
   border-radius: var(--radius-md);
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.2s ease;
+  box-shadow: 0 3px 10px rgba(157, 92, 255, 0.1);
+}
+
+.backButton:hover {
+  background-color: rgba(157, 92, 255, 0.15);
+  border-color: rgba(157, 92, 255, 0.4);
 }
 
 .backButton:active {
   background-color: rgba(157, 92, 255, 0.2);
   transform: scale(0.98);
+  box-shadow: 0 1px 5px rgba(157, 92, 255, 0.1);
 }
 
 /* Modal Overlay and Delete Confirmation Styles */
