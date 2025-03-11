@@ -37,7 +37,7 @@ export default function History() {
       }) + ' ' + date.toLocaleTimeString('en-US', {
         hour: '2-digit',
         minute: '2-digit'
-
+    
   return (
     <div className={styles.historyContainer}>
       <div className={styles.sectionHeader}>
