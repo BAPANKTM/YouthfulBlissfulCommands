@@ -37,13 +37,6 @@ export default function History() {
       }) + ' ' + date.toLocaleTimeString('en-US', {
         hour: '2-digit',
         minute: '2-digit'
-    
-  return (
-    <div className={styles.historyContainer}>
-      <div className={styles.sectionHeader}>
-        <div className={styles.sectionTitle}>Withdrawal History</div>
-      </div>
-
       });
     } catch (e) {
       console.error('Date formatting error:', e);
@@ -77,6 +70,10 @@ export default function History() {
 
   return (
     <div className={styles.historyContainer}>
+      <div className={styles.sectionHeader}>
+        <div className={styles.sectionTitle}>Withdrawal History</div>
+      </div>
+
       <div className={styles.filterContainer}>
         <div 
           className={`${styles.filterOption} ${activeFilter === 'all' ? styles.active : ''}`}
