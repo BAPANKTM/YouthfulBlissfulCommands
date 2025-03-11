@@ -161,10 +161,14 @@ export default function Links() {
             </div>
 
             <span className={styles.linkDetailLabel}>Link Name</span>
-            <div className={styles.linkDetailValue}>{selectedLink.nickname}</div>
+            <div className={styles.linkDetailValue}>
+              <span className={styles.linkNickname}>{selectedLink.nickname}</span>
+            </div>
 
             <span className={styles.linkDetailLabel}>Created On</span>
-            <div className={styles.linkDetailValue}>{formatDate(selectedLink.createdAt)}</div>
+            <div className={styles.linkDetailValue}>
+              <span className={styles.createdDate}>{formatDate(selectedLink.createdAt)}</span>
+            </div>
           </div>
 
           <div className={styles.statsSection}>
@@ -190,7 +194,7 @@ export default function Links() {
               </div>
               <div className={`${styles.statCard} ${viewMode === '48hours' ? styles.active : ''}`} onClick={() => setViewMode('48hours')}>
                 <div className={styles.statNumber}>{selectedLink.views['48hours']}</div>
-                <div className={styles.statLabel}>Last 48 Hours</div>
+                <div className={styles.statLabel}>Last 48h</div>
               </div>
               <div className={`${styles.statCard} ${viewMode === 'lifetime' ? styles.active : ''}`} onClick={() => setViewMode('lifetime')}>
                 <div className={styles.statNumber}>{selectedLink.views['lifetime']}</div>
