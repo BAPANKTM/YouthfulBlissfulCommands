@@ -16,6 +16,7 @@ const Withdrawal = () => {
   const [withdrawAmount, setWithdrawAmount] = useState('');
   const [inputUpiId, setInputUpiId] = useState('');
   const [inputCryptoAddress, setInputCryptoAddress] = useState('');
+  const [addressSaved, setAddressSaved] = useState(false);
 
   useEffect(() => {
     // Fetch user data
@@ -29,6 +30,7 @@ const Withdrawal = () => {
         setUserData(data);
         setInputUpiId(data.upiId || '');
         setInputCryptoAddress(data.cryptoAddress || '');
+        setAddressSaved(!!data.upiId || !!data.cryptoAddress);
       } catch (error) {
         console.error('Error fetching user data:', error);
       } finally {
@@ -41,6 +43,7 @@ const Withdrawal = () => {
 
   const handleMethodSelect = (method) => {
     setSelectedMethod(method);
+    setAddressSaved(method === 'upi' ? !!userData.upiId : !!userData.cryptoAddress);
   };
 
   const handleAmountChange = (e) => {
@@ -49,10 +52,12 @@ const Withdrawal = () => {
 
   const handleSaveUpiId = () => {
     setUserData(prev => ({ ...prev, upiId: inputUpiId }));
+    setAddressSaved(true);
   };
 
   const handleSaveCryptoAddress = () => {
     setUserData(prev => ({ ...prev, cryptoAddress: inputCryptoAddress }));
+    setAddressSaved(true);
   };
 
   const handleWithdraw = () => {
@@ -107,7 +112,7 @@ const Withdrawal = () => {
             You need at least $5.00 to make a withdrawal. Start creating and earning!
           </p>
           <button className={styles.createButton}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M12 5V19" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               <path d="M5 12H19" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
@@ -122,21 +127,21 @@ const Withdrawal = () => {
               onClick={() => handleMethodSelect('upi')}
             >
               <div className={styles.methodIcon}>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M17 9V7C17 5.89543 16.1046 5 15 5H5C3.89543 5 3 5.89543 3 7V17C3 18.1046 3.89543 19 5 19H15C16.1046 19 17 18.1046 17 17V15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M21 12H7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M11 8L7 12L11 16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M21 4H3C1.89543 4 1 4.89543 1 6V18C1 19.1046 1.89543 20 3 20H21C22.1046 20 23 19.1046 23 18V6C23 4.89543 22.1046 4 21 4Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M1 10H23" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
               </div>
               UPI (FIAT)
             </div>
             <div 
-              className={`${styles.methodOption} ${selectedMethod === 'crypto' ? styles.active : ''}`}
-              onClick={() => handleMethodSelect('crypto')}
+              className={`${styles.methodOption} ${selectedMethod === 'usdt' ? styles.active : ''}`}
+              onClick={() => handleMethodSelect('usdt')}
             >
               <div className={styles.methodIcon}>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M9 8H15M9 16H15M12 8V16M12 3V5M12 19V21M6 3L7 5M6 21L7 19M18 3L17 5M18 21L17 19M3 6L5 7M19 6L21 7M19 18L21 17M3 18L5 17M3 12H5M19 12H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M12 6V12L16 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
               </div>
               USDT (TRC20)
@@ -144,15 +149,16 @@ const Withdrawal = () => {
           </div>
 
           {selectedMethod === 'upi' && (
-            <div className={styles.settingsSection}>
-              <div className={styles.settingsLabel}>UPI ID</div>
-              <div className={styles.settingsInput}>
-                <input 
-                  type="text" 
-                  value={inputUpiId} 
-                  onChange={(e) => setInputUpiId(e.target.value)}
-                  placeholder="Enter your UPI ID (e.g., user@upi)"
-                />
+            <div className={styles.inputGroup}>
+              <label className={styles.inputLabel}>{addressSaved ? 'Withdrawal Address:' : 'Enter UPI ID:'}</label>
+              <input
+                type="text"
+                value={inputUpiId}
+                onChange={(e) => setInputUpiId(e.target.value)}
+                placeholder="e.g., user@upi"
+                className={styles.inputField}
+              />
+              <div className={styles.saveButtonContainer}>
                 <button 
                   className={styles.saveButton}
                   onClick={handleSaveUpiId}
@@ -163,16 +169,17 @@ const Withdrawal = () => {
             </div>
           )}
 
-          {selectedMethod === 'crypto' && (
-            <div className={styles.settingsSection}>
-              <div className={styles.settingsLabel}>USDT Address (TRC20)</div>
-              <div className={styles.settingsInput}>
-                <input 
-                  type="text" 
-                  value={inputCryptoAddress} 
-                  onChange={(e) => setInputCryptoAddress(e.target.value)}
-                  placeholder="Enter your USDT TRC20 address"
-                />
+          {selectedMethod === 'usdt' && (
+            <div className={styles.inputGroup}>
+              <label className={styles.inputLabel}>{addressSaved ? 'Withdrawal Address:' : 'Enter USDT Address:'}</label>
+              <input
+                type="text"
+                value={inputCryptoAddress}
+                onChange={(e) => setInputCryptoAddress(e.target.value)}
+                placeholder="e.g., TRC20 wallet address"
+                className={styles.inputField}
+              />
+              <div className={styles.saveButtonContainer}>
                 <button 
                   className={styles.saveButton}
                   onClick={handleSaveCryptoAddress}
@@ -182,37 +189,35 @@ const Withdrawal = () => {
               </div>
             </div>
           )}
-
-          {((selectedMethod === 'upi' && userData.upiId) || 
-            (selectedMethod === 'crypto' && userData.cryptoAddress)) && (
-            <div className={styles.amountSection}>
-              <div className={styles.amountLabel}>Withdrawal Amount</div>
-              <div className={styles.amountInput}>
-                <span className={styles.amountPrefix}>$</span>
-                <input 
-                  type="number" 
-                  value={withdrawAmount} 
-                  onChange={handleAmountChange}
-                  placeholder="Enter amount"
-                  min="1"
-                  max={userData.amount}
-                />
+          
+          {addressSaved && (
+            <>
+              <div className={styles.inputGroup}>
+                <label className={styles.inputLabel}>Enter Amount:</label>
+                <div className={styles.amountInput}>
+                  <input
+                    type="number"
+                    value={withdrawAmount}
+                    onChange={handleAmountChange}
+                    placeholder="0.00"
+                  />
+                </div>
               </div>
+
+              <div className={styles.infoNotes}>
+                <p>• Minimum withdrawal: $5.00</p>
+                <p>• Processing time: 24-48 hours</p>
+              </div>
+
               <button 
                 className={styles.withdrawButton}
                 onClick={handleWithdraw}
                 disabled={!withdrawAmount || parseFloat(withdrawAmount) <= 0 || parseFloat(withdrawAmount) > userData.amount}
               >
-                Withdraw
+                Withdraw Funds
               </button>
-            </div>
+            </>
           )}
-
-          <div className={styles.infoNotes}>
-            <p>• Minimum withdrawal amount: $5.00</p>
-            <p>• Withdrawals are processed within 24 hours</p>
-            <p>• Transaction fee may apply based on method</p>
-          </div>
         </div>
       )}
 
