@@ -85,10 +85,20 @@ export default function Links() {
   }
 
   if (selectedLink) {
+    // Function to truncate URL for sticky header
+    const truncateUrl = (url, maxLength = 24) => {
+      if (url.length <= maxLength) return url;
+      return url.substring(0, maxLength) + '...';
+    };
+    
     return (
       <div className={styles.detailsContainer}>
-        <div className={styles.detailsHeader}>
-          <h2>Link Details</h2>
+        <div className={styles.stickyHeader}>
+          <div className={styles.stickyHeaderContent}>
+            <div className={styles.stickyTitle}>{selectedLink.nickname}</div>
+            <div className={styles.stickyUrl}>{truncateUrl(selectedLink.link)}</div>
+          </div>
+          
           <button className={styles.closeButton} onClick={closeDetails}>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M18 6L6 18" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -104,42 +114,37 @@ export default function Links() {
           </div>
 
           <div className={styles.linkDetailSection}>
-            <span className={styles.linkDetailLabel}>Nickname</span>
-            <div className={styles.linkDetailValue}>{selectedLink.nickname}</div>
-          </div>
-
-          <div className={styles.linkDetailSection}>
             <span className={styles.linkDetailLabel}>Creation Date</span>
             <div className={styles.linkDetailValue}>{formatDate(selectedLink.createdAt)}</div>
           </div>
 
-          <div className={styles.viewsToggle}>
-            <button 
-              className={`${styles.viewToggleButton} ${viewMode === '60minutes' ? styles.active : ''}`} 
-              onClick={() => setViewMode('60minutes')}
-            >
-              Last 60 Minutes
-            </button>
-            <button 
-              className={`${styles.viewToggleButton} ${viewMode === '48hours' ? styles.active : ''}`} 
-              onClick={() => setViewMode('48hours')}
-            >
-              Last 48 Hours
-            </button>
-            <button 
-              className={`${styles.viewToggleButton} ${viewMode === 'lifetime' ? styles.active : ''}`} 
-              onClick={() => setViewMode('lifetime')}
-            >
-              Lifetime
-            </button>
-          </div>
-
-          <div className={styles.viewStats}>
-            <div className={styles.viewStatsNumber}>{getViewCount(selectedLink)}</div>
-            <div className={styles.viewStatsLabel}>
-              {viewMode === '60minutes' ? 'Views in the last hour' : 
-               viewMode === '48hours' ? 'Views in the last 48 hours' : 
-               'Total lifetime views'}
+          <div className={styles.statsSection}>
+            <h3 className={styles.statsSectionTitle}>View Statistics</h3>
+            
+            <div className={styles.statsCards}>
+              <div 
+                className={`${styles.statCard} ${viewMode === '60minutes' ? styles.active : ''}`}
+                onClick={() => setViewMode('60minutes')}
+              >
+                <div className={styles.statNumber}>{selectedLink.views['60minutes']}</div>
+                <div className={styles.statLabel}>Last Hour</div>
+              </div>
+              
+              <div 
+                className={`${styles.statCard} ${viewMode === '48hours' ? styles.active : ''}`}
+                onClick={() => setViewMode('48hours')}
+              >
+                <div className={styles.statNumber}>{selectedLink.views['48hours']}</div>
+                <div className={styles.statLabel}>Last 48h</div>
+              </div>
+              
+              <div 
+                className={`${styles.statCard} ${viewMode === 'lifetime' ? styles.active : ''}`}
+                onClick={() => setViewMode('lifetime')}
+              >
+                <div className={styles.statNumber}>{selectedLink.views.lifetime}</div>
+                <div className={styles.statLabel}>Lifetime</div>
+              </div>
             </div>
           </div>
 
