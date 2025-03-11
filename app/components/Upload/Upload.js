@@ -4,6 +4,7 @@ import fetchTelegramConfig from '../../utils/telegramConfig';
 
 const Upload = ({ onUpload }) => {
   const [file, setFile] = useState(null);
+  const [text, setText] = useState('');
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [uploadStatus, setUploadStatus] = useState({ type: null, message: null });
@@ -55,7 +56,6 @@ const Upload = ({ onUpload }) => {
       }
 
       // Add caption if available
-      const text = document.querySelector('.captionInput').value;
       if (text.trim()) {
         formData.append('caption', text);
       }
@@ -206,7 +206,7 @@ const Upload = ({ onUpload }) => {
         <ProgressIndicator />
 
         <textarea 
-          className={styles.captionInput}
+          className={`${styles.captionInput} captionInput`}
           placeholder="Add a caption (optional)..." 
           value={text}
           onChange={handleTextChange}
