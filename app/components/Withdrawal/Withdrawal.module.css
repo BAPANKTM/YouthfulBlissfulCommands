@@ -32,8 +32,10 @@
 
 .currencySymbol {
   font-size: 28px;
-  margin-right: 2px;
-  opacity: 0.8;
+  margin-right: 4px;
+  opacity: 1;
+  color: #ffffff;
+  font-weight: 600;
 }
 
 .balanceLabel {

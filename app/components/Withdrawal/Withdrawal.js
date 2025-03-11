@@ -53,19 +53,48 @@ const Withdrawal = () => {
     setWithdrawalAddress(e.target.value);
   };
 
+  const validateWithdrawalAddress = (address) => {
+    if (!address.trim()) return false;
+    
+    if (selectedMethod === 'upi') {
+      // Basic UPI ID validation (username@provider format)
+      const upiRegex = /^[a-zA-Z0-9.\-_]{2,256}@[a-zA-Z]{2,64}$/;
+      return upiRegex.test(address);
+    } else if (selectedMethod === 'usdt') {
+      // Basic TRC20 address validation (starts with T and has 34 chars)
+      const trc20Regex = /^T[a-zA-Z0-9]{33}$/;
+      return trc20Regex.test(address);
+    }
+    
+    return false;
+  };
+
   const handleWithdraw = () => {
+    // Amount validation
     if (!withdrawAmount || isNaN(withdrawAmount) || parseFloat(withdrawAmount) <= 0) {
       alert('Please enter a valid amount');
       return;
     }
 
-    if (parseFloat(withdrawAmount) > userData.amount) {
+    const amount = parseFloat(withdrawAmount);
+    
+    // Minimum amount check
+    if (amount < 5) {
+      alert('Minimum withdrawal amount is $5.00');
+      return;
+    }
+    
+    // Maximum amount check
+    if (amount > userData.amount) {
       alert('Insufficient balance');
       return;
     }
 
-    if (!withdrawalAddress.trim()) {
-      alert('Please enter a withdrawal address');
+    // Address validation
+    if (!validateWithdrawalAddress(withdrawalAddress)) {
+      alert(selectedMethod === 'upi' 
+        ? 'Please enter a valid UPI ID (e.g., username@upi)' 
+        : 'Please enter a valid TRC20 address (starts with T and has 34 characters)');
       return;
     }
 
@@ -171,6 +200,15 @@ const Withdrawal = () => {
                 value={withdrawAmount}
                 onChange={handleAmountChange}
                 placeholder="0.00"
+                min="5"
+                max={userData.amount}
+                step="0.01"
+                onBlur={(e) => {
+                  // Format to two decimal places on blur
+                  if (e.target.value && !isNaN(e.target.value)) {
+                    setWithdrawAmount(parseFloat(e.target.value).toFixed(2));
+                  }
+                }}
               />
             </div>
             {selectedMethod === 'upi' && withdrawAmount && !isNaN(withdrawAmount) && (
