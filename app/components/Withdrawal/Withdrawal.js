@@ -46,7 +46,11 @@ const Withdrawal = () => {
   };
 
   const handleAmountChange = (e) => {
-    setWithdrawAmount(e.target.value);
+    const value = e.target.value;
+    // Only allow values greater than or equal to 5 and not exceeding balance
+    if (!value || (parseFloat(value) >= 5 && parseFloat(value) <= userData.amount)) {
+      setWithdrawAmount(value);
+    }
   };
 
   const handleAddressChange = (e) => {
@@ -68,6 +72,9 @@ const Withdrawal = () => {
     
     return false;
   };
+  
+  // Real-time validation for withdrawal address
+  const isAddressValid = validateWithdrawalAddress(withdrawalAddress);
 
   const handleWithdraw = () => {
     // Amount validation
@@ -188,8 +195,15 @@ const Withdrawal = () => {
               value={withdrawalAddress}
               onChange={handleAddressChange}
               placeholder={selectedMethod === 'upi' ? "e.g., user@upi" : "e.g., TRC20 wallet address"}
-              className={styles.inputField}
+              className={`${styles.inputField} ${withdrawalAddress && !isAddressValid ? styles.invalidInput : ''}`}
             />
+            {withdrawalAddress && !isAddressValid && (
+              <div className={styles.errorMessage}>
+                {selectedMethod === 'upi' 
+                  ? 'Please enter a valid UPI ID (e.g., username@upi)' 
+                  : 'Please enter a valid TRC20 address (starts with T and has 34 characters)'}
+              </div>
+            )}
           </div>
 
           <div className={styles.inputGroup}>
@@ -199,7 +213,7 @@ const Withdrawal = () => {
                 type="number"
                 value={withdrawAmount}
                 onChange={handleAmountChange}
-                placeholder="0.00"
+                placeholder="Min: $5.00, Max: $" + userData.amount.toFixed(2)
                 min="5"
                 max={userData.amount}
                 step="0.01"
@@ -211,11 +225,25 @@ const Withdrawal = () => {
                 }}
               />
             </div>
-            {selectedMethod === 'upi' && withdrawAmount && !isNaN(withdrawAmount) && (
-              <div className={styles.inrEstimate}>
-                Estimated INR: ₹{(parseFloat(withdrawAmount) * 87).toFixed(2)}
-                <span className={styles.inrRate}>(Rate: ₹87 per $)</span>
-              </div>
+            {withdrawAmount && (
+              <>
+                {parseFloat(withdrawAmount) < 5 && (
+                  <div className={styles.errorMessage}>
+                    Minimum withdrawal amount is $5.00
+                  </div>
+                )}
+                {parseFloat(withdrawAmount) > userData.amount && (
+                  <div className={styles.errorMessage}>
+                    Amount exceeds your available balance
+                  </div>
+                )}
+                {selectedMethod === 'upi' && parseFloat(withdrawAmount) >= 5 && parseFloat(withdrawAmount) <= userData.amount && (
+                  <div className={styles.inrEstimate}>
+                    Estimated INR: ₹{(parseFloat(withdrawAmount) * 87).toFixed(2)}
+                    <span className={styles.inrRate}>(Rate: ₹87 per $)</span>
+                  </div>
+                )}
+              </>
             )}
           </div>
 
@@ -227,7 +255,13 @@ const Withdrawal = () => {
           <button 
             className={styles.withdrawButton}
             onClick={handleWithdraw}
-            disabled={!withdrawAmount || parseFloat(withdrawAmount) <= 0 || parseFloat(withdrawAmount) > userData.amount || !withdrawalAddress.trim()}
+            disabled={
+              !withdrawAmount || 
+              parseFloat(withdrawAmount) < 5 || 
+              parseFloat(withdrawAmount) > userData.amount || 
+              !withdrawalAddress.trim() ||
+              !isAddressValid
+            }
           >
             Withdraw Funds
           </button>

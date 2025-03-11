@@ -169,6 +169,18 @@
   box-shadow: 0 0 0 2px rgba(157, 92, 255, 0.1);
 }
 
+.invalidInput {
+  border-color: #FF6B6B !important;
+  background: rgba(255, 107, 107, 0.05) !important;
+}
+
+.errorMessage {
+  color: #FF6B6B;
+  font-size: 12px;
+  margin-top: 4px;
+  animation: fadeIn 0.3s ease;
+}
+
 .amountInput {
   position: relative;
   display: flex;
