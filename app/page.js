@@ -49,24 +49,10 @@ export default function Home() {
   const handleAction = (action) => {
     console.log(`Action clicked: ${action}`);
     // Handle different actions here
-    if (action === 'withdrawal') {
-      const Withdrawal = require('./components/Withdrawal/Withdrawal').default;
+    if (action === 'withdrawal' || action === 'help') {
       setFloaterContent({
-        title: "Withdrawal",
-        content: <Withdrawal balance={1000} onClose={() => setShowFloater(false)} />,
-        primaryText: "",
-        secondaryText: "Cancel",
-        onPrimary: () => {},
-        onSecondary: () => {
-          console.log(`${action} cancelled`);
-          setShowFloater(false);
-        },
-      });
-      setShowFloater(true);
-    } else if (action === 'help') {
-      setFloaterContent({
-        title: "Help",
-        content: `This is the help content.`,
+        title: action.charAt(0).toUpperCase() + action.slice(1),
+        content: `This is the ${action} content.`,
         primaryText: "Confirm",
         secondaryText: "Cancel",
         onPrimary: () => console.log(`${action} confirmed`),
