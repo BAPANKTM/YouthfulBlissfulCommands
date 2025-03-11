@@ -210,9 +210,17 @@ const Withdrawal = () => {
             <label className={styles.inputLabel}>Enter Amount:</label>
             <div className={styles.amountInput}>
               <input
-                type="number"
+                type="text"
+                inputMode="decimal"
+                pattern="[0-9]*\.?[0-9]*"
                 value={withdrawAmount}
-                onChange={handleAmountChange}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  // Only allow numeric input with decimals
+                  if (value === '' || /^\d*\.?\d*$/.test(value)) {
+                    handleAmountChange(e);
+                  }
+                }}
                 placeholder={`Min: $5.00, Max: $${userData.amount.toFixed(2)}`}
                 min="5"
                 max={userData.amount}
@@ -221,6 +229,9 @@ const Withdrawal = () => {
                   // Format to two decimal places on blur
                   if (e.target.value && !isNaN(e.target.value)) {
                     setWithdrawAmount(parseFloat(e.target.value).toFixed(2));
+                  } else if (e.target.value && isNaN(e.target.value)) {
+                    // Clear invalid input
+                    setWithdrawAmount('');
                   }
                 }}
               />
