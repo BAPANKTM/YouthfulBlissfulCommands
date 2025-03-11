@@ -286,6 +286,50 @@
   background: linear-gradient(to right, #9D5CFF, #6E3BB3);
 }
 
+.statsSectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.refreshButton {
+  background: rgba(157, 92, 255, 0.15);
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.refreshButton:active {
+  background: rgba(157, 92, 255, 0.25);
+  transform: scale(0.95);
+}
+
+.refreshButton svg {
+  width: 18px;
+  height: 18px;
+}
+
+.rotating {
+  animation: rotate 1.5s linear infinite;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .statNumber {
   font-size: 28px;
   font-weight: 700;
