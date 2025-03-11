@@ -204,33 +204,24 @@
 }
 
 .linkDetailSection {
-  margin-bottom: 25px;
-  background-color: rgba(157, 92, 255, 0.05);
-  padding: 15px;
+  background: rgba(30, 30, 40, 0.5);
   border-radius: var(--radius-md);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  margin-bottom: 15px;
+  border: 1px solid rgba(157, 92, 255, 0.08);
 }
 
 .linkDetailLabel {
-  color: var(--primary);
-  font-size: 13px;
-  font-weight: 600;
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
   display: block;
-  margin-bottom: 5px;
-  padding: 2px 0;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
 }
 
 .linkDetailValue {
+  font-size: 14px;
   color: var(--text-primary);
-  font-size: 16px;
-  word-break: break-all;
-  margin-bottom: 15px;
-  padding: 10px;
-  background-color: var(--bg-card-hover);
-  border-radius: var(--radius-sm);
-  border-left: 3px solid var(--primary);
+  line-height: 1.4;
 }
 
 .linkDetailValue.url {
@@ -254,42 +245,30 @@
   border: 1px solid rgba(157, 92, 255, 0.08);
 }
 
-.statsHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 15px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
 .statsSectionTitle {
   font-size: 16px;
   font-weight: 600;
   color: var(--text-primary);
-  margin: 0;
-  padding: 0;
-  line-height: 1.5;
+  margin: 0 0 15px 0;
+  text-align: center;
 }
 
 .statsCards {
   display: flex;
   justify-content: space-between;
   gap: 10px;
-  margin-top: 15px;
-  flex-wrap: wrap;
 }
 
 .statCard {
   flex: 1;
-  min-width: 90px;
-  background-color: var(--bg-card);
-  border-radius: var(--radius-md);
-  padding: 15px;
+  background: rgba(20, 20, 30, 0.6);
+  border-radius: var(--radius-sm);
+  padding: 15px 10px;
   text-align: center;
-  cursor: pointer;
+  border: 1px solid rgba(157, 92, 255, 0.1);
   transition: all 0.2s ease;
-  border: 1px solid transparent;
+  overflow: hidden;
+  position: relative;
 }
 
 .statCard.active {
@@ -319,8 +298,6 @@
   font-size: 12px;
   color: var(--text-secondary);
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .deleteButton {
@@ -344,110 +321,6 @@
 .deleteButton:active {
   background-color: rgba(255, 92, 92, 0.2);
   transform: scale(0.98);
-}
-
-/* Delete Success State Styles */
-.deleteSuccessContainer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 50px 20px;
-  background: var(--bg-dark);
-  border-radius: var(--radius-md);
-  animation: fadeInScale 0.5s ease-out;
-  margin-bottom: 70px;
-}
-
-@keyframes fadeInScale {
-  0% { opacity: 0; transform: scale(0.95); }
-  100% { opacity: 1; transform: scale(1); }
-}
-
-.deleteSuccessIcon {
-  margin-bottom: 24px;
-  animation: successPulse 2s infinite;
-}
-
-@keyframes successPulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
-}
-
-.deleteSuccessTitle {
-  font-size: 24px;
-  font-weight: 600;
-  color: #00D26A;
-  margin-bottom: 16px;
-  text-align: center;
-}
-
-.deleteSuccessText {
-  font-size: 16px;
-  color: var(--text-secondary);
-  text-align: center;
-  max-width: 320px;
-  line-height: 1.5;
-  margin-bottom: 24px;
-}
-
-.deleteSuccessButton {
-  padding: 14px 24px;
-  background-color: var(--primary);
-  color: white;
-  border: none;
-  border-radius: var(--radius-md);
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.deleteSuccessButton:hover {
-  background-color: var(--primary-dark);
-}
-
-.deleteSuccessButton:active {
-  transform: scale(0.98);
-}
-
-/* Deleting State Styles */
-.deletingContainer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 60px 20px;
-  background: var(--bg-dark);
-  border-radius: var(--radius-md);
-  margin-bottom: 70px;
-}
-
-.deletingSpinner {
-  width: 50px;
-  height: 50px;
-  border: 3px solid rgba(255, 92, 92, 0.2);
-  border-radius: 50%;
-  border-top-color: #FF5C5C;
-  animation: spin 1s linear infinite;
-  margin-bottom: 24px;
-}
-
-.deletingTitle {
-  font-size: 20px;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin-bottom: 16px;
-  text-align: center;
-}
-
-.deletingText {
-  font-size: 14px;
-  color: var(--text-secondary);
-  text-align: center;
-  max-width: 300px;
-  line-height: 1.5;
 }
 
 /* Modal Overlay and Delete Confirmation Styles */
@@ -491,29 +364,22 @@
   display: flex;
   justify-content: center;
   margin-bottom: 16px;
-  animation: pulseWarning 2s infinite;
-}
-
-@keyframes pulseWarning {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
 }
 
 .deleteModalTitle {
   color: #FF5C5C;
   text-align: center;
-  font-size: 22px;
-  font-weight: 700;
+  font-size: 20px;
+  font-weight: 600;
   margin: 0 0 16px 0;
 }
 
 .deleteModalText {
   color: var(--text-primary);
   text-align: center;
-  font-size: 15px;
+  font-size: 14px;
   line-height: 1.5;
-  margin: 0 0 10px 0;
+  margin: 0 0 8px 0;
 }
 
 .deleteModalNote {
@@ -522,10 +388,6 @@
   font-size: 13px;
   font-style: italic;
   margin: 0 0 24px 0;
-  background-color: rgba(255, 255, 255, 0.05);
-  padding: 8px 12px;
-  border-radius: var(--radius-sm);
-  border-left: 3px solid var(--primary);
 }
 
 .deleteModalActions {
@@ -582,11 +444,11 @@
   .statNumber {
     font-size: 24px;
   }
-
+  
   .deleteModal {
     padding: 20px;
   }
-
+  
   .deleteModalActions {
     flex-direction: column;
   }
@@ -758,19 +620,38 @@
   transition: background-color 0.2s;
 }
 
+.statsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.statsSectionTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+  padding: 0;
+  line-height: 1.5;
+}
+
 .refreshButton {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   background: rgba(157, 92, 255, 0.1);
-  border: 1px solid rgba(157, 92, 255, 0.2);
+  border: 1px solid rgba(157, 92, 255, 0.3);
   color: var(--primary);
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
-  padding: 6px 10px;
+  padding: 6px 12px;
   border-radius: var(--radius-sm);
   transition: all 0.2s ease;
+  height: 36px;
 }
 
 @keyframes spin {
@@ -830,34 +711,4 @@
 
 .copyButton:active {
   transform: scale(0.95);
-}
-
-@media (max-width: 400px) {
-  .statsCards {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 10px;
-  }
-
-  .statCard {
-    width: 100%;
-  }
-
-  .linkDetailLabel {
-    font-size: 14px;
-  }
-
-  .linkDetailValue {
-    font-size: 15px;
-  }
-}
-
-.linkNickname {
-  font-weight: 600;
-  display: inline-block;
-}
-
-.createdDate {
-  color: var(--text-primary);
-  display: inline-block;
 }
