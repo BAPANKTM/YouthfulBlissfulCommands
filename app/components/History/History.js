@@ -102,12 +102,12 @@ export default function History() {
       </div>
 
       {loading ? (
-        <div className={styles.loadingState}>
+        <div className={styles.loadingState} style={{ padding: '20px 0' }}>
           <div className={styles.loadingSpinner}></div>
           <div>Loading history...</div>
         </div>
       ) : filteredWithdrawals.length === 0 ? (
-        <div className={styles.emptyState}>
+        <div className={styles.emptyState} style={{ padding: '20px 0' }}>
           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M12 8V12L15 15" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             <path d="M3.05078 11.0002C3.27246 8.18717 4.61914 5.54688 6.82471 3.78127C9.03027 2.01566 11.8857 1.26709 14.6952 1.744C17.5048 2.22092 20.0216 3.87287 21.5801 6.27142C23.1387 8.66996 23.5905 11.5998 22.8444 14.3144C22.0984 17.0291 20.2264 19.2949 17.6949 20.5885C15.1634 21.8822 12.1956 22.0869 9.51732 21.1498C6.83908 20.2127 4.66739 18.202 3.4917 15.6089C2.31601 13.0158 2.20846 10.0511 3.19102 7.38036" 
