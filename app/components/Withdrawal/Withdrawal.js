@@ -1,4 +1,3 @@
-
 'use client';
 import { useState, useEffect } from 'react';
 import styles from './Withdrawal.module.css';
@@ -155,17 +154,20 @@ const Withdrawal = () => {
                 type="text"
                 value={inputUpiId}
                 onChange={(e) => setInputUpiId(e.target.value)}
-                placeholder="e.g., user@upi"
+                placeholder="e.g., user@bankname"
                 className={styles.inputField}
               />
-              <div className={styles.saveButtonContainer}>
-                <button 
-                  className={styles.saveButton}
-                  onClick={handleSaveUpiId}
-                >
-                  Save
-                </button>
-              </div>
+              {!addressSaved && (
+                <div className={styles.confirmButtonContainer}>
+                  <button 
+                    className={styles.confirmAddressButton}
+                    onClick={handleSaveUpiId}
+                    disabled={!inputUpiId.trim()}
+                  >
+                    Confirm
+                  </button>
+                </div>
+              )}
             </div>
           )}
 
@@ -179,17 +181,20 @@ const Withdrawal = () => {
                 placeholder="e.g., TRC20 wallet address"
                 className={styles.inputField}
               />
-              <div className={styles.saveButtonContainer}>
-                <button 
-                  className={styles.saveButton}
-                  onClick={handleSaveCryptoAddress}
-                >
-                  Save
-                </button>
-              </div>
+              {!addressSaved && (
+                <div className={styles.confirmButtonContainer}>
+                  <button 
+                    className={styles.confirmAddressButton}
+                    onClick={handleSaveCryptoAddress}
+                    disabled={!inputCryptoAddress.trim()}
+                  >
+                    Confirm
+                  </button>
+                </div>
+              )}
             </div>
           )}
-          
+
           {addressSaved && (
             <>
               <div className={styles.inputGroup}>
@@ -234,7 +239,7 @@ const Withdrawal = () => {
               </button>
             </div>
             <div className={styles.confirmationContent}>
-              Are you sure you want to withdraw ${parseFloat(withdrawAmount).toFixed(2)} using {selectedMethod === 'upi' ? 'UPI (FIAT)' : 'USDT (TRC20)'}?
+              Are you sure you want to withdraw ${parseFloat(withdrawAmount).toFixed(2)} using {selectedMethod === 'upi' ? 'UPI (FIAT)' : 'USDT (TRC20)'} to {selectedMethod === 'upi' ? inputUpiId : inputCryptoAddress}?
             </div>
             <div className={styles.confirmationActions}>
               <button 

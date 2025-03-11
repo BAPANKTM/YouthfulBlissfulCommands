@@ -1,4 +1,3 @@
-
 .withdrawalContainer {
   width: 100%;
   animation: var(--animation-slide-up);
@@ -154,74 +153,77 @@
 
 .inputField {
   width: 100%;
-  background: rgba(0, 0, 0, 0.2);
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: var(--radius-sm);
   color: white;
-  padding: 12px 14px;
   font-size: 14px;
-  outline: none;
-  transition: all 0.3s ease;
 }
 
 .inputField:focus {
+  outline: none;
   border-color: rgba(157, 92, 255, 0.5);
-  box-shadow: 0 0 0 2px rgba(157, 92, 255, 0.2);
+  box-shadow: 0 0 0 2px rgba(157, 92, 255, 0.1);
+}
+
+.amountInput {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.amountInput::before {
+  content: '$';
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9D5CFF;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.amountInput input {
+  width: 100%;
+  padding: 12px 12px 12px 30px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-sm);
+  color: white;
+  font-size: 16px;
+}
+
+.amountInput input:focus {
+  outline: none;
+  border-color: rgba(157, 92, 255, 0.5);
+  box-shadow: 0 0 0 2px rgba(157, 92, 255, 0.1);
 }
 
 .saveButtonContainer {
   display: flex;
   justify-content: flex-end;
-  margin-bottom: 16px;
+  margin-bottom: 16px; /* Moved to bottom */
 }
 
 .saveButton {
-  background: rgba(157, 92, 255, 0.2);
+  background: linear-gradient(90deg, #9D5CFF 0%, #B47AFF 100%); /* More attractive gradient */
   color: white;
-  border: 1px solid rgba(157, 92, 255, 0.3);
+  border: none;
   border-radius: var(--radius-sm);
-  padding: 8px 16px;
+  padding: 10px 20px; /* Increased padding */
   font-size: 14px;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(157, 92, 255, 0.2); /* Added box-shadow */
 }
 
 .saveButton:hover {
-  background: rgba(157, 92, 255, 0.3);
+  box-shadow: 0 6px 10px rgba(157, 92, 255, 0.3); /* Increased box-shadow on hover */
+  transform: translateY(-2px);
 }
 
-.amountInput {
-  position: relative;
-  margin-bottom: 16px;
-}
-
-.amountInput:before {
-  content: "$";
-  position: absolute;
-  left: 16px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--text-secondary);
-  font-size: 16px;
-  z-index: 1;
-}
-
-.amountInput input {
-  width: 100%;
-  background: rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: var(--radius-sm);
-  color: white;
-  padding: 12px 14px 12px 32px;
-  font-size: 16px;
-  outline: none;
-  transition: all 0.3s ease;
-}
-
-.amountInput input:focus {
-  border-color: rgba(157, 92, 255, 0.5);
-  box-shadow: 0 0 0 2px rgba(157, 92, 255, 0.2);
-}
 
 .withdrawButton {
   width: 100%;
@@ -378,20 +380,20 @@
   .balanceAmount {
     font-size: 32px;
   }
-  
+
   .currencySymbol {
     font-size: 24px;
   }
-  
+
   .methodOption {
     padding: 8px;
     font-size: 13px;
   }
-  
+
   .confirmationDialog {
     max-width: 300px;
   }
-  
+
   .confirmationContent {
     padding: 14px;
     font-size: 13px;
@@ -402,11 +404,11 @@
   .balanceAmount {
     font-size: 28px;
   }
-  
+
   .confirmationDialog {
     max-width: 280px;
   }
-  
+
   .methodOption {
     font-size: 12px;
   }
