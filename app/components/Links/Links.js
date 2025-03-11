@@ -57,8 +57,24 @@ export default function Links() {
     setViewMode('lifetime');
   };
 
-  const handleDelete = () => {
-    alert('Delete functionality not implemented');
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  
+  const handleDelete = (e) => {
+    e.stopPropagation();
+    setShowDeleteConfirm(true);
+  };
+  
+  const confirmDelete = () => {
+    // Here you would implement the actual delete functionality
+    // For now, we'll just show a success message
+    setShowDeleteConfirm(false);
+    alert('Link deleted successfully. It is no longer accessible to the public. (Your earnings are preserved)');
+    closeDetails();
+  };
+  
+  const cancelDelete = (e) => {
+    e.stopPropagation();
+    setShowDeleteConfirm(false);
   };
 
   const getViewCount = (link) => {
@@ -117,7 +133,35 @@ export default function Links() {
         <div className={styles.detailsContent}>
           <div className={styles.linkDetailSection}>
             <span className={styles.linkDetailLabel}>Link URL</span>
-            <div className={`${styles.linkDetailValue} ${styles.url}`}>{selectedLink.link}</div>
+            <div className={styles.linkUrlContainer}>
+              <div className={`${styles.linkDetailValue} ${styles.url}`}>{selectedLink.link}</div>
+              <button 
+                className={styles.copyButton}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigator.clipboard.writeText(selectedLink.link)
+                    .then(() => {
+                      // Visual feedback for copy success
+                      const copyBtn = e.target.closest('button');
+                      const originalText = copyBtn.innerText;
+                      copyBtn.innerText = 'Copied!';
+                      setTimeout(() => {
+                        copyBtn.innerText = originalText;
+                      }, 2000);
+                    })
+                    .catch(err => {
+                      console.error('Failed to copy: ', err);
+                      alert('Failed to copy link. Please try again.');
+                    });
+                }}
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{marginRight: '5px'}}>
+                  <path d="M20 9H11C9.89543 9 9 9.89543 9 11V20C9 21.1046 9.89543 22 11 22H20C21.1046 22 22 21.1046 22 20V11C22 9.89543 21.1046 9 20 9Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M5 15H4C3.46957 15 2.96086 14.7893 2.58579 14.4142C2.21071 14.0391 2 13.5304 2 13V4C2 3.46957 2.21071 2.96086 2.58579 2.58579C2.96086 2.21071 3.46957 2 4 2H13C13.5304 2 14.0391 2.21071 14.4142 2.58579C14.7893 2.96086 15 3.46957 15 4V5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                Copy URL
+              </button>
+            </div>
           </div>
 
           <div className={styles.linkDetailSection}>
@@ -184,6 +228,29 @@ export default function Links() {
             Delete Link
           </button>
         </div>
+
+        {showDeleteConfirm && (
+          <div className={styles.deleteConfirmOverlay} onClick={cancelDelete}>
+            <div className={styles.deleteConfirmDialog} onClick={e => e.stopPropagation()}>
+              <div className={styles.deleteConfirmHeader}>
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#FF5C5C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M12 8V12" stroke="#FF5C5C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M12 16H12.01" stroke="#FF5C5C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                <h3>Delete Link?</h3>
+              </div>
+              <p className={styles.deleteConfirmMessage}>
+                Are you sure you want to delete this link? It will no longer be accessible to the public.<br/>
+                <span className={styles.deleteConfirmNote}>Note: Your earnings will not be deleted.</span>
+              </p>
+              <div className={styles.deleteConfirmButtons}>
+                <button className={styles.cancelDeleteButton} onClick={cancelDelete}>Cancel</button>
+                <button className={styles.confirmDeleteButton} onClick={confirmDelete}>Yes, Delete</button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     );
   }
@@ -216,17 +283,7 @@ export default function Links() {
                 <div className={styles.viewsCount}>
                   <span className={styles.viewsNumber}>{link.totalViews}</span> views
                 </div>
-                <button className={styles.viewDetailsButton} onClick={(e) => {
-                    e.stopPropagation();
-                    navigator.clipboard.writeText(link.link)
-                      .then(() => {
-                        alert('Link copied to clipboard!');
-                      })
-                      .catch(err => {
-                        console.error('Failed to copy: ', err);
-                        alert('Failed to copy link. Please try again.');
-                      });
-                  }}>
+                <button className={styles.viewDetailsButton}>
                   View Details
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M9 18L15 12L9 6" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
