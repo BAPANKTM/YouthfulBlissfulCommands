@@ -213,7 +213,7 @@ const Withdrawal = () => {
                 type="number"
                 value={withdrawAmount}
                 onChange={handleAmountChange}
-                placeholder="Min: $5.00, Max: $" + userData.amount.toFixed(2)
+                placeholder={`Min: $5.00, Max: $${userData.amount.toFixed(2)}`}
                 min="5"
                 max={userData.amount}
                 step="0.01"
