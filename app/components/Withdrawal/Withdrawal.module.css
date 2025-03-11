@@ -460,18 +460,35 @@
 }
 
 /* Success dialog styles */
-/* Success styles adjusted to work directly in withdrawal container */
-
-.successHeader {
+.successOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 8px 10px;
-  position: relative;
-  margin-bottom: 5px;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+  backdrop-filter: blur(5px);
 }
 
-.successHeader::before {
+.successDialog {
+  background: #1e1e1e;
+  border-radius: var(--radius-md);
+  width: 85%;
+  max-width: 320px;
+  overflow: hidden;
+  animation: slideUp 0.3s ease;
+  text-align: center;
+  border: 1px solid rgba(157, 92, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(157, 92, 255, 0.1);
+  position: relative;
+}
+
+.successDialog::before {
   content: '';
   position: absolute;
   top: 0;
@@ -481,36 +498,6 @@
   background: linear-gradient(90deg, #00D26A, #00D26A);
   animation: shimmer 3s infinite linear;
   background-size: 200% 100%;
-}
-
-.closeSuccessButton {
-  background: none;
-  border: none;
-  color: var(--text-secondary);
-  font-size: 24px;
-  cursor: pointer;
-  padding: 0;
-  margin: 0;
-  line-height: 1;
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  transition: all 0.2s;
-}
-
-.closeSuccessButton:hover {
-  background: rgba(255, 255, 255, 0.1);
-}
-
-.successBody {
-  padding: 0 15px 15px;
-  position: relative;
-  text-align: center;
-  border-radius: var(--radius-md);
-  animation: slideUp 0.3s ease;
 }
 
 .successIcon {
@@ -523,7 +510,7 @@
 }
 
 .successTitle {
-  margin: 0;
+  margin: 0 0 12px;
   font-size: 16px;
   font-weight: 700;
   color: #00D26A;
