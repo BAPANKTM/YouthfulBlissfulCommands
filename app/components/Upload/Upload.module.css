@@ -139,14 +139,14 @@
   margin: 0;
 }
 
-/* Text Upload Form */
-.textUploadForm, .mediaUploadForm {
+/* Media Upload Form */
+.mediaUploadForm {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
-.textInput, .captionInput {
+.captionInput {
   width: 100%;
   padding: 12px;
   border-radius: var(--radius-sm);
@@ -157,17 +157,10 @@
   resize: vertical;
   font-family: inherit;
   transition: border-color 0.2s ease;
-}
-
-.textInput {
-  min-height: 120px;
-}
-
-.captionInput {
   min-height: 80px;
 }
 
-.textInput:focus, .captionInput:focus {
+.captionInput:focus {
   outline: none;
   border-color: rgba(157, 92, 255, 0.4);
   background: rgba(157, 92, 255, 0.05);

@@ -33,7 +33,7 @@ export default function Home() {
   const handleUpload = () => {
     console.log("Upload clicked");
     setFloaterContent({
-      title: "Share Content",
+      title: "Share Media",
       content: <Upload onUpload={() => {}} />,
       primaryText: "",
       secondaryText: "Cancel",
