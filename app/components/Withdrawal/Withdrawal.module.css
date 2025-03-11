@@ -200,27 +200,28 @@
   box-shadow: 0 0 0 2px rgba(157, 92, 255, 0.1);
 }
 
+
 .saveButtonContainer {
   display: flex;
   justify-content: flex-end;
-  margin-bottom: 16px; /* Moved to bottom */
+  margin-bottom: 16px;
 }
 
 .saveButton {
-  background: linear-gradient(90deg, #9D5CFF 0%, #B47AFF 100%); /* More attractive gradient */
+  background: linear-gradient(90deg, #9D5CFF 0%, #B47AFF 100%);
   color: white;
   border: none;
   border-radius: var(--radius-sm);
-  padding: 10px 20px; /* Increased padding */
+  padding: 10px 20px;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 6px rgba(157, 92, 255, 0.2); /* Added box-shadow */
+  box-shadow: 0 4px 6px rgba(157, 92, 255, 0.2);
 }
 
 .saveButton:hover {
-  box-shadow: 0 6px 10px rgba(157, 92, 255, 0.3); /* Increased box-shadow on hover */
+  box-shadow: 0 6px 10px rgba(157, 92, 255, 0.3);
   transform: translateY(-2px);
 }
 
@@ -358,6 +359,16 @@
   padding: 20px;
   text-align: center;
   color: var(--text-secondary);
+}
+
+.confirmationAddress {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-sm);
+  padding: 10px;
+  margin: 10px 0;
+  word-break: break-all;
+  font-family: monospace;
+  font-size: 14px;
 }
 
 @keyframes fadeIn {

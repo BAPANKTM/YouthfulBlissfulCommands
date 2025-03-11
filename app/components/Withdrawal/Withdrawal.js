@@ -13,9 +13,7 @@ const Withdrawal = () => {
   const [selectedMethod, setSelectedMethod] = useState('upi');
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [withdrawAmount, setWithdrawAmount] = useState('');
-  const [inputUpiId, setInputUpiId] = useState('');
-  const [inputCryptoAddress, setInputCryptoAddress] = useState('');
-  const [addressSaved, setAddressSaved] = useState(false);
+  const [withdrawalAddress, setWithdrawalAddress] = useState('');
 
   useEffect(() => {
     // Fetch user data
@@ -27,9 +25,7 @@ const Withdrawal = () => {
         }
         const data = await response.json();
         setUserData(data);
-        setInputUpiId(data.upiId || '');
-        setInputCryptoAddress(data.cryptoAddress || '');
-        setAddressSaved(!!data.upiId || !!data.cryptoAddress);
+        setWithdrawalAddress(selectedMethod === 'upi' ? (data.upiId || '') : (data.cryptoAddress || ''));
       } catch (error) {
         console.error('Error fetching user data:', error);
       } finally {
@@ -40,23 +36,21 @@ const Withdrawal = () => {
     fetchUserData();
   }, []);
 
+  useEffect(() => {
+    // Update withdrawal address when method changes
+    setWithdrawalAddress(selectedMethod === 'upi' ? (userData.upiId || '') : (userData.cryptoAddress || ''));
+  }, [selectedMethod, userData]);
+
   const handleMethodSelect = (method) => {
     setSelectedMethod(method);
-    setAddressSaved(method === 'upi' ? !!userData.upiId : !!userData.cryptoAddress);
   };
 
   const handleAmountChange = (e) => {
     setWithdrawAmount(e.target.value);
   };
 
-  const handleSaveUpiId = () => {
-    setUserData(prev => ({ ...prev, upiId: inputUpiId }));
-    setAddressSaved(true);
-  };
-
-  const handleSaveCryptoAddress = () => {
-    setUserData(prev => ({ ...prev, cryptoAddress: inputCryptoAddress }));
-    setAddressSaved(true);
+  const handleAddressChange = (e) => {
+    setWithdrawalAddress(e.target.value);
   };
 
   const handleWithdraw = () => {
@@ -70,11 +64,23 @@ const Withdrawal = () => {
       return;
     }
 
+    if (!withdrawalAddress.trim()) {
+      alert('Please enter a withdrawal address');
+      return;
+    }
+
     setShowConfirmation(true);
   };
 
   const handleConfirmWithdraw = () => {
     // Here we would process the withdrawal in a real app
+    // Also update the stored address
+    if (selectedMethod === 'upi') {
+      setUserData(prev => ({ ...prev, upiId: withdrawalAddress }));
+    } else {
+      setUserData(prev => ({ ...prev, cryptoAddress: withdrawalAddress }));
+    }
+
     alert('Withdrawal confirmed!');
     setShowConfirmation(false);
   };
@@ -127,8 +133,8 @@ const Withdrawal = () => {
             >
               <div className={styles.methodIcon}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M21 4H3C1.89543 4 1 4.89543 1 6V18C1 19.1046 1.89543 20 3 20H21C22.1046 20 23 19.1046 23 18V6C23 4.89543 22.1046 4 21 4Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M1 10H23" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M19 5H5C3.89543 5 3 5.89543 3 7V17C3 18.1046 3.89543 19 5 19H19C20.1046 19 21 18.1046 21 17V7C21 5.89543 20.1046 5 19 5Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M3 7L12 13L21 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
               </div>
               UPI (FIAT)
@@ -139,90 +145,49 @@ const Withdrawal = () => {
             >
               <div className={styles.methodIcon}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M12 6V12L16 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M9.09 9C9.57564 7.82831 10.695 7.0387 12 7.0387C13.305 7.0387 14.4244 7.82831 14.91 9C15.3956 10.1717 15.3956 11.8283 14.91 13C14.4244 14.1717 13.305 14.9613 12 14.9613C10.695 14.9613 9.57564 14.1717 9.09 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
               </div>
               USDT (TRC20)
             </div>
           </div>
 
-          {selectedMethod === 'upi' && (
-            <div className={styles.inputGroup}>
-              <label className={styles.inputLabel}>{addressSaved ? 'Withdrawal Address:' : 'Enter UPI ID:'}</label>
+          <div className={styles.inputGroup}>
+            <label className={styles.inputLabel}>Withdrawal Address:</label>
+            <input
+              type="text"
+              value={withdrawalAddress}
+              onChange={handleAddressChange}
+              placeholder={selectedMethod === 'upi' ? "e.g., user@upi" : "e.g., TRC20 wallet address"}
+              className={styles.inputField}
+            />
+          </div>
+
+          <div className={styles.inputGroup}>
+            <label className={styles.inputLabel}>Enter Amount:</label>
+            <div className={styles.amountInput}>
               <input
-                type="text"
-                value={inputUpiId}
-                onChange={(e) => setInputUpiId(e.target.value)}
-                placeholder="e.g., user@bankname"
-                className={styles.inputField}
+                type="number"
+                value={withdrawAmount}
+                onChange={handleAmountChange}
+                placeholder="0.00"
               />
-              {!addressSaved && (
-                <div className={styles.confirmButtonContainer}>
-                  <button 
-                    className={styles.confirmAddressButton}
-                    onClick={handleSaveUpiId}
-                    disabled={!inputUpiId.trim()}
-                  >
-                    Confirm
-                  </button>
-                </div>
-              )}
             </div>
-          )}
+          </div>
 
-          {selectedMethod === 'usdt' && (
-            <div className={styles.inputGroup}>
-              <label className={styles.inputLabel}>{addressSaved ? 'Withdrawal Address:' : 'Enter USDT Address:'}</label>
-              <input
-                type="text"
-                value={inputCryptoAddress}
-                onChange={(e) => setInputCryptoAddress(e.target.value)}
-                placeholder="e.g., TRC20 wallet address"
-                className={styles.inputField}
-              />
-              {!addressSaved && (
-                <div className={styles.confirmButtonContainer}>
-                  <button 
-                    className={styles.confirmAddressButton}
-                    onClick={handleSaveCryptoAddress}
-                    disabled={!inputCryptoAddress.trim()}
-                  >
-                    Confirm
-                  </button>
-                </div>
-              )}
-            </div>
-          )}
+          <div className={styles.infoNotes}>
+            <p>• Minimum withdrawal: $5.00</p>
+            <p>• Processing time: 24-48 hours</p>
+          </div>
 
-          {addressSaved && (
-            <>
-              <div className={styles.inputGroup}>
-                <label className={styles.inputLabel}>Enter Amount:</label>
-                <div className={styles.amountInput}>
-                  <input
-                    type="number"
-                    value={withdrawAmount}
-                    onChange={handleAmountChange}
-                    placeholder="0.00"
-                  />
-                </div>
-              </div>
-
-              <div className={styles.infoNotes}>
-                <p>• Minimum withdrawal: $5.00</p>
-                <p>• Processing time: 24-48 hours</p>
-              </div>
-
-              <button 
-                className={styles.withdrawButton}
-                onClick={handleWithdraw}
-                disabled={!withdrawAmount || parseFloat(withdrawAmount) <= 0 || parseFloat(withdrawAmount) > userData.amount}
-              >
-                Withdraw Funds
-              </button>
-            </>
-          )}
+          <button 
+            className={styles.withdrawButton}
+            onClick={handleWithdraw}
+            disabled={!withdrawAmount || parseFloat(withdrawAmount) <= 0 || parseFloat(withdrawAmount) > userData.amount || !withdrawalAddress.trim()}
+          >
+            Withdraw Funds
+          </button>
         </div>
       )}
 
@@ -239,7 +204,8 @@ const Withdrawal = () => {
               </button>
             </div>
             <div className={styles.confirmationContent}>
-              Are you sure you want to withdraw ${parseFloat(withdrawAmount).toFixed(2)} using {selectedMethod === 'upi' ? 'UPI (FIAT)' : 'USDT (TRC20)'} to {selectedMethod === 'upi' ? inputUpiId : inputCryptoAddress}?
+              <p>Are you sure you want to withdraw ${parseFloat(withdrawAmount).toFixed(2)} using {selectedMethod === 'upi' ? 'UPI (FIAT)' : 'USDT (TRC20)'} to:</p>
+              <div className={styles.confirmationAddress}>{withdrawalAddress}</div>
             </div>
             <div className={styles.confirmationActions}>
               <button 
