@@ -26,25 +26,8 @@ export default function Home() {
   });
 
   useEffect(() => {
-    if (activeTab === 'history') {
-      const History = require('./components/History/History').default;
-      setFloaterContent({
-        title: "Withdrawal History",
-        content: <History />,
-        primaryText: "",
-        secondaryText: "Back",
-        onPrimary: null,
-        onSecondary: () => {
-          console.log('History closed');
-          setShowFloater(false);
-          setActiveTab('home');
-        },
-      });
-      setShowFloater(true);
-    } else {
-      // Close floater when switching to other tabs
-      setShowFloater(false);
-    }
+    // Close floater when switching tabs
+    setShowFloater(false);
   }, [activeTab]);
 
   const handleUpload = () => {
@@ -86,6 +69,9 @@ export default function Home() {
     switch (activeTab) {
       case 'links':
         return <Links />;
+      case 'history':
+        const History = require('./components/History/History').default;
+        return <History />;
       case 'home':
       default:
         return (
