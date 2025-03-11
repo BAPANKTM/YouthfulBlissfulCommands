@@ -1,0 +1,40 @@
+"Develop a front-end component for the 'Withdrawal' feature in our Next.js Telegram web app, designed to allow users to withdraw funds using either UPI (FIAT) or USDT (TRC20). This is a front-end simulation only—backend integration will be added later. Use existing site styles for consistency and ensure a professional, responsive, and bug-free UI/UX. Do not duplicate or modify unrelated code.
+
+Requirements:
+
+Display User Balance:
+Show the user's current balance (e.g., 1000 units) prominently at the top of the page. Use dummy data for simulation (e.g., hardcoded or from 'public/data/user.json').
+Select Withdrawal Method:
+Provide two buttons or tabs labeled 'UPI (FIAT)' and 'USDT (TRC20)' for users to choose their withdrawal method.
+Highlight the selected method visually (e.g., active state with a different color).
+Check and Set User Settings:
+UPI Settings: If no UPI ID is set, display an input field for the user to enter their UPI ID (e.g., 'user@upi') with a 'Save' button to store it temporarily in state. Allow users to change the UPI ID even if set.
+USDT Settings: If no crypto address is set, display an input field for the user to enter their USDT (TRC20) address (e.g., '0x1234567890') with a 'Save' button. Allow changes to the address if set.
+Disable the 'Withdraw' button until a method-specific setting (UPI ID or crypto address) is saved.
+Enter Withdrawal Amount:
+After settings are saved, display an input field for the user to enter the withdrawal amount. Add basic front-end validation (e.g., alert if amount exceeds balance or is invalid).
+Include a 'Withdraw' button to proceed.
+Confirm Withdrawal:
+On clicking 'Withdraw', show a confirmation dialog matching the provided screenshot (centered modal with 'WITHDRAWAL' in bold, message like 'Are you sure you want to withdraw [amount] using [method]?', 'Cancel' and 'Confirm' buttons).
+Style the dialog with a dark background, rounded corners, and a purple 'Confirm' button, with a gray 'Cancel' button and a 'X' close button in the top-right corner.
+For simulation, 'Confirm' triggers an alert (e.g., 'Withdrawal confirmed') and closes the dialog; 'Cancel' or 'X' closes it without action.
+UI/UX Guidelines:
+
+Professional Design: Use existing site typography (e.g., sans-serif), color scheme (e.g., dark background with white text), and button styles. Ensure a clean, modern look.
+Responsiveness: Make the layout fully responsive:
+On mobile (<768px), stack elements vertically with larger touch targets.
+On desktop (>1024px), align method selection and settings horizontally.
+Test for no hidden elements, overlaps, or misalignment.
+No Bugs: Ensure all interactive elements (inputs, buttons, dialog) work flawlessly across devices.
+State Management: Use React useState to manage selected method, UPI ID, crypto address, and amount.
+Implementation Details:
+
+Create components like 'WithdrawalPage', 'UpiSection', 'UsdtSection', and 'ConfirmationDialog'.
+Use dummy data (e.g., balance = 1000, upiId = '', cryptoAddress = '') for testing.
+Style with CSS modules (e.g., 'WithdrawalPage.module.scss') for scoped styles.
+Deliverables:
+
+A 'Withdrawal' page component with balance display, method selection, settings input, amount field, and confirmation dialog.
+Responsive CSS ensuring compatibility across all screen sizes.
+Clean, reusable code ready for future backend integration.
+Focus on a polished, professional UI/UX with no duplication or bugs. Test thoroughly for responsiveness and functionality."
