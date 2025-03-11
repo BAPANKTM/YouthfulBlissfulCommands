@@ -411,6 +411,130 @@
   to { transform: translateY(0); opacity: 1; }
 }
 
+/* Success dialog styles */
+.successDialog {
+  background: #1e1e1e;
+  border-radius: var(--radius-md);
+  width: 90%;
+  max-width: 360px;
+  overflow: hidden;
+  animation: slideUp 0.3s ease;
+  text-align: center;
+  border: 1px solid rgba(157, 92, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(157, 92, 255, 0.1);
+}
+
+.successIcon {
+  margin: 24px auto 12px;
+  display: flex;
+  justify-content: center;
+  animation: scaleIn 0.5s ease;
+}
+
+.successTitle {
+  margin: 0 0 20px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #00D26A;
+  letter-spacing: 0.5px;
+}
+
+.successContent {
+  padding: 0 20px 20px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.successContent p {
+  margin-bottom: 8px;
+  color: var(--text-secondary);
+}
+
+.successAddress {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-sm);
+  padding: 10px;
+  margin: 8px 0 16px;
+  word-break: break-all;
+  font-family: monospace;
+  font-size: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.successAmount {
+  background: linear-gradient(120deg, rgba(157, 92, 255, 0.1) 0%, rgba(157, 92, 255, 0.02) 100%);
+  border-radius: var(--radius-md);
+  padding: 15px;
+  margin: 16px 0;
+  position: relative;
+  border: 1px solid rgba(157, 92, 255, 0.15);
+}
+
+.amountValue {
+  font-size: 32px;
+  font-weight: 700;
+  background: linear-gradient(90deg, #FFFFFF 30%, #e0e0e0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -1px;
+  line-height: 1;
+  margin-bottom: 5px;
+}
+
+.amountCurrency {
+  font-size: 24px;
+  margin-right: 2px;
+  opacity: 0.9;
+}
+
+.amountEstimate {
+  font-size: 16px;
+  color: #9D5CFF;
+  font-weight: 500;
+  opacity: 0.9;
+}
+
+.successTimeframe {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 16px 0;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.successNote {
+  font-size: 13px;
+  color: var(--text-secondary);
+  font-weight: 500;
+  margin-top: 8px;
+}
+
+.successButton {
+  width: 100%;
+  background: linear-gradient(90deg, #9D5CFF 0%, #B47AFF 100%);
+  color: white;
+  border: none;
+  padding: 16px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.successButton:hover {
+  background: linear-gradient(90deg, #B47AFF 0%, #9D5CFF 100%);
+}
+
+@keyframes scaleIn {
+  0% { transform: scale(0.5); opacity: 0; }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
 @keyframes pulse {
   0% { opacity: 0.6; }
   50% { opacity: 1; }

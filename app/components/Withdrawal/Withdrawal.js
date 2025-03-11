@@ -14,6 +14,7 @@ const Withdrawal = () => {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [withdrawAmount, setWithdrawAmount] = useState('');
   const [withdrawalAddress, setWithdrawalAddress] = useState('');
+  const [showSuccess, setShowSuccess] = useState(false); // Added state for success message
 
   useEffect(() => {
     // Fetch user data
@@ -59,7 +60,7 @@ const Withdrawal = () => {
 
   const validateWithdrawalAddress = (address) => {
     if (!address.trim()) return false;
-    
+
     if (selectedMethod === 'upi') {
       // Basic UPI ID validation (username@provider format)
       const upiRegex = /^[a-zA-Z0-9.\-_]{2,256}@[a-zA-Z]{2,64}$/;
@@ -69,10 +70,10 @@ const Withdrawal = () => {
       const trc20Regex = /^T[a-zA-Z0-9]{33}$/;
       return trc20Regex.test(address);
     }
-    
+
     return false;
   };
-  
+
   // Real-time validation for withdrawal address
   const isAddressValid = validateWithdrawalAddress(withdrawalAddress);
 
@@ -84,13 +85,13 @@ const Withdrawal = () => {
     }
 
     const amount = parseFloat(withdrawAmount);
-    
+
     // Minimum amount check
     if (amount < 5) {
       alert('Minimum withdrawal amount is $5.00');
       return;
     }
-    
+
     // Maximum amount check
     if (amount > userData.amount) {
       alert('Insufficient balance');
@@ -117,7 +118,7 @@ const Withdrawal = () => {
       setUserData(prev => ({ ...prev, cryptoAddress: withdrawalAddress }));
     }
 
-    alert('Withdrawal confirmed!');
+    setShowSuccess(true); // Show success message
     setShowConfirmation(false);
   };
 
@@ -172,7 +173,7 @@ const Withdrawal = () => {
                   <path d="M3 7L12 13L21 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
               </div>
-              UPI (FIAT)
+              UPI (INDIA) {/* Changed to UPI (INDIA) */}
             </div>
             <div 
               className={`${styles.methodOption} ${selectedMethod === 'usdt' ? styles.active : ''}`}
@@ -292,7 +293,7 @@ const Withdrawal = () => {
               </button>
             </div>
             <div className={styles.confirmationContent}>
-              <p>Are you sure you want to withdraw ${parseFloat(withdrawAmount).toFixed(2)} using {selectedMethod === 'upi' ? 'UPI (FIAT)' : 'USDT (TRC20)'} to:</p>
+              <p>Are you sure you want to withdraw ${parseFloat(withdrawAmount).toFixed(2)} using {selectedMethod === 'upi' ? 'UPI (INDIA)' : 'USDT (TRC20)'} to:</p>
               <div className={styles.confirmationAddress}>{withdrawalAddress}</div>
             </div>
             <div className={styles.confirmationActions}>
@@ -309,6 +310,21 @@ const Withdrawal = () => {
                 Confirm
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {showSuccess && ( // Success message modal
+        <div className={styles.successOverlay}>
+          <div className={styles.successDialog}>
+            <h2>Withdrawal Request Submitted</h2>
+            <p>You will receive payment via {selectedMethod === 'upi' ? 'UPI (INDIA)' : 'USDT (TRC20)'}.</p>
+            <p>Amount: ${parseFloat(withdrawAmount).toFixed(2)}</p>
+            {selectedMethod === 'upi' && (
+              <p>Estimated INR: ₹{(parseFloat(withdrawAmount) * 87).toFixed(2)}</p>
+            )}
+            <p>You will receive payment within 1 to 48 hours. Check back in your withdrawal history to see the status.</p>
+            <button onClick={() => setShowSuccess(false)}>OK</button>
           </div>
         </div>
       )}
