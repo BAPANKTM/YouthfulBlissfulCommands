@@ -47,8 +47,8 @@ const Withdrawal = () => {
 
   const handleAmountChange = (e) => {
     const value = e.target.value;
-    // Only allow values greater than or equal to 5 and not exceeding balance
-    if (!value || (parseFloat(value) >= 5 && parseFloat(value) <= userData.amount)) {
+    // Always update the value when it's empty or a valid number
+    if (value === '' || /^\d*\.?\d*$/.test(value)) {
       setWithdrawAmount(value);
     }
   };
