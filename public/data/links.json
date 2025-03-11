@@ -1,0 +1,39 @@
+
+[
+  {
+    "id": "1",
+    "link": "https://t.me/file1",
+    "nickname": "Campaign Alpha",
+    "createdAt": "2023-10-01T12:00:00Z",
+    "totalViews": 150,
+    "views": {
+      "60minutes": 10,
+      "48hours": 50,
+      "lifetime": 150
+    }
+  },
+  {
+    "id": "2",
+    "link": "https://t.me/file2",
+    "nickname": "Marketing Beta",
+    "createdAt": "2023-11-15T09:30:00Z",
+    "totalViews": 278,
+    "views": {
+      "60minutes": 25,
+      "48hours": 120,
+      "lifetime": 278
+    }
+  },
+  {
+    "id": "3",
+    "link": "https://t.me/file3",
+    "nickname": "Product Launch",
+    "createdAt": "2023-12-05T15:45:00Z",
+    "totalViews": 95,
+    "views": {
+      "60minutes": 5,
+      "48hours": 35,
+      "lifetime": 95
+    }
+  }
+]

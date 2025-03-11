@@ -1,0 +1,264 @@
+
+.linksContainer {
+  padding: 15px;
+  background-color: var(--bg-dark);
+  border-radius: var(--radius-md);
+  margin-bottom: 60px;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.sectionTitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.linksList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.linkItem {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-card);
+  border-radius: var(--radius-md);
+  padding: 15px;
+  cursor: pointer;
+  transition: transform 0.2s, background-color 0.2s;
+}
+
+.linkItem:hover {
+  background-color: var(--bg-card-hover);
+  transform: translateY(-2px);
+}
+
+.linkInfo {
+  margin-bottom: 12px;
+}
+
+.nickname {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 5px;
+}
+
+.uploadDate {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.linkStats {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.viewsCount {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.viewsNumber {
+  color: var(--primary);
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.viewDetailsButton {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: transparent;
+  border: none;
+  color: var(--primary);
+  font-size: 14px;
+  cursor: pointer;
+  padding: 5px 8px;
+  border-radius: var(--radius-sm);
+  transition: background-color 0.2s;
+}
+
+.viewDetailsButton:hover {
+  background-color: rgba(157, 92, 255, 0.1);
+}
+
+.loadingState, .emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 50px 20px;
+  color: var(--text-secondary);
+  text-align: center;
+  gap: 10px;
+}
+
+.loadingSpinner {
+  width: 30px;
+  height: 30px;
+  border: 3px solid rgba(157, 92, 255, 0.2);
+  border-top: 3px solid var(--primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Details view styles */
+.detailsContainer {
+  padding: 15px;
+  background-color: var(--bg-dark);
+  border-radius: var(--radius-md);
+  margin-bottom: 60px;
+}
+
+.detailsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.detailsHeader h2 {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.closeButton {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+
+.closeButton:hover {
+  background-color: rgba(157, 92, 255, 0.1);
+}
+
+.detailsContent {
+  background-color: var(--bg-card);
+  border-radius: var(--radius-md);
+  padding: 20px;
+}
+
+.detailItem {
+  margin-bottom: 15px;
+}
+
+.detailLabel {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 5px;
+}
+
+.detailValue {
+  font-size: 15px;
+  color: var(--text-primary);
+  word-break: break-all;
+}
+
+.viewStatsSection {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: var(--radius-sm);
+  padding: 15px;
+  margin: 20px 0;
+}
+
+.viewStatsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.viewCount {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.viewModeTabs {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.viewModeTab {
+  background-color: rgba(157, 92, 255, 0.1);
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  font-size: 13px;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: background-color 0.2s;
+  flex: 1;
+  min-width: 100px;
+  text-align: center;
+}
+
+.activeTab {
+  background-color: var(--primary);
+  color: white;
+}
+
+.deleteButton {
+  width: 100%;
+  background-color: rgba(255, 59, 59, 0.2);
+  color: rgb(255, 95, 95);
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: background-color 0.2s;
+}
+
+.deleteButton:hover {
+  background-color: rgba(255, 59, 59, 0.3);
+}
+
+/* Responsive adjustments */
+@media (min-width: 500px) {
+  .linkItem {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .linkInfo {
+    margin-bottom: 0;
+  }
+}
+
+@media (max-width: 380px) {
+  .viewModeTabs {
+    flex-direction: column;
+  }
+  
+  .viewModeTab {
+    width: 100%;
+  }
+}

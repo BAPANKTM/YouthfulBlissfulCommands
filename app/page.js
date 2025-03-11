@@ -11,6 +11,7 @@ import Stats from "./components/Stats/Stats";
 import Navigation from "./components/Navigation/Navigation";
 import Floater from "./components/Floater/Floater";
 import SplashScreen from "./components/SplashScreen/SplashScreen";
+import Links from "./components/Links/Links";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState("home");
@@ -81,16 +82,30 @@ export default function Home() {
     }
   };
 
+  const renderContent = () => {
+    switch (activeTab) {
+      case 'links':
+        return <Links />;
+      case 'home':
+      default:
+        return (
+          <>
+            <Greeting />
+            <Balance value="0" />
+            <ActionButtons openFloater={handleAction} />
+            <Upload onUpload={handleUpload} />
+            <Stats />
+          </>
+        );
+    }
+  };
+
   return (
     <>
       <SplashScreen /> {/*Added SplashScreen */}
       <Container>
         <Header username="User" />
-        <Greeting />
-        <Balance value="0" />
-        <ActionButtons openFloater={handleAction} />
-        <Upload onUpload={handleUpload} />
-        <Stats />
+        {renderContent()}
       </Container>
       <Navigation activeTab={activeTab} onTabChange={setActiveTab} />
       <Floater
