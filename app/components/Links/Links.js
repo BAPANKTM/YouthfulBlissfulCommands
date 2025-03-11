@@ -58,26 +58,26 @@ export default function Links() {
   };
 
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-  
+
   const handleDelete = (e) => {
     e.stopPropagation();
     setShowDeleteConfirm(true);
   };
-  
+
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
-  
+
   const confirmDelete = () => {
     // Here you would implement the actual delete functionality
     setShowDeleteConfirm(false);
     setShowSuccessMessage(true);
-    
+
     // Auto close the success message after 3 seconds
     setTimeout(() => {
       setShowSuccessMessage(false);
       closeDetails();
     }, 3000);
   };
-  
+
   const cancelDelete = (e) => {
     e.stopPropagation();
     setShowDeleteConfirm(false);
@@ -281,7 +281,7 @@ export default function Links() {
             </div>
           </div>
         )}
-        
+
         {showSuccessMessage && (
           <div className={styles.modalOverlay}>
             <div className={styles.successModal}>
@@ -291,13 +291,12 @@ export default function Links() {
                   <path d="M22 4L12 14.01L9 11.01" stroke="#4BB543" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
               </div>
-              <h2 className={styles.successModalTitle}>Link Successfully Removed</h2>
+              <h2 className={styles.successModalTitle}>Link Successfully Deleted</h2>
               <p className={styles.successModalText}>
-                Your link has been permanently deleted from our servers and is no longer accessible.
+                The link has been permanently removed from our servers and is no longer accessible to the public.
               </p>
               <p className={styles.successModalNote}>
-                All associated earnings have been preserved in your account.
-                Your earnings have been preserved.
+                Your earnings have been preserved and remain safely in your account.
               </p>
             </div>
           </div>

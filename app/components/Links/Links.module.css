@@ -534,6 +534,74 @@
   }
   
   .deleteModal {
+
+/* Styles for deleted message container */
+.deletedMessageContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+}
+
+.deletedMessageIcon {
+  margin-bottom: 16px;
+}
+
+.deletedMessageTitle {
+  color: #4BB543;
+  font-size: 22px;
+  font-weight: 600;
+  margin: 0 0 16px 0;
+}
+
+.deletedMessageText {
+  color: var(--text-primary);
+  font-size: 15px;
+  line-height: 1.5;
+  margin: 0 0 8px 0;
+}
+
+.deletedMessageNote {
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-style: italic;
+  margin: 0 0 20px 0;
+}
+
+.backToLinksButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: rgba(157, 92, 255, 0.1);
+  border: 1px solid rgba(157, 92, 255, 0.2);
+  border-radius: var(--radius-md);
+  color: var(--primary);
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.backToLinksButton:hover {
+  background: rgba(157, 92, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+.backToLinksButton:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.backToLinksButton svg {
+  transition: transform 0.2s ease;
+}
+
+.backToLinksButton:hover svg {
+  transform: translateX(-3px);
+}
+
     padding: 20px;
   }
   
