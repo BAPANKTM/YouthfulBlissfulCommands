@@ -230,23 +230,38 @@ export default function Links() {
         </div>
 
         {showDeleteConfirm && (
-          <div className={styles.deleteConfirmOverlay} onClick={cancelDelete}>
-            <div className={styles.deleteConfirmDialog} onClick={e => e.stopPropagation()}>
-              <div className={styles.deleteConfirmHeader}>
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <div className={styles.modalOverlay}>
+            <div className={styles.deleteModal}>
+              <div className={styles.deleteModalIcon}>
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#FF5C5C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                   <path d="M12 8V12" stroke="#FF5C5C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                   <path d="M12 16H12.01" stroke="#FF5C5C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
-                <h3>Delete Link?</h3>
               </div>
-              <p className={styles.deleteConfirmMessage}>
-                Are you sure you want to delete this link? It will no longer be accessible to the public.<br/>
-                <span className={styles.deleteConfirmNote}>Note: Your earnings will not be deleted.</span>
+              <h2 className={styles.deleteModalTitle}>Delete Link?</h2>
+              <p className={styles.deleteModalText}>
+                Are you sure you want to delete this link? It will no longer be accessible to the public.
               </p>
-              <div className={styles.deleteConfirmButtons}>
-                <button className={styles.cancelDeleteButton} onClick={cancelDelete}>Cancel</button>
-                <button className={styles.confirmDeleteButton} onClick={confirmDelete}>Yes, Delete</button>
+              <p className={styles.deleteModalNote}>
+                Your earnings will not be deleted.
+              </p>
+              <div className={styles.deleteModalActions}>
+                <button 
+                  className={styles.cancelButton}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    cancelDelete(e);
+                  }}
+                >
+                  Cancel
+                </button>
+                <button 
+                  className={styles.confirmButton}
+                  onClick={confirmDelete}
+                >
+                  Confirm
+                </button>
               </div>
             </div>
           </div>
