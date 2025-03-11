@@ -324,7 +324,7 @@ const Withdrawal = () => {
               </svg>
             </div>
             <h2 className={styles.successTitle}>Withdrawal Request Submitted</h2>
-            
+
             <div className={styles.successAmount}>
               <div className={styles.amountValue}>
                 <span className={styles.amountCurrency}>$</span>
@@ -336,7 +336,7 @@ const Withdrawal = () => {
                 </div>
               )}
             </div>
-            
+
             <div className={styles.successContent}>
               <div className={styles.successDetails}>
                 <div className={styles.detailRow}>
@@ -357,7 +357,7 @@ const Withdrawal = () => {
                   })}</span>
                 </div>
               </div>
-              
+
               <div className={styles.successTimeframe}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -365,12 +365,12 @@ const Withdrawal = () => {
                 </svg>
                 Processing time: 24-48 hours
               </div>
-              
+
               <div className={styles.successNote}>
                 ID: W{Math.floor(Math.random() * 10000000)}
               </div>
             </div>
-            
+
             <button 
               className={styles.successButton}
               onClick={() => {

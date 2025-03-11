@@ -417,16 +417,16 @@
     width: 90%;
     max-width: 280px;
   }
-  
+
   .confirmationHeader h3 {
     font-size: 14px;
   }
-  
+
   .confirmationContent {
     padding: 12px;
     font-size: 12px;
   }
-  
+
   .cancelButton, .confirmButton {
     font-size: 12px;
     padding: 8px 0;
@@ -625,13 +625,13 @@
 }
 
 .successNote {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--text-secondary);
   font-weight: 500;
-  margin-top: 6px;
+  margin-top: 5px;
   display: inline-block;
   background: rgba(157, 92, 255, 0.08);
-  padding: 5px 10px;
+  padding: 4px 8px;
   border-radius: var(--radius-sm);
 }
 
@@ -656,68 +656,54 @@
 }
 
 @media (max-width: 380px) {
-  .successDialog {
-    width: 92%;
-    max-width: 300px;
+  .successContainer {
+    padding: 12px;
   }
-  
+
   .amountValue {
-    font-size: 28px;
+    font-size: 22px;
   }
-  
+
   .amountCurrency {
-    font-size: 20px;
+    font-size: 16px;
   }
-  
+
   .detailLabel, .detailValue {
     font-size: 11px;
   }
-  
+
   .successButton {
-    padding: 10px;
-    font-size: 13px;
+    padding: 8px;
+    font-size: 12px;
   }
-  
+
   .successIcon {
     transform: scale(0.7);
-    margin: 12px auto 6px;
+    margin: 5px auto;
   }
-  
+
   .successTitle {
-    font-size: 15px;
-    margin-bottom: 10px;
+    font-size: 14px;
+    margin-bottom: 8px;
   }
 }
 
 @media (max-width: 320px) {
-  .successDialog {
-    width: 95%;
-    max-width: 280px;
+  .successContainer {
+    padding: 10px;
   }
-  
-  .successContent {
-    padding: 0 12px 12px;
-  }
-  
+
   .amountValue {
-    font-size: 24px;
+    font-size: 20px;
   }
-  
+
   .amountCurrency {
-    font-size: 18px;
+    font-size: 16px;
   }
-}
 
-@keyframes scaleIn {
-  0% { transform: scale(0.5); opacity: 0; }
-  50% { transform: scale(1.1); }
-  100% { transform: scale(1); opacity: 1; }
-}
-
-@keyframes pulse {
-  0% { opacity: 0.6; }
-  50% { opacity: 1; }
-  100% { opacity: 0.6; }
+  .successTitle {
+    font-size: 13px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -756,4 +742,16 @@
   .methodOption {
     font-size: 12px;
   }
+}
+
+@keyframes scaleIn {
+  0% { transform: scale(0.5); opacity: 0; }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes pulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
 }
