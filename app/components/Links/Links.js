@@ -1,14 +1,12 @@
 'use client';
 import { useState, useEffect } from 'react';
 import styles from './Links.module.css';
-import { formatDate, shortenUrl, refreshLinkStats } from '../../utils/linksUtils';
 
 export default function Links() {
   const [links, setLinks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedLink, setSelectedLink] = useState(null);
   const [viewMode, setViewMode] = useState('lifetime');
-  const [refreshing, setRefreshing] = useState(false); // Add refreshing state
 
   useEffect(() => {
     async function loadLinks() {
@@ -77,22 +75,6 @@ export default function Links() {
     }
   };
 
-  const handleRefresh = async () => {
-    setRefreshing(true);
-    try {
-      await refreshLinkStats(selectedLink.id); // Assuming refreshLinkStats updates the selectedLink's views
-      // Re-fetch data or update state directly if refreshLinkStats doesn't handle it.  This would require restructuring the code to allow for updates to individual links.
-      // For simplicity, I'm assuming refreshLinkStats handles all updates.
-      //Example:  const updatedLink = await refreshLinkStats(selectedLink.id); setSelectedLink(updatedLink);
-
-    } catch (error) {
-      console.error("Error refreshing link stats:", error);
-    } finally {
-      setRefreshing(false);
-    }
-  };
-
-
   if (loading) {
     return (
       <div className={styles.loadingState}>
@@ -108,7 +90,7 @@ export default function Links() {
       if (url.length <= maxLength) return url;
       return url.substring(0, maxLength) + '...';
     };
-
+    
     return (
       <div className={styles.detailsContainer}>
         <div className={styles.stickyHeader}>
@@ -116,7 +98,7 @@ export default function Links() {
             <div className={styles.stickyTitle}>{selectedLink.nickname}</div>
             <div className={styles.stickyUrl}>{truncateUrl(selectedLink.link)}</div>
           </div>
-
+          
           <button className={styles.closeButton} onClick={closeDetails}>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M18 6L6 18" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -138,7 +120,7 @@ export default function Links() {
 
           <div className={styles.statsSection}>
             <h3 className={styles.statsSectionTitle}>View Statistics</h3>
-
+            
             <div className={styles.statsCards}>
               <div 
                 className={`${styles.statCard} ${viewMode === '60minutes' ? styles.active : ''}`}
@@ -147,7 +129,7 @@ export default function Links() {
                 <div className={styles.statNumber}>{selectedLink.views['60minutes']}</div>
                 <div className={styles.statLabel}>Last Hour</div>
               </div>
-
+              
               <div 
                 className={`${styles.statCard} ${viewMode === '48hours' ? styles.active : ''}`}
                 onClick={() => setViewMode('48hours')}
@@ -155,7 +137,7 @@ export default function Links() {
                 <div className={styles.statNumber}>{selectedLink.views['48hours']}</div>
                 <div className={styles.statLabel}>Last 48h</div>
               </div>
-
+              
               <div 
                 className={`${styles.statCard} ${viewMode === 'lifetime' ? styles.active : ''}`}
                 onClick={() => setViewMode('lifetime')}
@@ -164,9 +146,6 @@ export default function Links() {
                 <div className={styles.statLabel}>Lifetime</div>
               </div>
             </div>
-            <button onClick={handleRefresh} disabled={refreshing}>
-              {refreshing ? 'Refreshing...' : 'Refresh'}
-            </button> {/* Added refresh button */}
           </div>
 
           <button className={styles.deleteButton} onClick={handleDelete}>
