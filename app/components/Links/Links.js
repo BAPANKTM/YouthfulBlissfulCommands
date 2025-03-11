@@ -216,7 +216,17 @@ export default function Links() {
                 <div className={styles.viewsCount}>
                   <span className={styles.viewsNumber}>{link.totalViews}</span> views
                 </div>
-                <button className={styles.viewDetailsButton}>
+                <button className={styles.viewDetailsButton} onClick={(e) => {
+                    e.stopPropagation();
+                    navigator.clipboard.writeText(link.link)
+                      .then(() => {
+                        alert('Link copied to clipboard!');
+                      })
+                      .catch(err => {
+                        console.error('Failed to copy: ', err);
+                        alert('Failed to copy link. Please try again.');
+                      });
+                  }}>
                   View Details
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M9 18L15 12L9 6" stroke="#9D5CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>

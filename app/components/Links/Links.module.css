@@ -549,3 +549,45 @@
 .refreshButton:active {
   transform: scale(0.98);
 }
+
+.linkUrlContainer {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 10px;
+  gap: 10px;
+}
+
+.linkUrl {
+  font-size: 14px;
+  word-break: break-all;
+  color: var(--text-secondary);
+  font-family: monospace;
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  flex-grow: 1;
+}
+
+.copyButton {
+  padding: 8px 14px;
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  height: 36px;
+}
+
+.copyButton:hover {
+  background-color: var(--primary-dark);
+}
+
+.copyButton:active {
+  transform: scale(0.95);
+}
