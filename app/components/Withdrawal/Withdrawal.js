@@ -317,14 +317,66 @@ const Withdrawal = () => {
       {showSuccess && ( // Success message modal
         <div className={styles.successOverlay}>
           <div className={styles.successDialog}>
-            <h2>Withdrawal Request Submitted</h2>
-            <p>You will receive payment via {selectedMethod === 'upi' ? 'UPI (INDIA)' : 'USDT (TRC20)'}.</p>
-            <p>Amount: ${parseFloat(withdrawAmount).toFixed(2)}</p>
-            {selectedMethod === 'upi' && (
-              <p>Estimated INR: ₹{(parseFloat(withdrawAmount) * 87).toFixed(2)}</p>
-            )}
-            <p>You will receive payment within 1 to 48 hours. Check back in your withdrawal history to see the status.</p>
-            <button onClick={() => setShowSuccess(false)}>OK</button>
+            <div className={styles.successIcon}>
+              <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M22 11.0799V11.9999C21.9988 14.1563 21.3005 16.2545 20.0093 17.9817C18.7182 19.7088 16.9033 20.9723 14.8354 21.5838C12.7674 22.1952 10.5573 22.1218 8.53447 21.3746C6.51168 20.6274 4.78465 19.2462 3.61096 17.4369C2.43727 15.6276 1.87979 13.4879 2.02168 11.3362C2.16356 9.18443 2.99721 7.13619 4.39828 5.49694C5.79935 3.85768 7.69279 2.71525 9.79619 2.24001C11.8996 1.76477 14.1003 1.9822 16.07 2.85986" stroke="#00D26A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M22 4L12 14.01L9 11.01" stroke="#00D26A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
+            <h2 className={styles.successTitle}>Withdrawal Request Submitted</h2>
+            
+            <div className={styles.successAmount}>
+              <div className={styles.amountValue}>
+                <span className={styles.amountCurrency}>$</span>
+                {parseFloat(withdrawAmount).toFixed(2)}
+              </div>
+              {selectedMethod === 'upi' && (
+                <div className={styles.amountEstimate}>
+                  ≈ ₹{(parseFloat(withdrawAmount) * 87).toFixed(2)}
+                </div>
+              )}
+            </div>
+            
+            <div className={styles.successContent}>
+              <div className={styles.successDetails}>
+                <div className={styles.detailRow}>
+                  <span className={styles.detailLabel}>Method:</span>
+                  <span className={styles.detailValue}>{selectedMethod === 'upi' ? 'UPI (INDIA)' : 'USDT (TRC20)'}</span>
+                </div>
+                <div className={styles.detailRow}>
+                  <span className={styles.detailLabel}>Address:</span>
+                  <span className={styles.detailValue}>{withdrawalAddress}</span>
+                </div>
+                <div className={styles.detailRow}>
+                  <span className={styles.detailLabel}>Date:</span>
+                  <span className={styles.detailValue}>{new Date().toLocaleString()}</span>
+                </div>
+              </div>
+              
+              <div className={styles.successTimeframe}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M12 6V12L16 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                Processing time: 24-48 hours
+              </div>
+              
+              <div className={styles.successNote}>
+                Transaction ID: W{Math.floor(Math.random() * 10000000)}
+              </div>
+            </div>
+            
+            <button 
+              className={styles.successButton}
+              onClick={() => {
+                setShowSuccess(false);
+                // Redirect to history section or trigger history view
+                window.location.hash = 'history';
+                // You could also use a more sophisticated router approach if available
+              }}
+            >
+              View Withdrawal History
+            </button>
           </div>
         </div>
       )}

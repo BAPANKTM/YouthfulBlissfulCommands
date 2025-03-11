@@ -412,6 +412,21 @@
 }
 
 /* Success dialog styles */
+.successOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+  backdrop-filter: blur(5px);
+}
+
 .successDialog {
   background: #1e1e1e;
   border-radius: var(--radius-md);
@@ -422,6 +437,19 @@
   text-align: center;
   border: 1px solid rgba(157, 92, 255, 0.2);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(157, 92, 255, 0.1);
+  position: relative;
+}
+
+.successDialog::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #00D26A, #00D26A);
+  animation: shimmer 3s infinite linear;
+  background-size: 200% 100%;
 }
 
 .successIcon {
@@ -429,6 +457,7 @@
   display: flex;
   justify-content: center;
   animation: scaleIn 0.5s ease;
+  filter: drop-shadow(0 0 10px rgba(0, 210, 106, 0.4));
 }
 
 .successTitle {
@@ -437,6 +466,7 @@
   font-weight: 700;
   color: #00D26A;
   letter-spacing: 0.5px;
+  text-shadow: 0 2px 10px rgba(0, 210, 106, 0.3);
 }
 
 .successContent {
@@ -445,33 +475,53 @@
   line-height: 1.5;
 }
 
-.successContent p {
-  margin-bottom: 8px;
-  color: var(--text-secondary);
+.successDetails {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: var(--radius-sm);
+  margin: 5px 0 15px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  overflow: hidden;
 }
 
-.successAddress {
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: var(--radius-sm);
-  padding: 10px;
-  margin: 8px 0 16px;
+.detailRow {
+  display: flex;
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  text-align: left;
+}
+
+.detailRow:last-child {
+  border-bottom: none;
+}
+
+.detailLabel {
+  flex: 0 0 35%;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+.detailValue {
+  flex: 1;
+  color: white;
+  font-size: 13px;
+  font-weight: 500;
   word-break: break-all;
-  font-family: monospace;
-  font-size: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .successAmount {
-  background: linear-gradient(120deg, rgba(157, 92, 255, 0.1) 0%, rgba(157, 92, 255, 0.02) 100%);
+  background: linear-gradient(120deg, rgba(0, 210, 106, 0.1) 0%, rgba(0, 210, 106, 0.02) 100%);
   border-radius: var(--radius-md);
   padding: 15px;
   margin: 16px 0;
   position: relative;
-  border: 1px solid rgba(157, 92, 255, 0.15);
+  border: 1px solid rgba(0, 210, 106, 0.15);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  animation: var(--animation-glow);
+  animation-duration: 2s;
 }
 
 .amountValue {
-  font-size: 32px;
+  font-size: 38px;
   font-weight: 700;
   background: linear-gradient(90deg, #FFFFFF 30%, #e0e0e0 100%);
   -webkit-background-clip: text;
@@ -479,19 +529,38 @@
   letter-spacing: -1px;
   line-height: 1;
   margin-bottom: 5px;
+  position: relative;
+  display: inline-block;
+}
+
+.amountValue::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  right: -50%;
+  bottom: -50%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transform: rotate(25deg);
+  animation: shine 3s infinite ease-in-out;
+  animation-delay: 0.5s;
 }
 
 .amountCurrency {
-  font-size: 24px;
+  font-size: 28px;
   margin-right: 2px;
   opacity: 0.9;
+  color: white;
+  position: relative;
+  top: -2px;
 }
 
 .amountEstimate {
   font-size: 16px;
-  color: #9D5CFF;
+  color: #00D26A;
   font-weight: 500;
   opacity: 0.9;
+  margin-top: 5px;
 }
 
 .successTimeframe {
@@ -499,7 +568,7 @@
   align-items: center;
   gap: 8px;
   margin: 16px 0;
-  padding: 10px;
+  padding: 10px 12px;
   background: rgba(255, 255, 255, 0.05);
   border-radius: var(--radius-sm);
   font-size: 13px;
@@ -511,11 +580,15 @@
   color: var(--text-secondary);
   font-weight: 500;
   margin-top: 8px;
+  display: inline-block;
+  background: rgba(157, 92, 255, 0.08);
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
 }
 
 .successButton {
   width: 100%;
-  background: linear-gradient(90deg, #9D5CFF 0%, #B47AFF 100%);
+  background: linear-gradient(90deg, #00D26A 0%, #00AF58 100%);
   color: white;
   border: none;
   padding: 16px;
@@ -523,10 +596,37 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
+  margin-top: 15px;
+  box-shadow: 0 4px 15px rgba(0, 210, 106, 0.3);
 }
 
 .successButton:hover {
-  background: linear-gradient(90deg, #B47AFF 0%, #9D5CFF 100%);
+  background: linear-gradient(90deg, #00AF58 0%, #00D26A 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 210, 106, 0.4);
+}
+
+@media (max-width: 380px) {
+  .successDialog {
+    width: 95%;
+  }
+  
+  .amountValue {
+    font-size: 32px;
+  }
+  
+  .amountCurrency {
+    font-size: 24px;
+  }
+  
+  .detailLabel, .detailValue {
+    font-size: 12px;
+  }
+  
+  .successButton {
+    padding: 14px;
+    font-size: 15px;
+  }
 }
 
 @keyframes scaleIn {
