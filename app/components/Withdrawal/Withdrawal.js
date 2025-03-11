@@ -97,8 +97,7 @@ const Withdrawal = () => {
     <div className={styles.withdrawalContainer}>
       <div className={styles.balanceSection}>
         <div className={styles.balanceAmount}>
-          <span className={styles.currencySymbol}>$</span>
-          {userData.amount.toFixed(2)}
+          <span className={styles.currencySymbol}>$</span>{userData.amount.toFixed(2)}
         </div>
         <div className={styles.balanceLabel}>Your Balance</div>
       </div>
@@ -174,6 +173,12 @@ const Withdrawal = () => {
                 placeholder="0.00"
               />
             </div>
+            {selectedMethod === 'upi' && withdrawAmount && !isNaN(withdrawAmount) && (
+              <div className={styles.inrEstimate}>
+                Estimated INR: ₹{(parseFloat(withdrawAmount) * 87).toFixed(2)}
+                <span className={styles.inrRate}>(Rate: ₹87 per $)</span>
+              </div>
+            )}
           </div>
 
           <div className={styles.infoNotes}>
