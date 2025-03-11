@@ -70,3 +70,38 @@ export const getStatusColor = (status) => {
       return '#9D5CFF';
   }
 };
+export const fetchUserData = async () => {
+  try {
+    const response = await fetch('/data/user.json');
+    if (!response.ok) {
+      throw new Error('Failed to fetch user data');
+    }
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching user data:', error);
+    // Return default fallback data
+    return { 
+      userId: '12345',
+      amount: 0,
+      upiId: '',
+      cryptoAddress: ''
+    };
+  }
+};
+
+export const saveUserSettings = async (settings) => {
+  // In a real app, this would make an API call to save the settings
+  // For now, we'll just log it to console
+  console.log('Saving user settings:', settings);
+  return { success: true };
+};
+
+export const processWithdrawal = async (withdrawalData) => {
+  // In a real app, this would make an API call to process the withdrawal
+  // For now, we'll just log it to console
+  console.log('Processing withdrawal:', withdrawalData);
+  return { 
+    success: true,
+    transactionId: 'TX' + Math.floor(Math.random() * 1000000)
+  };
+};

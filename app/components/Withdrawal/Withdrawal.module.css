@@ -1,0 +1,437 @@
+
+.withdrawalContainer {
+  width: 100%;
+  animation: var(--animation-slide-up);
+  animation-delay: 0.2s;
+}
+
+.balanceSection {
+  background: linear-gradient(120deg, rgba(157, 92, 255, 0.1) 0%, rgba(157, 92, 255, 0.02) 100%);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  margin-bottom: 24px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(157, 92, 255, 0.15);
+  backdrop-filter: blur(10px);
+}
+
+.balanceAmount {
+  font-size: 42px;
+  font-weight: 700;
+  background: linear-gradient(90deg, #FFFFFF 30%, #e0e0e0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -1px;
+  line-height: 1;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+  margin-bottom: 8px;
+}
+
+.currencySymbol {
+  font-size: 32px;
+  margin-right: 4px;
+  opacity: 0.8;
+}
+
+.balanceLabel {
+  font-size: 16px;
+  color: var(--text-secondary);
+}
+
+.insufficientBalance {
+  background: linear-gradient(120deg, rgba(255, 107, 107, 0.1) 0%, rgba(255, 107, 107, 0.02) 100%);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  border: 1px solid rgba(255, 107, 107, 0.15);
+  animation: var(--animation-slide-up);
+  animation-delay: 0.3s;
+}
+
+.insufficientIcon {
+  margin-bottom: 16px;
+  animation: pulse 2s infinite;
+}
+
+.insufficientTitle {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #FF6B6B;
+}
+
+.insufficientText {
+  font-size: 15px;
+  color: var(--text-secondary);
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.createButton {
+  background: linear-gradient(90deg, #9D5CFF 0%, #B47AFF 100%);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(157, 92, 255, 0.3);
+}
+
+.createButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(157, 92, 255, 0.4);
+}
+
+.withdrawalContent {
+  animation: var(--animation-slide-up);
+  animation-delay: 0.3s;
+}
+
+.methodSelection {
+  display: flex;
+  margin-bottom: 24px;
+  gap: 12px;
+}
+
+.methodOption {
+  flex: 1;
+  padding: 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+}
+
+.methodOption:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.methodOption.active {
+  background: rgba(157, 92, 255, 0.1);
+  border-color: rgba(157, 92, 255, 0.3);
+}
+
+.methodIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9D5CFF;
+}
+
+.methodOption.active .methodIcon {
+  color: #B47AFF;
+}
+
+.settingsSection {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  margin-bottom: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.settingsLabel {
+  font-size: 15px;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+
+.settingsInput {
+  display: flex;
+  gap: 10px;
+}
+
+.settingsInput input {
+  flex: 1;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-sm);
+  color: white;
+  padding: 12px 16px;
+  font-size: 15px;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.settingsInput input:focus {
+  border-color: rgba(157, 92, 255, 0.5);
+  box-shadow: 0 0 0 2px rgba(157, 92, 255, 0.2);
+}
+
+.saveButton {
+  background: #9D5CFF;
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 0 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.saveButton:hover {
+  background: #B47AFF;
+}
+
+.amountSection {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  margin-bottom: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.amountLabel {
+  font-size: 15px;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+
+.amountInput {
+  position: relative;
+  margin-bottom: 16px;
+}
+
+.amountPrefix {
+  position: absolute;
+  top: 50%;
+  left: 16px;
+  transform: translateY(-50%);
+  color: #9D5CFF;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.amountInput input {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-sm);
+  color: white;
+  padding: 14px 16px 14px 36px;
+  font-size: 18px;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.amountInput input:focus {
+  border-color: rgba(157, 92, 255, 0.5);
+  box-shadow: 0 0 0 2px rgba(157, 92, 255, 0.2);
+}
+
+.withdrawButton {
+  width: 100%;
+  background: linear-gradient(90deg, #9D5CFF 0%, #B47AFF 100%);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 16px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(157, 92, 255, 0.3);
+}
+
+.withdrawButton:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(157, 92, 255, 0.4);
+}
+
+.withdrawButton:disabled {
+  background: #4d4d4d;
+  cursor: not-allowed;
+  box-shadow: none;
+  opacity: 0.7;
+}
+
+.infoNotes {
+  padding: 0 4px;
+  margin-bottom: 20px;
+}
+
+.infoNotes p {
+  color: var(--text-secondary);
+  font-size: 14px;
+  margin-bottom: 8px;
+  opacity: 0.8;
+}
+
+.confirmationOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+.confirmationDialog {
+  background: #1e1e1e;
+  border-radius: var(--radius-md);
+  width: 85%;
+  max-width: 400px;
+  overflow: hidden;
+  animation: slideUp 0.3s ease;
+}
+
+.confirmationHeader {
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.confirmationHeader h3 {
+  margin: 0;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  height: 24px;
+  width: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.confirmationContent {
+  padding: 24px 20px;
+  text-align: center;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.confirmationActions {
+  padding: 16px 20px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.cancelButton {
+  background: #4d4d4d;
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.confirmButton {
+  background: #9D5CFF;
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.confirmButton:hover {
+  background: #B47AFF;
+}
+
+.loading {
+  text-align: center;
+  padding: 30px;
+  color: var(--text-secondary);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes pulse {
+  0% { opacity: 0.7; }
+  50% { opacity: 1; }
+  100% { opacity: 0.7; }
+}
+
+/* Responsive styles */
+@media (max-width: 500px) {
+  .balanceAmount {
+    font-size: 36px;
+  }
+  
+  .currencySymbol {
+    font-size: 28px;
+  }
+  
+  .methodSelection {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .methodOption {
+    padding: 12px;
+  }
+  
+  .settingsSection, .amountSection {
+    padding: 16px;
+  }
+  
+  .confirmationDialog {
+    width: 90%;
+  }
+}
+
+@media (max-width: 380px) {
+  .balanceAmount {
+    font-size: 32px;
+  }
+  
+  .settingsInput {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .saveButton {
+    width: 100%;
+    padding: 12px;
+  }
+}
