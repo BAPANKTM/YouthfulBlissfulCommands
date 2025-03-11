@@ -1,4 +1,3 @@
-
 'use client';
 import { useState, useEffect } from 'react';
 import styles from './Links.module.css';
@@ -31,7 +30,7 @@ export default function Links() {
       if (isNaN(date.getTime())) {
         throw new Error('Invalid date');
       }
-      
+
       const options = { 
         year: 'numeric', 
         month: 'long', 
@@ -41,7 +40,7 @@ export default function Links() {
         second: '2-digit',
         timeZoneName: 'short'
       };
-      
+
       return date.toLocaleDateString('en-US', options);
     } catch (e) {
       console.error('Date formatting error:', e);
@@ -64,7 +63,7 @@ export default function Links() {
 
   const getViewCount = (link) => {
     if (!link || !link.views) return 0;
-    
+
     switch (viewMode) {
       case '60minutes':
         return link.views['60minutes'];
@@ -99,50 +98,56 @@ export default function Links() {
         </div>
 
         <div className={styles.detailsContent}>
-          <div className={styles.detailItem}>
-            <div className={styles.detailLabel}>Full Link URL:</div>
-            <div className={styles.detailValue}>{selectedLink.link}</div>
+          <div className={styles.linkDetailSection}>
+            <span className={styles.linkDetailLabel}>Link URL</span>
+            <div className={`${styles.linkDetailValue} ${styles.url}`}>{selectedLink.link}</div>
           </div>
-          
-          <div className={styles.detailItem}>
-            <div className={styles.detailLabel}>Nickname:</div>
-            <div className={styles.detailValue}>{selectedLink.nickname}</div>
+
+          <div className={styles.linkDetailSection}>
+            <span className={styles.linkDetailLabel}>Nickname</span>
+            <div className={styles.linkDetailValue}>{selectedLink.nickname}</div>
           </div>
-          
-          <div className={styles.detailItem}>
-            <div className={styles.detailLabel}>Creation Date:</div>
-            <div className={styles.detailValue}>{formatDate(selectedLink.createdAt)}</div>
+
+          <div className={styles.linkDetailSection}>
+            <span className={styles.linkDetailLabel}>Creation Date</span>
+            <div className={styles.linkDetailValue}>{formatDate(selectedLink.createdAt)}</div>
           </div>
-          
-          <div className={styles.viewStatsSection}>
-            <div className={styles.viewStatsHeader}>
-              <div className={styles.detailLabel}>View Statistics:</div>
-              <div className={styles.viewCount}>{getViewCount(selectedLink)} views</div>
+
+          <div className={styles.viewsToggle}>
+            <button 
+              className={`${styles.viewToggleButton} ${viewMode === '60minutes' ? styles.active : ''}`} 
+              onClick={() => setViewMode('60minutes')}
+            >
+              Last 60 Minutes
+            </button>
+            <button 
+              className={`${styles.viewToggleButton} ${viewMode === '48hours' ? styles.active : ''}`} 
+              onClick={() => setViewMode('48hours')}
+            >
+              Last 48 Hours
+            </button>
+            <button 
+              className={`${styles.viewToggleButton} ${viewMode === 'lifetime' ? styles.active : ''}`} 
+              onClick={() => setViewMode('lifetime')}
+            >
+              Lifetime
+            </button>
+          </div>
+
+          <div className={styles.viewStats}>
+            <div className={styles.viewStatsNumber}>{getViewCount(selectedLink)}</div>
+            <div className={styles.viewStatsLabel}>
+              {viewMode === '60minutes' ? 'Views in the last hour' : 
+               viewMode === '48hours' ? 'Views in the last 48 hours' : 
+               'Total lifetime views'}
             </div>
-            
-            <div className={styles.viewModeTabs}>
-              <button 
-                className={`${styles.viewModeTab} ${viewMode === '60minutes' ? styles.activeTab : ''}`}
-                onClick={() => setViewMode('60minutes')}
-              >
-                Last 60 Minutes
-              </button>
-              <button 
-                className={`${styles.viewModeTab} ${viewMode === '48hours' ? styles.activeTab : ''}`}
-                onClick={() => setViewMode('48hours')}
-              >
-                Last 48 Hours
-              </button>
-              <button 
-                className={`${styles.viewModeTab} ${viewMode === 'lifetime' ? styles.activeTab : ''}`}
-                onClick={() => setViewMode('lifetime')}
-              >
-                Lifetime
-              </button>
-            </div>
           </div>
-          
+
           <button className={styles.deleteButton} onClick={handleDelete}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 6H5H21" stroke="#FF5C5C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z" stroke="#FF5C5C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
             Delete Link
           </button>
         </div>
